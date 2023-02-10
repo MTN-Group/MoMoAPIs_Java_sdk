@@ -1,0 +1,6 @@
+REFERENCE_ID=UUID/referenceId
+API_KEY=received after creating user
+CALLBACK_URL=http://sample.com/callbackurl
+COLLECTION_SUBSCRIPTION_KEY=place your COLLECTION subscription key here
+DISBURSEMENT_SUBSCRIPTION_KEY=place your DISBURSEMENT subscription key here
+REMITTANCE_SUBSCRIPTION_KEY=place your REMITTANCE subscription key here

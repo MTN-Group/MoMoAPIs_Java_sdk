@@ -25,24 +25,28 @@ public class CollectionContext implements MoMoContext {
     private MoMoAuthentication credential;
     private AccessToken accessToken;
     
-    private CollectionContext(String subscriptionKey, String referenceId, String apiKey, Environment mode, String callBackUrl, Map<String, String> configurations) throws MoMoException {
+    private CollectionContext(String subscriptionKey, String referenceId, String apiKey, Environment mode, String callBackUrl,
+                              Map<String, String> configurations, String targetEnvironment) throws MoMoException {
         this.credential = new MoMoAuthentication(subscriptionKey, SubscriptionType.COLLECTION, referenceId, apiKey);
         if (configurations != null && configurations.size() > 0) {
             this.credential.addConfigurations(configurations);
         }
 
         this.setMode(mode);
+        this.setTargetEnvironment(targetEnvironment);
         this.callBackUrl = callBackUrl;
 
         this.accessToken = this.credential.createAccessToken();
         instance = this;
     }
 
-    public static void createContext(String subscriptionKey, String referenceId, String apiKey, Environment mode, String callBackUrl, Map<String, String> configurations) throws MoMoException {
+    public static void createContext(String subscriptionKey, String referenceId, String apiKey, Environment mode, String callBackUrl,
+                                     Map<String, String> configurations, String targetEnvironment) throws MoMoException {
         if (instance == null) {
             synchronized (CollectionContext.class) {
                 if (instance == null) {
-                    instance = new CollectionContext(subscriptionKey, referenceId, apiKey, mode, callBackUrl, configurations);
+                    instance = new CollectionContext(subscriptionKey, referenceId, apiKey, mode, callBackUrl,
+                            configurations, targetEnvironment);
                 }
             }
         }
@@ -196,6 +200,7 @@ public class CollectionContext implements MoMoContext {
     @Override
     public MoMoContext setTargetEnvironment(String targetEnvironment) {
         this.credential.addConfiguration(Constants.TARGET_ENVIRONMENT, targetEnvironment);
+        this.addHTTPHeader(Constants.TARGET_ENVIRONMENT, targetEnvironment);
         return this;
     }
 

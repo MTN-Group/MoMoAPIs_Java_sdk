@@ -1,5 +1,6 @@
 package com.momo.api.base.context.collection;
 
+import com.momo.api.base.constants.Constants;
 import com.momo.api.base.exception.MoMoException;
 import com.momo.api.constants.Environment;
 import com.momo.api.requests.collection.CollectionRequest;
@@ -17,6 +18,7 @@ public class CollectionConfiguration {
     private Environment mode;
     private Map<String, String> configurations;
     private String subscriptionKey;
+    private String targetEnvironment; // if we wish to give it explicitly, we can use this property
 
     //TODO test case for addCallBackUrl and all similar functions that are required in integration test
     /**
@@ -47,7 +49,7 @@ public class CollectionConfiguration {
      * @param apiKey
      */
     public CollectionConfiguration(String subscriptionKey, String referenceId, String apiKey) {
-        this(subscriptionKey, referenceId, apiKey, Environment.SANDBOX);
+        this(subscriptionKey, referenceId, apiKey, Environment.SANDBOX, Constants.SANDBOX);
     }
 
     //TODO check if this constructor works as needed
@@ -62,8 +64,8 @@ public class CollectionConfiguration {
      * @param apiKey
      * @param mode
      */
-    public CollectionConfiguration(String subscriptionKey, String referenceId, String apiKey, Environment mode) {
-        this(subscriptionKey, referenceId, apiKey, mode, null);
+    public CollectionConfiguration(String subscriptionKey, String referenceId, String apiKey, Environment mode, String targetEnvironment) {
+        this(subscriptionKey, referenceId, apiKey, mode, targetEnvironment, null);
     }
 
     //TODO is there any point in passing the "configurations" as a parameter? Can it be modified?
@@ -76,12 +78,13 @@ public class CollectionConfiguration {
      * @param mode
      * @param configurations
      */
-    public CollectionConfiguration(String subscriptionKey, String referenceId, String apiKey, Environment mode, Map<String, String> configurations) {
+    public CollectionConfiguration(String subscriptionKey, String referenceId, String apiKey, Environment mode, String targetEnvironment, Map<String, String> configurations) {
         this.subscriptionKey = subscriptionKey;
         this.referenceId = referenceId;
         this.apiKey = apiKey;
         this.mode = mode;
         this.configurations = configurations;
+        this.targetEnvironment = targetEnvironment;
     }
 
     /**
@@ -102,7 +105,8 @@ public class CollectionConfiguration {
      * @throws MoMoException
      */
     private void createCollectionContext() throws MoMoException {
-        CollectionContext.createContext(this.subscriptionKey, this.referenceId, this.apiKey, this.mode, this.callBackUrl, this.configurations);
+        CollectionContext.createContext(this.subscriptionKey, this.referenceId, this.apiKey, this.mode, this.callBackUrl,
+                this.configurations, this.targetEnvironment);
     }
 
     /**

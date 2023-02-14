@@ -55,7 +55,7 @@ public class CollectionConfiguration {
     //TODO check if this constructor works as needed
     //TODO also check check if this works with sandbox environment
     /**
-     * Creates a singleton instance of CollectionContext. This
+     * Creates a singleton instance of CollectionContext.This
      * CollectionConfiguration constructor is used for Production environment,
      * but also can be used in sandbox if required
      *
@@ -63,6 +63,7 @@ public class CollectionConfiguration {
      * @param referenceId
      * @param apiKey
      * @param mode
+     * @param targetEnvironment
      */
     public CollectionConfiguration(String subscriptionKey, String referenceId, String apiKey, Environment mode, String targetEnvironment) {
         this(subscriptionKey, referenceId, apiKey, mode, targetEnvironment, null);
@@ -76,6 +77,7 @@ public class CollectionConfiguration {
      * @param referenceId
      * @param apiKey
      * @param mode
+     * @param targetEnvironment
      * @param configurations
      */
     public CollectionConfiguration(String subscriptionKey, String referenceId, String apiKey, Environment mode, String targetEnvironment, Map<String, String> configurations) {

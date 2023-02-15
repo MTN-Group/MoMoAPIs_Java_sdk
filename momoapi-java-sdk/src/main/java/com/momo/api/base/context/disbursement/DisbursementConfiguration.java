@@ -23,10 +23,10 @@ public class DisbursementConfiguration {
 
     /**
      * This callBackURL will have a lower priority and will be overridden by the
-     * callBackURL set for the RequestObject.If the CallBackUrl is added to an
-     * object of this class, then there is no need to specify the CallBackUrl
-     * separately on each request object unless the callBackURL is different for
-     * each request.
+     * callBackURL set for the DisbursementRequestObject.If the CallBackUrl is
+     * added to an object of this class, then there is no need to specify the
+     * CallBackUrl separately on each request object unless the callBackURL is
+     * different for each request.
      *
      * @param callBackUrl
      * @return

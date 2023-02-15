@@ -21,13 +21,12 @@ public class CollectionConfiguration {
     private String subscriptionKey;
     private String targetEnvironment; // if we wish to give it explicitly, we can use this property
 
-    //TODO test case for addCallBackUrl and all similar functions that are required in integration test
     /**
      * This callBackURL will have a lower priority and will be overridden by the
-     * callBackURL set for the RequestObject.If the CallBackUrl is added to an
-     * object of this class, then there is no need to specify the CallBackUrl
-     * separately on each request object unless the callBackURL is different for
-     * each request.
+     * callBackURL set for the CollectionRequestObject.If the CallBackUrl is
+     * added to an object of this class, then there is no need to specify the
+     * CallBackUrl separately on each request object unless the callBackURL is
+     * different for each request.
      *
      * @param callBackUrl
      * @return
@@ -54,8 +53,6 @@ public class CollectionConfiguration {
         this(subscriptionKey, referenceId, apiKey, Environment.SANDBOX, Constants.SANDBOX);
     }
 
-    //TODO check if this constructor works as needed
-    //TODO also check check if this works with sandbox environment
     /**
      * Creates a singleton instance of CollectionContext.This
      * CollectionConfiguration constructor is used for Production environment,

@@ -190,7 +190,6 @@ public class CollectionContext implements MoMoContext {
         return this;
     }
 
-    //TODO call setTargetEnvironment from CollectionContext constructor by passing in the required targetEnvironment value
     /**
      * Set the TargetEnvironment based on the parameter passed in
      *

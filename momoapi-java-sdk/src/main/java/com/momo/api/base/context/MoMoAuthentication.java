@@ -14,6 +14,8 @@ import com.momo.api.base.util.ResourceUtil;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Base64;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -91,8 +93,7 @@ public class MoMoAuthentication extends BaseAuthentication {
 
             return null;
         } catch (IOException e) {
-            //TODO check if throwing MoMoException can be removed
-//            throw new MoMoException("An error occurred while generating AccessToken ", e);
+            Logger.getLogger(MoMoAuthentication.class.getName()).log(Level.SEVERE, e.toString(), e);
         } finally {
             // Replace the headers back to JSON for any future use.
             this.headers.put(Constants.HTTP_CONTENT_TYPE_HEADER, Constants.HTTP_CONTENT_TYPE_JSON);

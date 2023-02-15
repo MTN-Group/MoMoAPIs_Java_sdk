@@ -139,7 +139,6 @@ public class DisbursementRequestTest {
         assertNotNull(transferStatus.getFinancialTransactionId());
         assertNotNull(transferStatus.getPayeeNote());
         assertNotNull(transferStatus.getPayerMessage());
-        //TODO check Reason object is correct
         //assertNotNull(transferStatus.getReason());
         assertNotNull(transferStatus.getStatus());
 
@@ -345,9 +344,7 @@ public class DisbursementRequestTest {
 //        assertNotNull(depositStatus.getFinancialTransactionId());
         assertNotNull(depositStatus.getPayeeNote());
         assertNotNull(depositStatus.getPayerMessage());
-        //TODO check Reason object is correct
         //assertNotNull(payStatus.getReason());
-        //TODO assert possible status values : SUCCESSFUL
         assertNotNull(depositStatus.getStatus());
 
         assertNotNull(depositStatus.getPayee());
@@ -485,9 +482,7 @@ public class DisbursementRequestTest {
 //        assertNotNull(refundStatus.getFinancialTransactionId());
         assertNotNull(refundStatus.getPayeeNote());
         assertNotNull(refundStatus.getPayerMessage());
-        //TODO check Reason object is correct
         //assertNotNull(payStatus.getReason());
-        //TODO assert possible status values : SUCCESSFUL
         assertNotNull(refundStatus.getStatus());
 
         assertNotNull(refundStatus.getPayee());

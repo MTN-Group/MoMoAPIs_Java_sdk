@@ -27,7 +27,5 @@ public interface MoMoContext {
     
     public MoMoContext setMode(Environment mode);
     
-    //TODO this method is implemented but not yet called from anywhere. 
-    //Make sure targetEnvironment need to be passed as parameter and call the method from appropriately after passing in the targetEnvironment value to it.
     public MoMoContext setTargetEnvironment(String targetEnvironment);
 }

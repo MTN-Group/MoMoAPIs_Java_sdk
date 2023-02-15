@@ -15,6 +15,8 @@ import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * *
@@ -69,9 +71,6 @@ public abstract class HttpConnection {
             } else {
                 result.setPayLoad(null);
             }
-//        } catch (IOException e) {
-//            //TODO MoMoException thrown. Need to verified.
-//            throw new MoMoException("An error occurred while reading payload from response object", e);
         } finally {
             if (reader != null) {
                 reader.close();
@@ -165,24 +164,15 @@ public abstract class HttpConnection {
                                     HttpStatusCode.BAD_REQUEST, this.connection.getHeaderFields(), referenceId);
                             break;
                     }
-//                } catch (IOException e) {
-//                    //TODO MoMoException thrown. Need to verified.
-//                    throw new MoMoException("An error occurred while creating an HttpResponse object from the response received", e);
-//                    // requestResponse = HttpResponse.createResponse(null, false,
-//                    // HttpStatusCode.BAD_REQUEST);
-//                }
                 break retryLoop;
             } while (retry < this.config.getMaxRetry());
         } catch (IOException e) {
-            //TODO MoMoException thrown. Need to verified.
-//            throw new MoMoException("An error occurred while creating the request", e);
         } finally {
             if (writer != null) {
                 try {
                     writer.close();
                 } catch (IOException e) {
-                    //TODO MoMoException thrown. Need to verified.
-//                    throw new MoMoException("An error occurred while completing the request", e);
+                    Logger.getLogger(HttpConnection.class.getName()).log(Level.SEVERE, e.toString(), e);
                 } finally {
                     writer = null;
                 }

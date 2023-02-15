@@ -97,13 +97,12 @@ public class ResourceUtil {
             throws MoMoException {
         HttpResponse requestResponse = requestExecute(httpMethod, resourcePath, payLoad, notificationType, callBackURL, currentContext);
         StatusResponse statusResponse = new StatusResponse();
-        //TODO remove after test
+        //TODO remove after testing
         if (!StringUtils.isNullOrEmpty(requestResponse.getPayLoad().toString())) {
             System.out.println("PayLoad:::::::::::::::::::::: " + requestResponse.getPayLoad().toString());
         }
 
         statusResponse.setStatus(requestResponse.isSuccess());
-        //TODO should we create a separate model class that conain only "Status"? In some scenarios, we are not returning ReferenceId.
         if (requestResponse.getReferenceId() != null) {
             statusResponse.setReferenceId(requestResponse.getReferenceId());
         }
@@ -169,7 +168,7 @@ public class ResourceUtil {
             if (currentContext.getHTTPHeader(Constants.HTTP_CONTENT_TYPE_HEADER) == null) {
                 currentContext.addHTTPHeader(Constants.HTTP_CONTENT_TYPE_HEADER, Constants.HTTP_CONTENT_TYPE_JSON);
             }
-            //TODO make sure TARGET_ENVIRONMENT can be set to the value passed in during initialisation
+            
             if (currentContext.getHTTPHeader(Constants.TARGET_ENVIRONMENT) == null) {
                 if(currentContext.getConfigurationMap().containsKey(Constants.TARGET_ENVIRONMENT) && !StringUtils.isNullOrEmpty(currentContext.getConfigurationMap().get(Constants.TARGET_ENVIRONMENT))){
                     currentContext.addHTTPHeader(Constants.TARGET_ENVIRONMENT, currentContext.getConfigurationMap().get(Constants.TARGET_ENVIRONMENT));
@@ -281,8 +280,6 @@ public class ResourceUtil {
                 .replace(Constants.ACCOUNT_HOLDER_ID_TYPE, accountHolder.getAccountHolderIdType())
                 .replace(Constants.ACCOUNT_HOLDER_ID, accountHolder.getAccountHolderId());
 
-        //TODO do I need to check this in all cases where resourcePath is created
-        //Need to varify if all the variables are validated
         if (StringUtils.isNullOrEmpty(resourcePath)) {
             throw new MoMoException(
                     new HttpErrorResponse.HttpErrorResponseBuilder(Constants.INTERNAL_ERROR_CATEGORY,

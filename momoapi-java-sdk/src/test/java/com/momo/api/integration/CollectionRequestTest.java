@@ -40,8 +40,6 @@ public class CollectionRequestTest {
 
     //TODO add comment for test methods
     //TODO test with MSISDN, EMAIL or PARTY_CODE
-    //TODO write each case description in detail
-    //TODO test if MODE(sandbox/prod), and other similar values are not causing any errors while creating an instance or modifying them
     static PropertiesLoader loader;
 
     @BeforeAll
@@ -96,7 +94,6 @@ public class CollectionRequestTest {
     }
 
     //TODO test methods that have reference_id as parameters, by passing a previously used reference id
-    //TODO if required read object from jsonString: RequestToPay requestToPayFromString = JSONFormatter.fromJSON(requestToPayJsonString, RequestToPay.class); //only for success scenarios
     @Test
     @DisplayName("Request To Pay Test Success")
     void requestToPayTestSuccess() throws MoMoException {
@@ -152,7 +149,6 @@ public class CollectionRequestTest {
         assertNotNull(requestPayStatus.getFinancialTransactionId());
         assertNotNull(requestPayStatus.getPayeeNote());
         assertNotNull(requestPayStatus.getPayerMessage());
-        //TODO check Reason object is correct
         //assertNotNull(requestPayStatus.getReason());
         assertNotNull(requestPayStatus.getStatus());
         assertTrue(requestPayStatus.getStatus().equals("SUCCESSFUL"));
@@ -228,7 +224,6 @@ public class CollectionRequestTest {
         CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX);
         CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
 
-        //TODO some methods donot accept NULL valies directly, and throws compile tome error. check which method it is.
         //case 1: currency is null
         MoMoException moMoException = assertThrows(MoMoException.class, () -> collectionRequest.getAccountBalanceInSpecificCurrency(null));
         assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_VALUE_ERROR);
@@ -438,9 +433,7 @@ public class CollectionRequestTest {
         assertNotNull(withdrawStatus.getFinancialTransactionId());
         assertNotNull(withdrawStatus.getPayeeNote());
         assertNotNull(withdrawStatus.getPayerMessage());
-        //TODO check Reason object is correct
         //assertNotNull(payStatus.getReason());
-        //TODO assert possible status values
         assertNotNull(withdrawStatus.getStatus());
 
         assertNotNull(withdrawStatus.getPayer());

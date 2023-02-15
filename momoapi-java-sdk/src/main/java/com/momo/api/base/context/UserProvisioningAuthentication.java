@@ -17,6 +17,8 @@ import com.momo.api.models.ApiUser;
 import com.momo.api.models.CallbackHost;
 import java.io.IOException;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -69,14 +71,12 @@ public class UserProvisioningAuthentication extends BaseAuthentication {
 
             ResourceUtil.validateResponseData(responseData);
 
-            //TODO might need proper response as an object(StatusResponse) after creation of new user
             StatusResponse statusResponse = new StatusResponse();
             statusResponse.setReferenceId(this.referenceId);
             statusResponse.setStatus(responseData.isSuccess());
             return statusResponse;
         } catch (IOException e) {
-            //TODO MoMoException thrown. Need to be verified.
-            //throw new MoMoException("An error occurred while creating a new API User ", e);
+            Logger.getLogger(UserProvisioningAuthentication.class.getName()).log(Level.SEVERE, e.toString(), e);
         } finally {
             // Replace the headers back to JSON for any future use.
             this.headers.put(Constants.HTTP_CONTENT_TYPE_HEADER, Constants.HTTP_CONTENT_TYPE_JSON);
@@ -118,9 +118,8 @@ public class UserProvisioningAuthentication extends BaseAuthentication {
             }
 
             return null;
-        } catch (IOException ex) {
-            //TODO MoMoException thrown. Need to be verified.
-//            throw new MoMoException("An error occurred while fetching the API User details", e);
+        } catch (IOException e) {
+            Logger.getLogger(UserProvisioningAuthentication.class.getName()).log(Level.SEVERE, e.toString(), e);
         } finally {
             // Replace the headers back to JSON for any future use.
             this.headers.put(Constants.HTTP_CONTENT_TYPE_HEADER, Constants.HTTP_CONTENT_TYPE_JSON);
@@ -162,8 +161,7 @@ public class UserProvisioningAuthentication extends BaseAuthentication {
 
             return null;
         } catch (IOException e) {
-            //TODO MoMoException thrown. Need to verified.
-//            throw new MoMoException("An error occurred while generating the API Key", e);
+            Logger.getLogger(UserProvisioningAuthentication.class.getName()).log(Level.SEVERE, e.toString(), e);
         } finally {
             // Replace the headers back to JSON for any future use.
             this.headers.put(Constants.HTTP_CONTENT_TYPE_HEADER, Constants.HTTP_CONTENT_TYPE_JSON);

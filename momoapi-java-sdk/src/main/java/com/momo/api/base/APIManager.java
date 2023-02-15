@@ -7,6 +7,8 @@ import com.momo.api.constants.Environment;
 import java.net.URL;
 import java.util.Collections;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -62,7 +64,7 @@ public final class APIManager {
         try {
             endPoint = getAPIBaseURL().toURI() + resourcePoint;
         } catch (Exception e) {
-
+            Logger.getLogger(APIManager.class.getName()).log(Level.SEVERE, e.toString(), e);
         }
         return endPoint;
     }
@@ -88,8 +90,6 @@ public final class APIManager {
             }
 
             if (urlString == null || urlString.trim().length() <= 0) {
-                //TODO the Exception can be changed to MoMoException
-                //TODO the thrown exception is not handled in the subsequent method
                 throw new Exception("Could not find API endpoint");
             }
 

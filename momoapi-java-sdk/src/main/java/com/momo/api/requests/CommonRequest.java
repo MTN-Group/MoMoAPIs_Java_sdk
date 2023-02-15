@@ -3,6 +3,7 @@ package com.momo.api.requests;
 import com.momo.api.base.constants.API;
 import com.momo.api.base.constants.Constants;
 import com.momo.api.base.constants.HttpMethod;
+import com.momo.api.base.constants.IdType;
 import com.momo.api.base.context.MoMoContext;
 import com.momo.api.base.exception.MoMoException;
 import com.momo.api.base.model.StatusResponse;
@@ -78,7 +79,7 @@ public class CommonRequest extends ResourceUtil {
         }
 
         String resourcePath = API.SUBSCRIPTION_VER_ACCOUNTHOLDER_USER_INFO
-                .replace(Constants.ACCOUNT_HOLDER_ID_TYPE, Constants.MSISDN)
+                .replace(Constants.ACCOUNT_HOLDER_ID_TYPE, IdType.MSISDN.getIdTypeLowerCase())
                 .replace(Constants.ACCOUNT_HOLDER_ID, msisdn);
 
         resourcePath = resourcePath

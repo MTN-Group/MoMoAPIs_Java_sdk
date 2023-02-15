@@ -1,8 +1,11 @@
 package com.momo.api.unit;
 
 import com.momo.api.base.constants.Constants;
+import com.momo.api.base.constants.IdType;
+import com.momo.api.base.context.collection.CollectionConfiguration;
 import com.momo.api.base.exception.MoMoException;
 import com.momo.api.base.model.StatusResponse;
+import com.momo.api.constants.Environment;
 import com.momo.api.models.AccountBalance;
 import com.momo.api.models.AccountHolder;
 import com.momo.api.models.BasicUserInfo;
@@ -33,6 +36,32 @@ public class CollectionRequestTest {
     private static final String MSISDN = "23423423450";
 
     @Test
+    @DisplayName("Collection Configuration Test Success")
+    void collectionConfigurationTestFailure() throws MoMoException {
+        MoMoException moMoException = assertThrows(MoMoException.class, () -> new CollectionConfiguration(
+                "",
+                "REFERENCE_ID",
+                "API_KEY",
+                Environment.SANDBOX,
+                Constants.SANDBOX));
+        assertEquals(moMoException.getError().getErrorDescription(), Constants.EMPTY_STRING_ERROR);
+        moMoException = assertThrows(MoMoException.class, () -> new CollectionConfiguration(
+                "SUBSCRIPTION_KEY",
+                null,
+                "API_KEY",
+                Environment.SANDBOX,
+                Constants.SANDBOX));
+        assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_VALUE_ERROR);
+        moMoException = assertThrows(MoMoException.class, () -> new CollectionConfiguration(
+                "SUBSCRIPTION_KEY",
+                "REFERENCE_ID",
+                "API_KEY",
+                null,
+                Constants.SANDBOX));
+        assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_ENVIRONMENT_ERROR);
+    }
+
+    @Test
     @DisplayName("Request To Pay Test Success")
     void requestToPayTestSuccess() throws MoMoException {
         CollectionRequest collectionRequestSpy = spy(new CollectionRequest());
@@ -51,10 +80,10 @@ public class CollectionRequestTest {
     @DisplayName("Request To Pay Test Failure")
     void requestToPayTestFailure() throws MoMoException {
         CollectionRequest collectionRequestSpy = spy(new CollectionRequest());
-        
+
         RequestPay requestPay = getRequestPay();
         doThrow(MoMoException.class).when(collectionRequestSpy).requestToPay(requestPay);
-        
+
         assertThrows(MoMoException.class, () -> collectionRequestSpy.requestToPay(requestPay));
     }
 
@@ -76,9 +105,9 @@ public class CollectionRequestTest {
     @DisplayName("Request To Pay Transaction Status Test Failure")
     void requestToPayTransactionStatusTestFailure() throws MoMoException {
         CollectionRequest collectionRequestSpy = spy(new CollectionRequest());
-        
+
         doThrow(MoMoException.class).when(collectionRequestSpy).requestToPayTransactionStatus(REFERENCE_ID_PARAMETER);
-        
+
         assertThrows(MoMoException.class, () -> collectionRequestSpy.requestToPayTransactionStatus(REFERENCE_ID_PARAMETER));
     }
 
@@ -95,14 +124,14 @@ public class CollectionRequestTest {
         assertNotNull(actualAccountBalance.getAvailableBalance());
         assertEquals(actualAccountBalance.getAvailableBalance(), expectedAccountBalance.getAvailableBalance());
     }
-    
+
     @Test
     @DisplayName("Get Account Balance Test Failure")
-    void getAccountBalanceTestFailure() throws MoMoException{
+    void getAccountBalanceTestFailure() throws MoMoException {
         CollectionRequest collectionRequestSpy = spy(new CollectionRequest());
-        
+
         doThrow(MoMoException.class).when(collectionRequestSpy).getAccountBalance();
-        
+
         assertThrows(MoMoException.class, () -> collectionRequestSpy.getAccountBalance());
     }
 
@@ -119,14 +148,14 @@ public class CollectionRequestTest {
         assertNotNull(actualAccountBalance.getAvailableBalance());
         assertEquals(actualAccountBalance.getAvailableBalance(), expectedAccountBalance.getAvailableBalance());
     }
-    
+
     @Test
     @DisplayName("Get Account Balance In Specific Currency Test Failure")
-    void getAccountBalanceInSpecificCurrencyTestFailure() throws MoMoException{
+    void getAccountBalanceInSpecificCurrencyTestFailure() throws MoMoException {
         CollectionRequest collectionRequestSpy = spy(new CollectionRequest());
-        
+
         doThrow(MoMoException.class).when(collectionRequestSpy).getAccountBalanceInSpecificCurrency("EUR");
-        
+
         assertThrows(MoMoException.class, () -> collectionRequestSpy.getAccountBalanceInSpecificCurrency("EUR"));
     }
 
@@ -147,15 +176,15 @@ public class CollectionRequestTest {
         assertEquals(statusResponse.getReferenceId(), null);
         assertEquals(statusResponse.getStatus(), expectedStatusResponse.getStatus());
     }
-    
+
     @Test
     @DisplayName("Request To Pay Delivery Notification Test Failure")
-    void requestToPayDeliveryNotificationTestFailure() throws MoMoException{
+    void requestToPayDeliveryNotificationTestFailure() throws MoMoException {
         CollectionRequest collectionRequestSpy = spy(new CollectionRequest());
-        
+
         DeliveryNotification deliveryNotification = new DeliveryNotification();
         doThrow(MoMoException.class).when(collectionRequestSpy).requestToPayDeliveryNotification(REFERENCE_ID_PARAMETER, deliveryNotification, "Header Message");
-        
+
         assertThrows(MoMoException.class, () -> collectionRequestSpy.requestToPayDeliveryNotification(REFERENCE_ID_PARAMETER, deliveryNotification, "Header Message"));
     }
 
@@ -165,22 +194,22 @@ public class CollectionRequestTest {
         CollectionRequest collectionRequestSpy = spy(new CollectionRequest());
 
         Result expectedResult = getExpectedResult();
-        AccountHolder accountHolder = new AccountHolder(Constants.MSISDN, MSISDN);
+        AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getIdTypeLowerCase(), MSISDN);
         doReturn(expectedResult).when(collectionRequestSpy).validateAccountHolderStatus(accountHolder);
 
         Result actualResult = collectionRequestSpy.validateAccountHolderStatus(accountHolder);
         assertNotNull(actualResult);
         assertEquals(actualResult.getResult(), expectedResult.getResult());
     }
-    
+
     @Test
     @DisplayName("Validate Account Holder Status Test Failure")
-    void validateAccountHolderStatusTestFailure() throws MoMoException{
+    void validateAccountHolderStatusTestFailure() throws MoMoException {
         CollectionRequest collectionRequestSpy = spy(new CollectionRequest());
-        
-        AccountHolder accountHolder = new AccountHolder(Constants.MSISDN, MSISDN);
+
+        AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getIdTypeLowerCase(), MSISDN);
         doThrow(MoMoException.class).when(collectionRequestSpy).validateAccountHolderStatus(accountHolder);
-        
+
         assertThrows(MoMoException.class, () -> collectionRequestSpy.validateAccountHolderStatus(accountHolder));
     }
 
@@ -203,12 +232,13 @@ public class CollectionRequestTest {
     @DisplayName("Request To Withdraw V1 Test Failure")
     void requestToWithdrawV1TestFailure() throws MoMoException {
         CollectionRequest collectionRequestSpy = spy(new CollectionRequest());
-        
+
         Withdraw withdraw = getWithdraw();
         doThrow(MoMoException.class).when(collectionRequestSpy).requestToWithdrawV1(withdraw);
-        
+
         assertThrows(MoMoException.class, () -> collectionRequestSpy.requestToWithdrawV1(withdraw));
     }
+
     @Test
     @DisplayName("Request To Withdraw V2 Test Success")
     void requestToWithdrawV2TestSuccess() throws MoMoException {
@@ -228,10 +258,10 @@ public class CollectionRequestTest {
     @DisplayName("Request To Withdraw V2 Test Failure")
     void requestToWithdrawV2TestFailure() throws MoMoException {
         CollectionRequest collectionRequestSpy = spy(new CollectionRequest());
-        
+
         Withdraw withdraw = getWithdraw();
         doThrow(MoMoException.class).when(collectionRequestSpy).requestToWithdrawV2(withdraw);
-        
+
         assertThrows(MoMoException.class, () -> collectionRequestSpy.requestToWithdrawV2(withdraw));
     }
 
@@ -253,11 +283,12 @@ public class CollectionRequestTest {
     @DisplayName("Request To Withdraw Transaction Status Test Failure")
     void requestToWithdrawTransactionStatusTestFailure() throws MoMoException {
         CollectionRequest collectionRequestSpy = spy(new CollectionRequest());
-        
+
         doThrow(MoMoException.class).when(collectionRequestSpy).requestToWithdrawTransactionStatus(REFERENCE_ID_PARAMETER);
-        
+
         assertThrows(MoMoException.class, () -> collectionRequestSpy.requestToWithdrawTransactionStatus(REFERENCE_ID_PARAMETER));
     }
+
     @Test
     @DisplayName("Get Basic Userinfo Test Success")
     void getBasicUserinfoTestSuccess() throws MoMoException {
@@ -265,26 +296,26 @@ public class CollectionRequestTest {
 
         BasicUserInfo expectedBasicUserInfo = getExpectedBasicUserInfo();
         doReturn(expectedBasicUserInfo).when(collectionRequestSpy).getBasicUserinfo(MSISDN);
-        
+
         BasicUserInfo basicUserInfo = collectionRequestSpy.getBasicUserinfo(MSISDN);
         assertNotNull(basicUserInfo);
         assertNotNull(basicUserInfo.getBirthdate());
         assertEquals(basicUserInfo.getBirthdate(), expectedBasicUserInfo.getBirthdate());
     }
-    
+
     @Test
     @DisplayName("Get Basic Userinfo Test Failure")
-    void getBasicUserinfoTestFailure() throws MoMoException{
+    void getBasicUserinfoTestFailure() throws MoMoException {
         CollectionRequest collectionRequestSpy = spy(new CollectionRequest());
-        
+
         doThrow(MoMoException.class).when(collectionRequestSpy).getBasicUserinfo(MSISDN);
-        
+
         assertThrows(MoMoException.class, () -> collectionRequestSpy.getBasicUserinfo(MSISDN));
     }
 
     private StatusResponse getExpectedStatusResponse(boolean haveReferenceId) {
         StatusResponse statusResponse = new StatusResponse();
-        if(haveReferenceId){
+        if (haveReferenceId) {
             statusResponse.setReferenceId(REFERENCE_ID_RETURNED);
         }
         statusResponse.setStatus(true);
@@ -294,7 +325,7 @@ public class CollectionRequestTest {
     private RequestPayStatus getExpectedPayStatus() {
         Payer payer = new Payer();
         payer.setPartyId(MSISDN);
-        payer.setPartyIdType(Constants.MSISDN);
+        payer.setPartyIdType(IdType.MSISDN.getIdType());
 
         RequestPayStatus requestPayStatus = new RequestPayStatus();
         requestPayStatus.setAmount("6");
@@ -323,7 +354,7 @@ public class CollectionRequestTest {
         WithdrawStatus withdrawStatus = new WithdrawStatus();
         Payer payer = new Payer();
         payer.setPartyId(MSISDN);
-        payer.setPartyIdType(Constants.MSISDN);
+        payer.setPartyIdType(IdType.MSISDN.getIdType());
 
         withdrawStatus.setAmount("6");
         withdrawStatus.setCurrency("EUR");
@@ -348,7 +379,7 @@ public class CollectionRequestTest {
     private static Payer getPayer() {
         Payer payer = new Payer();
         payer.setPartyId(MSISDN);
-        payer.setPartyIdType(Constants.MSISDN);
+        payer.setPartyIdType(IdType.MSISDN.getIdType());
         return payer;
     }
 

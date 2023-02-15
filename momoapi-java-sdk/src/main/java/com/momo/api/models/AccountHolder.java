@@ -10,6 +10,7 @@ public class AccountHolder implements Serializable {
 
     private static final long serialVersionUID = -6178355438770692536L;
 
+    //TODO do we need to validate if it is all in small cases and not capital
     // Provides the account holder type
     private String accountHolderIdType;
 

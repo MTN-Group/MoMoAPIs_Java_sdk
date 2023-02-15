@@ -2,6 +2,7 @@ package com.momo.api.base.context.disbursement;
 
 import com.momo.api.base.constants.Constants;
 import com.momo.api.base.exception.MoMoException;
+import com.momo.api.base.util.Validator;
 import com.momo.api.constants.Environment;
 import com.momo.api.requests.disbursement.DisbursementRequest;
 import java.util.Map;
@@ -46,8 +47,9 @@ public class DisbursementConfiguration {
      * @param subscriptionKey
      * @param referenceId
      * @param apiKey
+     * @throws MoMoException
      */
-    public DisbursementConfiguration(String subscriptionKey, String referenceId, String apiKey) {
+    public DisbursementConfiguration(String subscriptionKey, String referenceId, String apiKey) throws MoMoException {
         this(subscriptionKey, referenceId, apiKey, Environment.SANDBOX, Constants.SANDBOX);
     }
 
@@ -61,8 +63,9 @@ public class DisbursementConfiguration {
      * @param apiKey
      * @param mode
      * @param targetEnvironment
+     * @throws MoMoException
      */
-    public DisbursementConfiguration(String subscriptionKey, String referenceId, String apiKey, Environment mode, String targetEnvironment) {
+    public DisbursementConfiguration(String subscriptionKey, String referenceId, String apiKey, Environment mode, String targetEnvironment) throws MoMoException {
         this(subscriptionKey, referenceId, apiKey, mode, targetEnvironment, null);
     }
 
@@ -75,14 +78,16 @@ public class DisbursementConfiguration {
      * @param mode
      * @param targetEnvironment
      * @param configurations
+     * @throws MoMoException
      */
-    public DisbursementConfiguration(String subscriptionKey, String referenceId, String apiKey, Environment mode, String targetEnvironment, Map<String, String> configurations) {
+    public DisbursementConfiguration(String subscriptionKey, String referenceId, String apiKey, Environment mode, String targetEnvironment, Map<String, String> configurations) throws MoMoException {
         this.subscriptionKey = subscriptionKey;
         this.referenceId = referenceId;
         this.apiKey = apiKey;
         this.mode = mode;
         this.configurations = configurations;
         this.targetEnvironment = targetEnvironment;
+        Validator.configurationValidator(subscriptionKey, referenceId, apiKey, mode, targetEnvironment);
     }
 
     /**

@@ -1,8 +1,11 @@
 package com.momo.api.unit;
 
 import com.momo.api.base.constants.Constants;
+import com.momo.api.base.constants.IdType;
+import com.momo.api.base.context.disbursement.DisbursementConfiguration;
 import com.momo.api.base.exception.MoMoException;
 import com.momo.api.base.model.StatusResponse;
+import com.momo.api.constants.Environment;
 import com.momo.api.models.AccountBalance;
 import com.momo.api.models.AccountHolder;
 import com.momo.api.models.BasicUserInfo;
@@ -33,6 +36,32 @@ public class DisbursementRequestTest {
     private static final String REFERENCE_ID_RETURNED = UUID.randomUUID().toString();
     private static final String REFERENCE_ID_PARAMETER = UUID.randomUUID().toString();
     private static final String MSISDN = "23423423450";
+
+    @Test
+    @DisplayName("Disbursement Configuration Test Success")
+    void disbursementConfigurationTestFailure() throws MoMoException {
+        MoMoException moMoException = assertThrows(MoMoException.class, () -> new DisbursementConfiguration(
+                "",
+                "REFERENCE_ID",
+                "API_KEY",
+                Environment.SANDBOX,
+                Constants.SANDBOX));
+        assertEquals(moMoException.getError().getErrorDescription(), Constants.EMPTY_STRING_ERROR);
+        moMoException = assertThrows(MoMoException.class, () -> new DisbursementConfiguration(
+                "SUBSCRIPTION_KEY",
+                null,
+                "API_KEY",
+                Environment.SANDBOX,
+                Constants.SANDBOX));
+        assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_VALUE_ERROR);
+        moMoException = assertThrows(MoMoException.class, () -> new DisbursementConfiguration(
+                "SUBSCRIPTION_KEY",
+                "REFERENCE_ID",
+                "API_KEY",
+                null,
+                Constants.SANDBOX));
+        assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_ENVIRONMENT_ERROR);
+    }
     
     @Test
     @DisplayName("Transfer Test Success")
@@ -138,7 +167,7 @@ public class DisbursementRequestTest {
         DisbursementRequest disbursementRequestSpy = spy(new DisbursementRequest());
         
         Result expectedResult = getExpectedResult();
-        AccountHolder accountHolder = new AccountHolder(Constants.MSISDN, MSISDN);
+        AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getIdTypeLowerCase(), MSISDN);
         doReturn(expectedResult).when(disbursementRequestSpy).validateAccountHolderStatus(accountHolder);
 
         Result actualResult = disbursementRequestSpy.validateAccountHolderStatus(accountHolder);
@@ -151,7 +180,7 @@ public class DisbursementRequestTest {
     void validateAccountHolderStatusTestFailure() throws MoMoException {
         DisbursementRequest disbursementRequestSpy = spy(new DisbursementRequest());
         
-        AccountHolder accountHolder = new AccountHolder(Constants.MSISDN, MSISDN);
+        AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getIdTypeLowerCase(), MSISDN);
         doThrow(MoMoException.class).when(disbursementRequestSpy).validateAccountHolderStatus(accountHolder);
         
         assertThrows(MoMoException.class, () -> disbursementRequestSpy.validateAccountHolderStatus(accountHolder));
@@ -375,7 +404,7 @@ public class DisbursementRequestTest {
         
         Payee payee = new Payee();
         payee.setPartyId(MSISDN);
-        payee.setPartyIdType(Constants.MSISDN);
+        payee.setPartyIdType(IdType.MSISDN.getIdType());
 
         TransferStatus transferStatus = new TransferStatus();
         transferStatus.setAmount("6");
@@ -391,7 +420,7 @@ public class DisbursementRequestTest {
     private DepositStatus getExpectedDepositStatus(){
         Payee payee = new Payee();
         payee.setPartyId(MSISDN);
-        payee.setPartyIdType(Constants.MSISDN);
+        payee.setPartyIdType(IdType.MSISDN.getIdType());
 
         DepositStatus depositStatus = new DepositStatus();
         depositStatus.setAmount("6");
@@ -406,7 +435,7 @@ public class DisbursementRequestTest {
     private RefundStatus getExpectedRefundStatus(){
         Payee payee = new Payee();
         payee.setPartyId(MSISDN);
-        payee.setPartyIdType(Constants.MSISDN);
+        payee.setPartyIdType(IdType.MSISDN.getIdType());
 
         RefundStatus refundStatus = new RefundStatus();
         refundStatus.setAmount("6");
@@ -444,7 +473,7 @@ public class DisbursementRequestTest {
     private static Payee getPayee() {
         Payee payee = new Payee();
         payee.setPartyId(MSISDN);
-        payee.setPartyIdType(Constants.MSISDN);
+        payee.setPartyIdType(IdType.MSISDN.getIdType());
         return payee;
     }
 

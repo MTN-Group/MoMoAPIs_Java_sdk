@@ -2,6 +2,7 @@ package com.momo.api.integration;
 
 import com.momo.api.base.HttpStatusCode;
 import com.momo.api.base.constants.Constants;
+import com.momo.api.base.constants.IdType;
 import com.momo.api.base.context.collection.CollectionConfiguration;
 import com.momo.api.base.context.provisioning.UserProvisioningConfiguration;
 import com.momo.api.base.context.provisioning.UserProvisioningContext;
@@ -321,7 +322,7 @@ public class CollectionRequestTest {
         CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX);
         CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
 
-        AccountHolder accountHolder = new AccountHolder(Constants.MSISDN, MSISDN_NUMBER);
+        AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getIdTypeLowerCase(), MSISDN_NUMBER);
         Result result = collectionRequest.validateAccountHolderStatus(accountHolder);
         assertNotNull(result);
         assertTrue(result.getResult());
@@ -340,7 +341,7 @@ public class CollectionRequestTest {
         assertEquals(moMoException.getError().getErrorDescription(), Constants.ACCOUNT_HOLDER_OBJECT_INIT_ERROR);
 
         //case 2: Key or Value is null
-        moMoException = assertThrows(MoMoException.class, () -> collectionRequest.validateAccountHolderStatus(new AccountHolder(Constants.MSISDN, null)));
+        moMoException = assertThrows(MoMoException.class, () -> collectionRequest.validateAccountHolderStatus(new AccountHolder(IdType.MSISDN.getIdTypeLowerCase(), null)));
         assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_VALUE_ERROR);
 
         //case 3: Key or Value is empty
@@ -561,7 +562,7 @@ public class CollectionRequestTest {
     private static Payer getPayer(String msisdnValue) {
         Payer payer = new Payer();
         payer.setPartyId(msisdnValue);
-        payer.setPartyIdType(Constants.MSISDN);
+        payer.setPartyIdType(IdType.MSISDN.getIdType());
         return payer;
     }
 

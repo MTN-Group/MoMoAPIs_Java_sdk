@@ -8,9 +8,10 @@ public final class API {
     //Base URL for Sandbox Environment
     public static final String SANDBOX_URL = "https://sandbox.momodeveloper.mtn.com";
 
+    //TODO validate if production url is est correctlt according to Environment used
     //TODO do we need to make the production url modifiable in some way?
     //Base URL for Production Environment
-    public static final String PRODUCTION_URL = "";
+    public static final String PRODUCTION_URL = "https://proxy.momoapi.mtn.com";
 
     //Create an API user
     public static final String API_USER = "/v1_0/apiuser";

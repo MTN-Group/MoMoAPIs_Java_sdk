@@ -31,16 +31,6 @@ public final class Constants {
     //Currency(Eg:- EUR)
     public static final String CURRENCY = "{currency}";
     
-    //TODO do we need an enum or class separately as AccountHolderIdType 
-    //msisdn is an account holder
-    public static final String MSISDN = "msisdn";
-    
-    //email is an account holder
-    public static final String EMAIL = "email";
-    
-    //party_code is an account holder
-    public static final String PARTY_CODE = "party_code";
-    
     // Invalid REST endpoint
     public static final String INVALID_REST_ENDPOINT = "REST API endpoint could not be fetched properly.";
     
@@ -140,6 +130,9 @@ public final class Constants {
     
     // Empty string Value
     public static final String EMPTY_STRING_ERROR = "The request could not be processed due to Empty String";
+    
+    // Empty or Null String
+    public static final String NULL_ENVIRONMENT_ERROR = "Environment must not be null";
     
     // Invalid parameters
     public static final String INVALID_PARAMETERS = "The request could not be processed due to invalid parameters";

@@ -2,6 +2,7 @@ package com.momo.api.base.context.collection;
 
 import com.momo.api.base.constants.Constants;
 import com.momo.api.base.exception.MoMoException;
+import com.momo.api.base.util.Validator;
 import com.momo.api.constants.Environment;
 import com.momo.api.requests.collection.CollectionRequest;
 import java.util.Map;
@@ -41,14 +42,15 @@ public class CollectionConfiguration {
     }
 
     /**
-     * Creates a singleton instance of CollectionContext. This
+     * Creates a singleton instance of CollectionContext.This
      * CollectionConfiguration constructor is used for Sandbox environment
      *
      * @param subscriptionKey
      * @param referenceId
      * @param apiKey
+     * @throws MoMoException
      */
-    public CollectionConfiguration(String subscriptionKey, String referenceId, String apiKey) {
+    public CollectionConfiguration(String subscriptionKey, String referenceId, String apiKey) throws MoMoException {
         this(subscriptionKey, referenceId, apiKey, Environment.SANDBOX, Constants.SANDBOX);
     }
 
@@ -64,8 +66,9 @@ public class CollectionConfiguration {
      * @param apiKey
      * @param mode
      * @param targetEnvironment
+     * @throws MoMoException
      */
-    public CollectionConfiguration(String subscriptionKey, String referenceId, String apiKey, Environment mode, String targetEnvironment) {
+    public CollectionConfiguration(String subscriptionKey, String referenceId, String apiKey, Environment mode, String targetEnvironment) throws MoMoException {
         this(subscriptionKey, referenceId, apiKey, mode, targetEnvironment, null);
     }
 
@@ -79,14 +82,16 @@ public class CollectionConfiguration {
      * @param mode
      * @param targetEnvironment
      * @param configurations
+     * @throws MoMoException
      */
-    public CollectionConfiguration(String subscriptionKey, String referenceId, String apiKey, Environment mode, String targetEnvironment, Map<String, String> configurations) {
+    public CollectionConfiguration(String subscriptionKey, String referenceId, String apiKey, Environment mode, String targetEnvironment, Map<String, String> configurations) throws MoMoException {
         this.subscriptionKey = subscriptionKey;
         this.referenceId = referenceId;
         this.apiKey = apiKey;
         this.mode = mode;
         this.configurations = configurations;
         this.targetEnvironment = targetEnvironment;
+        Validator.configurationValidator(subscriptionKey, referenceId, apiKey, mode, targetEnvironment);
     }
 
     /**

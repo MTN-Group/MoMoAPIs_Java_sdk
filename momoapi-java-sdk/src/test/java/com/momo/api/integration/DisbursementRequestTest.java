@@ -2,6 +2,7 @@ package com.momo.api.integration;
 
 import com.momo.api.base.HttpStatusCode;
 import com.momo.api.base.constants.Constants;
+import com.momo.api.base.constants.IdType;
 import com.momo.api.base.context.collection.CollectionConfiguration;
 import com.momo.api.base.context.disbursement.DisbursementConfiguration;
 import com.momo.api.base.context.disbursement.DisbursementContext;
@@ -228,7 +229,7 @@ public class DisbursementRequestTest {
         DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX);
         DisbursementRequest disbursementRequest = disbursementConfiguration.createDisbursementRequest();
 
-        AccountHolder accountHolder = new AccountHolder(Constants.MSISDN, MSISDN_NUMBER);
+        AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getIdTypeLowerCase(), MSISDN_NUMBER);
         Result result = disbursementRequest.validateAccountHolderStatus(accountHolder);
         assertNotNull(result);
         assertTrue(result.getResult());
@@ -247,7 +248,7 @@ public class DisbursementRequestTest {
         assertEquals(moMoException.getError().getErrorDescription(), Constants.ACCOUNT_HOLDER_OBJECT_INIT_ERROR);
 
         //case 2: Key or Value is null
-        moMoException = assertThrows(MoMoException.class, () -> disbursementRequest.validateAccountHolderStatus(new AccountHolder(Constants.MSISDN, null)));
+        moMoException = assertThrows(MoMoException.class, () -> disbursementRequest.validateAccountHolderStatus(new AccountHolder(IdType.MSISDN.getIdTypeLowerCase(), null)));
         assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_VALUE_ERROR);
 
         //case 3: Key or Value is empty
@@ -598,7 +599,7 @@ public class DisbursementRequestTest {
     private static Payee getPayee(String msisdnValue) {
         Payee payee = new Payee();
         payee.setPartyId(msisdnValue);
-        payee.setPartyIdType(Constants.MSISDN);
+        payee.setPartyIdType(IdType.MSISDN.getIdType());
         return payee;
     }
 
@@ -646,7 +647,7 @@ public class DisbursementRequestTest {
     private static Payer getPayer(String msisdnValue) {
         Payer payer = new Payer();
         payer.setPartyId(msisdnValue);
-        payer.setPartyIdType(Constants.MSISDN);
+        payer.setPartyIdType(IdType.MSISDN.getIdType());
         return payer;
     }
 

@@ -30,7 +30,6 @@ import java.util.UUID;
  */
 public class CollectionRequest extends CommonRequest {
 
-    //TODO do we need separate referenceID for each type of request under a section and getter for each?    
     private String referenceId;
 
     /**

@@ -16,8 +16,6 @@ import com.momo.api.models.CallbackHost;
  */
 public class UserProvisioningRequest {
 
-    //TODO recheck validation for each case 
-    //TODO can UserProvisioningRequest be moved to a separate package similar to collectionRequest
     /**
      * Used to create an API user in the sandbox target environment.
      *

@@ -24,7 +24,6 @@ import com.momo.api.models.Result;
  */
 public class CommonRequest extends ResourceUtil {
 
-    //TODO Make sure to remove methods that are not required for a usecase/module.
     protected NotificationType notificationType = NotificationType.CALLBACK;
     protected String callBackURL;
     
@@ -87,7 +86,6 @@ public class CommonRequest extends ResourceUtil {
         return createRequest(HttpMethod.GET, resourcePath, null, notificationType, callBackURL, BasicUserInfo.class, currentContext);
     }
 
-    //TODO deliveryNotification is not mandatory for header. we can create separate method for accepting both if needed
     /**
      * This operation is used to send additional Notification to an End User.
      *

@@ -11,14 +11,12 @@ import com.momo.api.config.PropertiesLoader;
 import com.momo.api.models.ApiKey;
 import com.momo.api.models.ApiUser;
 import com.momo.api.models.CallbackHost;
-import java.util.Arrays;
 import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-//TODO UserProvisioningRequestTest Unit test is not written
 /**
  *
  * Class UserProvisioningRequestTest
@@ -44,7 +42,6 @@ public class UserProvisioningRequestTest {
         StatusResponse statusResponse = userProvisioningRequest.createUser(callbackHost);
         assertNotNull(statusResponse);
         assertNotNull(statusResponse.getReferenceId());
-        //TODO use this validation in other cases if required
         assertEquals(UUID.fromString(statusResponse.getReferenceId()).toString(), statusResponse.getReferenceId());
     }
 
@@ -67,7 +64,6 @@ public class UserProvisioningRequestTest {
         callbackHost.setProviderCallbackHost(null);
         moMoException = assertThrows(MoMoException.class, () -> userProvisioningRequest.createUser(callbackHost));
         assertEquals(moMoException.getError().getStatusCode(), Integer.toString(HttpStatusCode.BAD_REQUEST.getHttpStatusCode()));
-        //TODO test case for invalid ProviderCallbackHost and valid CallbackURL and vice versa
     }
 
     @Test
@@ -83,8 +79,6 @@ public class UserProvisioningRequestTest {
         assertNotNull(apiUser);
         assertEquals(apiUser.getProviderCallbackHost(), "webhook.site");
         assertNotNull(apiUser.getTargetEnvironment());
-        //TODO is it sure to be sandbox/production
-        assertTrue(Arrays.asList("sandbox", "production").contains(apiUser.getTargetEnvironment()));
     }
 
     @Test

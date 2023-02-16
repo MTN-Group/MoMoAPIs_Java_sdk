@@ -112,11 +112,11 @@ public class DisbursementConfiguration {
         DisbursementContext.createContext(this.subscriptionKey, this.referenceId, this.apiKey, this.mode, this.callBackUrl, this.configurations, this.targetEnvironment);
     }
 
-    /**
-     * This will destroy the singleton object of DisbursementContext and
-     * requests will no longer work
-     */
-    public static void destroySingletonObject() {
-        DisbursementContext.destroySingletonObject();
-    }
+//    /**
+//     * This will destroy the singleton object of DisbursementContext and
+//     * requests will no longer work
+//     */
+//    public static void destroyContext() {
+//        DisbursementContext.destroyContext();
+//    }
 }

@@ -179,7 +179,6 @@ public class ResourceUtil {
 
             // Set call back URL
             //TODO do we need to check if callBackURL contains a subsrting of the CallbackHost? If so, is it possible in production to get the CallbackHost?
-            //TODO make sure isValidURL verifies the "callBackURL" only for valid cases(when the user is passing callBackURL validly)
             if (NotificationType.POLLING != notificationType && (!StringUtils.isNullOrEmpty(callBackURL)
                     || !StringUtils.isNullOrEmpty(currentContext.getCallBackUrl()))) {
                 if (!StringUtils.isNullOrEmpty(callBackURL)) {
@@ -190,7 +189,6 @@ public class ResourceUtil {
                                 new HttpErrorResponse.HttpErrorResponseBuilder(Constants.VALIDATION_ERROR_CATEGORY,
                                         Constants.INVALID_FORMAT_CODE).errorDescription(Constants.INVALID_CALLBACK_URL_FORMAT_ERROR).build());
                     }
-                    //TODO check if below code validates invalid url
                 } else if (!StringUtils.isNullOrEmpty(currentContext.getCallBackUrl())) {
                     if (isValidURL(currentContext.getCallBackUrl())) {
                         currentContext.addHTTPHeader(Constants.CALL_BACK_URL, currentContext.getCallBackUrl());

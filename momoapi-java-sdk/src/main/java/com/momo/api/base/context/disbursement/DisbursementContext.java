@@ -39,6 +39,19 @@ public class DisbursementContext implements MoMoContext {
         instance = this;
     }
 
+    /**
+     * This is for creating the singleton context. Parameters "callBackUrl" and
+     * "configurations" are not mandatory
+     *
+     * @param subscriptionKey
+     * @param referenceId
+     * @param apiKey
+     * @param mode
+     * @param callBackUrl
+     * @param configurations
+     * @param targetEnvironment
+     * @throws MoMoException
+     */
     public static void createContext(String subscriptionKey, String referenceId, String apiKey, Environment mode, String callBackUrl, Map<String, String> configurations, String targetEnvironment) throws MoMoException {
         if (instance == null) {
             synchronized (DisbursementContext.class) {
@@ -52,7 +65,7 @@ public class DisbursementContext implements MoMoContext {
 
     /**
      * *
-     * Returns context instance
+     * Returns context instance if exists or else throws exception
      *
      * @return
      * @throws MoMoException
@@ -69,7 +82,7 @@ public class DisbursementContext implements MoMoContext {
 
     /**
      * *
-     * Returns context status
+     * Returns true if a context exists
      *
      * @return
      */
@@ -87,9 +100,9 @@ public class DisbursementContext implements MoMoContext {
     @Override
     public AccessToken fetchAccessToken() throws MoMoException {
         if (this.credential != null) {
-            this.accessToken =  this.credential.createAccessToken();
+            this.accessToken = this.credential.createAccessToken();
             return this.accessToken;
-        }//TODO may need an else case to handle if "this.credential" is null
+        }
         return null;
     }
 
@@ -103,9 +116,9 @@ public class DisbursementContext implements MoMoContext {
     @Override
     public AccessToken getRefreshToken() throws MoMoException {
         if (this.credential != null) {
-            this.accessToken =  this.credential.getRefreshToken();
+            this.accessToken = this.credential.getRefreshToken();
             return this.accessToken;
-        }//TODO may need an else case to handle if "this.credential" is null
+        }
         return null;
     }
 
@@ -196,11 +209,11 @@ public class DisbursementContext implements MoMoContext {
         return this;
     }
 
-    /**
-     * This will destroy the singleton object of DisbursementContext and
-     * requests will no longer work
-     */
-    public static void destroySingletonObject() {
-        DisbursementContext.instance = null;
-    }
+//    /**
+//     * This will destroy the singleton object of DisbursementContext and
+//     * requests will no longer work
+//     */
+//    public static void destroyContext() {
+//        DisbursementContext.instance = null;
+//    }
 }

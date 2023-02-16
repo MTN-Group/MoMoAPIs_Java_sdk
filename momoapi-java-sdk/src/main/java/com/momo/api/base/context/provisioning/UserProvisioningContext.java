@@ -182,11 +182,11 @@ public class UserProvisioningContext {
         return this;
     }
 
-    /**
-     * This will destroy the singleton object of UserProvisioningContext and
-     * requests will no longer work
-     */
-    public static void destroySingletonObject() {
-        UserProvisioningContext.instance = null;
-    }
+//    /**
+//     * This will destroy the singleton object of UserProvisioningContext and
+//     * requests will no longer work
+//     */
+//    public static void destroyContext() {
+//        UserProvisioningContext.instance = null;
+//    }
 }

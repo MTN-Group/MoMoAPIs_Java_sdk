@@ -34,7 +34,6 @@ public class UserProvisioningConfiguration {
         this(subscriptionKey, mode, null);
     }
 
-    //TODO is there any point in passing the "configurations" as a parameter? Can it be modified?
     /**
      * UserProvisioningConfiguration constructor with subscriptionKey, Environment and
      * configurations
@@ -59,11 +58,11 @@ public class UserProvisioningConfiguration {
         return new UserProvisioningRequest();
     }
 
-    /**
-     * This will destroy the singleton object of UserProvisioningContext and
-     * requests will no longer work
-     */
-    public static void destroySingletonObject() {
-        UserProvisioningContext.destroySingletonObject();
-    }
+//    /**
+//     * This will destroy the singleton object of UserProvisioningContext and
+//     * requests will no longer work
+//     */
+//    public static void destroyContext() {
+//        UserProvisioningContext.destroyContext();
+//    }
 }

@@ -24,9 +24,9 @@ public class CollectionContext implements MoMoContext {
 
     private MoMoAuthentication credential;
     private AccessToken accessToken;
-    
+
     private CollectionContext(String subscriptionKey, String referenceId, String apiKey, Environment mode, String callBackUrl,
-                              Map<String, String> configurations, String targetEnvironment) throws MoMoException {
+            Map<String, String> configurations, String targetEnvironment) throws MoMoException {
         this.credential = new MoMoAuthentication(subscriptionKey, SubscriptionType.COLLECTION, referenceId, apiKey);
         if (configurations != null && configurations.size() > 0) {
             this.credential.addConfigurations(configurations);
@@ -40,8 +40,21 @@ public class CollectionContext implements MoMoContext {
         instance = this;
     }
 
+    /**
+     * This is for creating the singleton context. Parameters "callBackUrl" and
+     * "configurations" are not mandatory
+     *
+     * @param subscriptionKey
+     * @param referenceId
+     * @param apiKey
+     * @param mode
+     * @param callBackUrl
+     * @param configurations
+     * @param targetEnvironment
+     * @throws MoMoException
+     */
     public static void createContext(String subscriptionKey, String referenceId, String apiKey, Environment mode, String callBackUrl,
-                                     Map<String, String> configurations, String targetEnvironment) throws MoMoException {
+            Map<String, String> configurations, String targetEnvironment) throws MoMoException {
         if (instance == null) {
             synchronized (CollectionContext.class) {
                 if (instance == null) {
@@ -55,7 +68,7 @@ public class CollectionContext implements MoMoContext {
 
     /**
      * *
-     * Returns context instance
+     * Returns context instance if exists or else throws exception
      *
      * @return
      * @throws MoMoException
@@ -72,7 +85,7 @@ public class CollectionContext implements MoMoContext {
 
     /**
      * *
-     * Returns context status
+     * Returns true if a context exists
      *
      * @return
      */
@@ -93,8 +106,6 @@ public class CollectionContext implements MoMoContext {
             this.accessToken = this.credential.createAccessToken();
             return this.accessToken;
         }
-        //TODO may need an else case to handle if "this.credential" is null
-        //TODO write test case if possible to check an else case is needed
         return null;
     }
 
@@ -111,8 +122,6 @@ public class CollectionContext implements MoMoContext {
             this.accessToken = this.credential.getRefreshToken();
             return this.accessToken;
         }
-        //TODO may need an else case to handle if "this.credential" is null
-        //TODO write test case if possible to check an else case is needed
         return null;
     }
 
@@ -203,11 +212,11 @@ public class CollectionContext implements MoMoContext {
         return this;
     }
 
-    /**
-     * This will destroy the singleton object of CollectionContext and requests
-     * will no longer work
-     */
-    static void destroySingletonObject() {
-        CollectionContext.instance = null;
-    }
+//    /**
+//     * This will destroy the singleton object of CollectionContext and requests
+//     * will no longer work
+//     */
+//    public static void destroyContext() {
+//        CollectionContext.instance = null;
+//    }
 }

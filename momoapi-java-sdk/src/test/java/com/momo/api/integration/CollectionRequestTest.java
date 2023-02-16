@@ -5,7 +5,6 @@ import com.momo.api.base.constants.Constants;
 import com.momo.api.base.constants.IdType;
 import com.momo.api.base.context.collection.CollectionConfiguration;
 import com.momo.api.base.context.provisioning.UserProvisioningConfiguration;
-import com.momo.api.base.context.provisioning.UserProvisioningContext;
 import com.momo.api.base.exception.MoMoException;
 import com.momo.api.base.model.StatusResponse;
 import com.momo.api.config.MSISDN;
@@ -39,7 +38,6 @@ import org.junit.jupiter.api.Test;
 public class CollectionRequestTest {
 
     //TODO add comment for test methods
-    //TODO test with MSISDN, EMAIL or PARTY_CODE
     static PropertiesLoader loader;
 
     @BeforeAll
@@ -52,7 +50,7 @@ public class CollectionRequestTest {
     private final static String SUBSCRIPTION_KEY = "COLLECTION_SUBSCRIPTION_KEY";
 
     @Test
-    @DisplayName("Call Back Url Test Success")
+    @DisplayName("Call Back Url Test")
     public void callBackUrlTest() throws MoMoException {
         //Collection request made without calling "addCallBackUrl(String)" with "CollectionConfiguration" object
         CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX);
@@ -93,7 +91,6 @@ public class CollectionRequestTest {
         assertTrue(statusResponse.getStatus());
     }
 
-    //TODO test methods that have reference_id as parameters, by passing a previously used reference id
     @Test
     @DisplayName("Request To Pay Test Success")
     void requestToPayTestSuccess() throws MoMoException {
@@ -190,21 +187,21 @@ public class CollectionRequestTest {
         assertNotNull(accountBalance.getCurrency());
     }
 
-    /**
-     * Making an API request without creating context
-     *
-     * @throws MoMoException
-     */
-    @Test
-    @DisplayName("Get Account Balance Test Failure")
-    void getAccountBalanceTestFailure() throws MoMoException {
-        //Destroying the existing context to check of requests fail
-        CollectionConfiguration.destroySingletonObject();
-        //case 1: CollectionRequest is not properly initialised
-        CollectionRequest collectionRequest = new CollectionRequest();
-        MoMoException moMoException = assertThrows(MoMoException.class, () -> collectionRequest.getAccountBalance());
-        assertEquals(moMoException.getError().getErrorDescription(), Constants.REQUEST_NOT_CREATED);
-    }
+//    /**
+//     * Making an API request without creating context
+//     *
+//     * @throws MoMoException
+//     */
+//    @Test
+//    @DisplayName("Get Account Balance Test Failure")
+//    void getAccountBalanceTestFailure() throws MoMoException {
+//        //Destroying the existing context to check of requests fail
+//        CollectionConfiguration.destroySingletonObject();
+//        //case 1: CollectionRequest is not properly initialised
+//        CollectionRequest collectionRequest = new CollectionRequest();
+//        MoMoException moMoException = assertThrows(MoMoException.class, () -> collectionRequest.getAccountBalance());
+//        assertEquals(moMoException.getError().getErrorDescription(), Constants.REQUEST_NOT_CREATED);
+//    }
 
     @Test
     @DisplayName("Get Account Balance In Specific Currency Test Success")
@@ -317,7 +314,7 @@ public class CollectionRequestTest {
         CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX);
         CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
 
-        AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getIdTypeLowerCase(), MSISDN_NUMBER);
+        AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getValueInLowerCase(), MSISDN_NUMBER);
         Result result = collectionRequest.validateAccountHolderStatus(accountHolder);
         assertNotNull(result);
         assertTrue(result.getResult());
@@ -336,7 +333,7 @@ public class CollectionRequestTest {
         assertEquals(moMoException.getError().getErrorDescription(), Constants.ACCOUNT_HOLDER_OBJECT_INIT_ERROR);
 
         //case 2: Key or Value is null
-        moMoException = assertThrows(MoMoException.class, () -> collectionRequest.validateAccountHolderStatus(new AccountHolder(IdType.MSISDN.getIdTypeLowerCase(), null)));
+        moMoException = assertThrows(MoMoException.class, () -> collectionRequest.validateAccountHolderStatus(new AccountHolder(IdType.MSISDN.getValueInLowerCase(), null)));
         assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_VALUE_ERROR);
 
         //case 3: Key or Value is empty
@@ -517,45 +514,95 @@ public class CollectionRequestTest {
         assertTrue(statusResponse.getStatus());
     }
 
-    /**
-     * Checking if providing a callBackUrl with different host throws error 
-     *
-     * @throws MoMoException
-     */
     @Test
-    @DisplayName("Callback Host Test Failure")
-    void callbackHostTestFailure() throws MoMoException {
-        //destroying the exising valid UserProvisioning singleton instance, to create new instance with invalid "CallbackHost"
-        UserProvisioningContext.destroySingletonObject();
-        //CallbackHost is "something.site", so the "callBackUrl" must be a url with "something.site" as its host address
-        CallbackHost callbackHost = new CallbackHost("something.site");
-        UserProvisioningConfiguration userProvisioningConfiguration = new UserProvisioningConfiguration(loader.get(SUBSCRIPTION_KEY));
-        UserProvisioningRequest userProvisioningRequest = userProvisioningConfiguration.createUserProvisioningRequest();
-
-        StatusResponse statusResponse = userProvisioningRequest.createUser(callbackHost);
-
-        ApiKey apiKey = userProvisioningRequest.createApiKey(statusResponse.getReferenceId());
-        //destroying the newly created singleton instance having invalid "CallbackHost" value. Now a new instance can be created
-        UserProvisioningContext.destroySingletonObject();
-
-        //destroying the exising collection singleton instance, to create new instance with the above parameters 
-        CollectionConfiguration.destroySingletonObject();
-        //here 'loader.get("CALLBACK_URL")' need to contain a callBackUrl with a host address different than "something.site", so that it throws error
-        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), statusResponse.getReferenceId(), apiKey.getApiKey(), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+    @DisplayName("Request To Pay With EMAIL Test Success")
+    void requestToPayWithEMAILTestSuccess() throws MoMoException {
+        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
         CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
 
-        RequestPay requestPay = getRequestPay(MSISDN_NUMBER);
+        Payer payer = new Payer();
+        payer.setPartyId("testmail@gmail.com");
+        payer.setPartyIdType(IdType.EMAIL.getValue());
+        
+        RequestPay requestPay = new RequestPay();
+        requestPay.setAmount("6.0");
+        requestPay.setCurrency("EUR");
+        requestPay.setExternalId(getExternalId());
+        requestPay.setPayeeNote("RequestPay payee note");
+        requestPay.setPayerMessage("RequestPay payer message");
+        requestPay.setPayer(payer);
 
-        MoMoException moMoException = assertThrows(MoMoException.class, () -> collectionRequest.requestToPay(requestPay));
-        assertEquals(moMoException.getError().getStatusCode(), Integer.toString(HttpStatusCode.INTERNAL_SERVER_ERROR.getHttpStatusCode()));
-        //destroying the newly created collection singleton instance. Now a new instance can be created
-        CollectionConfiguration.destroySingletonObject();
+        StatusResponse statusResponse = collectionRequest.requestToPay(requestPay);
+        assertNotNull(statusResponse);
+        assertNotNull(statusResponse.getReferenceId());
+        assertEquals(UUID.fromString(statusResponse.getReferenceId()).toString(), statusResponse.getReferenceId());
+        assertTrue(statusResponse.getStatus());
     }
+
+    @Test
+    @DisplayName("Request To Pay With PARTY_CODE Test Success")
+    void requestToPayWithPARTY_CODETestSuccess() throws MoMoException {
+        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+        CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
+
+        Payer payer = new Payer();
+        payer.setPartyId(UUID.randomUUID().toString());
+        payer.setPartyIdType(IdType.PARTY_CODE.getValue());
+        
+        RequestPay requestPay = new RequestPay();
+        requestPay.setAmount("6.0");
+        requestPay.setCurrency("EUR");
+        requestPay.setExternalId(getExternalId());
+        requestPay.setPayeeNote("RequestPay payee note");
+        requestPay.setPayerMessage("RequestPay payer message");
+        requestPay.setPayer(payer);
+
+        StatusResponse statusResponse = collectionRequest.requestToPay(requestPay);
+        assertNotNull(statusResponse);
+        assertNotNull(statusResponse.getReferenceId());
+        assertEquals(UUID.fromString(statusResponse.getReferenceId()).toString(), statusResponse.getReferenceId());
+        assertTrue(statusResponse.getStatus());
+    }
+
+//    /**
+//     * Checking if providing a callBackUrl with different host throws error 
+//     *
+//     * @throws MoMoException
+//     */
+//    @Test
+//    @DisplayName("Callback Host Test Failure")
+//    void callbackHostTestFailure() throws MoMoException {
+//        //destroying the exising valid UserProvisioning singleton instance, to create new instance with invalid "CallbackHost"
+//        UserProvisioningContext.destroyContext();
+//        //CallbackHost is "something.site", so the "callBackUrl" must be a url with "something.site" as its host address
+//        CallbackHost callbackHost = new CallbackHost("something.site");
+//        UserProvisioningConfiguration userProvisioningConfiguration = new UserProvisioningConfiguration(loader.get(SUBSCRIPTION_KEY));
+//        UserProvisioningRequest userProvisioningRequest = userProvisioningConfiguration.createUserProvisioningRequest();
+//
+//        StatusResponse statusResponse = userProvisioningRequest.createUser(callbackHost);
+//
+//        ApiKey apiKey = userProvisioningRequest.createApiKey(statusResponse.getReferenceId());
+//        //destroying the newly created singleton instance having invalid "CallbackHost" value. Now a new instance can be created
+//        UserProvisioningContext.destroyContext();
+//
+//        //destroying the exising collection singleton instance, to create new instance with the above parameters 
+//        CollectionConfiguration.destroyContext();
+//        //here 'loader.get("CALLBACK_URL")' need to contain a callBackUrl with a host address different than "something.site", so that it throws error
+//        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), statusResponse.getReferenceId(), apiKey.getApiKey(), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+//        CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
+//
+//        RequestPay requestPay = getRequestPay(MSISDN_NUMBER);
+//
+//        MoMoException moMoException = assertThrows(MoMoException.class, () -> collectionRequest.requestToPay(requestPay));
+//        assertEquals(moMoException.getError().getStatusCode(), Integer.toString(HttpStatusCode.INTERNAL_SERVER_ERROR.getHttpStatusCode()));
+//        //destroying the newly created collection singleton instance. Now a new instance can be created
+//        CollectionConfiguration.destroyContext();
+//    }
 
     private static Payer getPayer(String msisdnValue) {
         Payer payer = new Payer();
         payer.setPartyId(msisdnValue);
-        payer.setPartyIdType(IdType.MSISDN.getIdType());
+        payer.setPartyIdType(IdType.MSISDN.getValue());
         return payer;
     }
 

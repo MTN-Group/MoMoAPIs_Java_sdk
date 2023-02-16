@@ -64,7 +64,6 @@ public class UserProvisioningAuthentication extends BaseAuthentication {
 
             this.headers.put(Constants.HTTP_CONTENT_TYPE_HEADER, Constants.HTTP_CONTENT_TYPE_JSON);
 
-            //TODO should I validate this.providerCallbackHost again here?
             String payload = JSONFormatter.toJSON(this.providerCallbackHost);
 
             HttpResponse responseData = connection.execute(httpConfiguration.getEndPointUrl(), payload, this.headers);

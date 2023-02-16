@@ -194,7 +194,7 @@ public class CollectionRequestTest {
         CollectionRequest collectionRequestSpy = spy(new CollectionRequest());
 
         Result expectedResult = getExpectedResult();
-        AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getIdTypeLowerCase(), MSISDN);
+        AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getValueInLowerCase(), MSISDN);
         doReturn(expectedResult).when(collectionRequestSpy).validateAccountHolderStatus(accountHolder);
 
         Result actualResult = collectionRequestSpy.validateAccountHolderStatus(accountHolder);
@@ -207,7 +207,7 @@ public class CollectionRequestTest {
     void validateAccountHolderStatusTestFailure() throws MoMoException {
         CollectionRequest collectionRequestSpy = spy(new CollectionRequest());
 
-        AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getIdTypeLowerCase(), MSISDN);
+        AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getValueInLowerCase(), MSISDN);
         doThrow(MoMoException.class).when(collectionRequestSpy).validateAccountHolderStatus(accountHolder);
 
         assertThrows(MoMoException.class, () -> collectionRequestSpy.validateAccountHolderStatus(accountHolder));
@@ -325,7 +325,7 @@ public class CollectionRequestTest {
     private RequestPayStatus getExpectedPayStatus() {
         Payer payer = new Payer();
         payer.setPartyId(MSISDN);
-        payer.setPartyIdType(IdType.MSISDN.getIdType());
+        payer.setPartyIdType(IdType.MSISDN.getValue());
 
         RequestPayStatus requestPayStatus = new RequestPayStatus();
         requestPayStatus.setAmount("6");
@@ -354,7 +354,7 @@ public class CollectionRequestTest {
         WithdrawStatus withdrawStatus = new WithdrawStatus();
         Payer payer = new Payer();
         payer.setPartyId(MSISDN);
-        payer.setPartyIdType(IdType.MSISDN.getIdType());
+        payer.setPartyIdType(IdType.MSISDN.getValue());
 
         withdrawStatus.setAmount("6");
         withdrawStatus.setCurrency("EUR");
@@ -379,7 +379,7 @@ public class CollectionRequestTest {
     private static Payer getPayer() {
         Payer payer = new Payer();
         payer.setPartyId(MSISDN);
-        payer.setPartyIdType(IdType.MSISDN.getIdType());
+        payer.setPartyIdType(IdType.MSISDN.getValue());
         return payer;
     }
 

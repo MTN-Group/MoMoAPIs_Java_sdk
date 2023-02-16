@@ -69,7 +69,6 @@ public class CollectionConfiguration {
         this(subscriptionKey, referenceId, apiKey, mode, targetEnvironment, null);
     }
 
-    //TODO is there any point in passing the "configurations" as a parameter? Can it be modified?
     /**
      * Creates a singleton instance of CollectionContext.
      *
@@ -113,12 +112,12 @@ public class CollectionConfiguration {
                 this.configurations, this.targetEnvironment);
     }
 
-    /**
-     * This will destroy the singleton object of CollectionContext and requests
-     * will no longer work
-     */
-    public static void destroySingletonObject() {
-        CollectionContext.destroySingletonObject();
-    }
+//    /**
+//     * This will destroy the singleton object of CollectionContext and requests
+//     * will no longer work
+//     */
+//    public static void destroyContext() {
+//        CollectionContext.destroyContext();
+//    }
 
 }

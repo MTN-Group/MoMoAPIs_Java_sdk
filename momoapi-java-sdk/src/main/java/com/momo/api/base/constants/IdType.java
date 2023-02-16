@@ -24,7 +24,7 @@ public enum IdType {
      * 
      * @return 
      */
-    public String getIdType() {
+    public String getValue() {
         return this.idType;
     }
     
@@ -32,7 +32,7 @@ public enum IdType {
      * 
      * @return 
      */
-    public String getIdTypeLowerCase() {
+    public String getValueInLowerCase() {
         return this.idType.toLowerCase();
     }
 }

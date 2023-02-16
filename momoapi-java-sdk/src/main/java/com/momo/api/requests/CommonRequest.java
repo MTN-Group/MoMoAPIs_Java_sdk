@@ -78,7 +78,7 @@ public class CommonRequest extends ResourceUtil {
         }
 
         String resourcePath = API.SUBSCRIPTION_VER_ACCOUNTHOLDER_USER_INFO
-                .replace(Constants.ACCOUNT_HOLDER_ID_TYPE, IdType.MSISDN.getIdTypeLowerCase())
+                .replace(Constants.ACCOUNT_HOLDER_ID_TYPE, IdType.MSISDN.getValueInLowerCase())
                 .replace(Constants.ACCOUNT_HOLDER_ID, msisdn);
 
         resourcePath = resourcePath

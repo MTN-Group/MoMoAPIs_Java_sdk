@@ -1,12 +1,14 @@
 package com.momo.api.requests.disbursement;
 
 import com.momo.api.base.constants.API;
+import com.momo.api.base.constants.AccessType;
 import com.momo.api.base.constants.Constants;
 import com.momo.api.base.constants.HttpMethod;
 import com.momo.api.base.constants.SubscriptionType;
 import com.momo.api.base.context.MoMoContext;
 import com.momo.api.base.context.disbursement.DisbursementContext;
 import com.momo.api.base.exception.MoMoException;
+import com.momo.api.base.model.BCAuthorize;
 import com.momo.api.base.model.StatusResponse;
 import com.momo.api.base.model.HttpErrorResponse;
 import com.momo.api.base.util.JSONFormatter;
@@ -315,6 +317,21 @@ public class DisbursementRequest extends TransferRequest {
      */
     public BasicUserInfo getBasicUserinfo(String msisdn) throws MoMoException {
         return getBasicUserinfo(msisdn, SubscriptionType.DISBURSEMENT, DisbursementContext.getContext());
+    }
+
+    /**
+     * This operation is used to claim a consent by the account holder for the
+     * requested scopes.bCAuthorize receives a parameter "auth_req_id" which is
+     * passed into Oauth2 API which is then used in getUserInfoWithConsent API
+     *
+     * @param accountHolder
+     * @param scope
+     * @param access_type
+     * @return
+     * @throws MoMoException
+     */
+    public BCAuthorize bCAuthorize(AccountHolder accountHolder, String scope, AccessType access_type) throws MoMoException {
+        return bCAuthorize(accountHolder, scope, access_type, SubscriptionType.DISBURSEMENT, DisbursementContext.getContext());
     }
 
 }

@@ -22,6 +22,12 @@ public final class API {
 
     //Create an access token
     public static final String SUBSCRIPTION_TOKEN = "/{subscriptionType}/token/";
+    
+    //Create an access token
+    public static final String SUBSCRIPTION_OAUTH2_TOKEN = "/{subscriptionType}/oauth2/token/";
+    
+    //Get personal information of the account holder with consent
+    public static final String SUBSCRIPTION_OAUTH2_USERINFO = "/{subscriptionType}/oauth2/v1_0/userinfo";
 
     //To make a Request
     public static final String SUBSCRIPTION_VER_REQUEST = "/{subscriptionType}/v1_0/{requestType}";

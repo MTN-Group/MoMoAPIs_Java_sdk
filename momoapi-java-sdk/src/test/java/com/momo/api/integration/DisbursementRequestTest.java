@@ -1,12 +1,13 @@
 package com.momo.api.integration;
 
 import com.momo.api.base.HttpStatusCode;
+import com.momo.api.base.constants.AccessType;
 import com.momo.api.base.constants.Constants;
 import com.momo.api.base.constants.IdType;
 import com.momo.api.base.context.collection.CollectionConfiguration;
 import com.momo.api.base.context.disbursement.DisbursementConfiguration;
-import com.momo.api.base.context.disbursement.DisbursementContext;
 import com.momo.api.base.exception.MoMoException;
+import com.momo.api.base.model.BCAuthorize;
 import com.momo.api.base.model.StatusResponse;
 import com.momo.api.config.MSISDN;
 import com.momo.api.config.PropertiesLoader;
@@ -52,6 +53,7 @@ public class DisbursementRequestTest {
 
     private final String incorrect_referenceid = "incorrect_referenceid";
     private final static String MSISDN_NUMBER = MSISDN.SUCCESSFUL.getValue();
+    private final static String EMAIL = "testmail@gmail.com";
     private final static String SUBSCRIPTION_KEY = "DISBURSEMENT_SUBSCRIPTION_KEY";
     private final static String COLLECTION_SUBSCRIPTION_KEY = "COLLECTION_SUBSCRIPTION_KEY";
 
@@ -589,6 +591,56 @@ public class DisbursementRequestTest {
         //case 2: Value is empty
         moMoException = assertThrows(MoMoException.class, () -> disbursementRequest.getBasicUserinfo(""));
         assertEquals(moMoException.getError().getErrorDescription(), Constants.EMPTY_STRING_ERROR);
+    }
+    
+    @Test
+    @DisplayName("BCAuthorize Test Success")
+    void bCAuthorizeTestSuccess() throws MoMoException {
+        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX);
+        DisbursementRequest disbursementRequest = disbursementConfiguration.createDisbursementRequest();
+
+        AccountHolder accountHolderMSISDN = new AccountHolder(IdType.MSISDN.getValue(), MSISDN_NUMBER);
+        BCAuthorize bCAuthorizeMSISDN = disbursementRequest.bCAuthorize(accountHolderMSISDN, "profile", AccessType.OFFLINE);
+        
+        assertNotNull(bCAuthorizeMSISDN);
+        assertNotNull(bCAuthorizeMSISDN.getAuth_req_id());
+        
+        AccountHolder accountHolderEMAIL = new AccountHolder(IdType.EMAIL.getValue(), EMAIL);
+        BCAuthorize bCAuthorizeEMAIL = disbursementRequest.bCAuthorize(accountHolderEMAIL, "profile", AccessType.OFFLINE);
+        
+        assertNotNull(bCAuthorizeEMAIL);
+        assertNotNull(bCAuthorizeEMAIL.getAuth_req_id());
+    }
+    
+    @Test
+    @DisplayName("BCAuthorize Test Failure")
+    void bCAuthorizeTestFailure() throws MoMoException {
+        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX);
+        DisbursementRequest disbursementRequest = disbursementConfiguration.createDisbursementRequest();
+
+        AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getValue(), MSISDN_NUMBER);
+        MoMoException moMoException = assertThrows(MoMoException.class, ()->disbursementRequest.bCAuthorize(accountHolder, "invalid", AccessType.OFFLINE));
+        
+        assertEquals(moMoException.getError().getStatusCode(), Integer.toString(HttpStatusCode.INTERNAL_SERVER_ERROR.getHttpStatusCode()));
+
+        AccountHolder accountHolder1 = new AccountHolder(null, null);
+        moMoException = assertThrows(MoMoException.class, ()->disbursementRequest.bCAuthorize(accountHolder1, "profile", AccessType.OFFLINE));
+        
+        assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_VALUE_ERROR);
+        
+        AccountHolder accountHolder2 = new AccountHolder(IdType.MSISDN.getValue(), MSISDN_NUMBER);
+        moMoException = assertThrows(MoMoException.class, ()->disbursementRequest.bCAuthorize(accountHolder2, "", AccessType.OFFLINE));
+        
+        assertEquals(moMoException.getError().getErrorDescription(), Constants.EMPTY_STRING_ERROR);
+        
+        AccountHolder accountHolder3 = new AccountHolder(IdType.MSISDN.getValue(), MSISDN_NUMBER);
+        moMoException = assertThrows(MoMoException.class, ()->disbursementRequest.bCAuthorize(accountHolder3, "profile", null));
+        
+        assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_VALUE_ERROR);
+        
+        moMoException = assertThrows(MoMoException.class, ()->disbursementRequest.bCAuthorize(null, "profile", AccessType.OFFLINE));
+        
+        assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_VALUE_ERROR);
     }
 
     private static Payee getPayee(String msisdnValue) {

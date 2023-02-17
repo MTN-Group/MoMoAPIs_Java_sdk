@@ -1,9 +1,11 @@
 package com.momo.api.unit;
 
+import com.momo.api.base.constants.AccessType;
 import com.momo.api.base.constants.Constants;
 import com.momo.api.base.constants.IdType;
 import com.momo.api.base.context.disbursement.DisbursementConfiguration;
 import com.momo.api.base.exception.MoMoException;
+import com.momo.api.base.model.BCAuthorize;
 import com.momo.api.base.model.StatusResponse;
 import com.momo.api.constants.Environment;
 import com.momo.api.models.AccountBalance;
@@ -60,7 +62,7 @@ public class DisbursementRequestTest {
                 "API_KEY",
                 null,
                 Constants.SANDBOX));
-        assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_ENVIRONMENT_ERROR);
+        assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_VALUE_ERROR);
     }
     
     @Test
@@ -389,6 +391,39 @@ public class DisbursementRequestTest {
         doThrow(MoMoException.class).when(disbursementRequestSpy).getBasicUserinfo(MSISDN);
         
         assertThrows(MoMoException.class, () -> disbursementRequestSpy.getBasicUserinfo(MSISDN));
+    }
+    
+    @Test
+    @DisplayName("BCAuthorize Test Success")
+    void bCAuthorizeTestSuccess() throws MoMoException {
+        DisbursementRequest disbursementRequestSpy = spy(new DisbursementRequest());
+        
+        AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getValue(), MSISDN);
+        BCAuthorize expectedBCAuthorize = getExpectedBCAuthorize();
+        doReturn(expectedBCAuthorize).when(disbursementRequestSpy).bCAuthorize(accountHolder, "profile", AccessType.OFFLINE);
+        
+        BCAuthorize bCAuthorize = disbursementRequestSpy.bCAuthorize(accountHolder, "profile", AccessType.OFFLINE);
+        
+        assertEquals(bCAuthorize.getAuth_req_id(), expectedBCAuthorize.getAuth_req_id());
+    }
+
+    @Test
+    @DisplayName("BCAuthorize Test Failure")
+    void bCAuthorizeTestFailure() throws MoMoException {
+        DisbursementRequest disbursementRequestSpy = spy(new DisbursementRequest());
+        
+        AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getValue(), MSISDN);
+        doThrow(MoMoException.class).when(disbursementRequestSpy).bCAuthorize(accountHolder, "profile", AccessType.OFFLINE);
+
+        assertThrows(MoMoException.class, () -> disbursementRequestSpy.bCAuthorize(accountHolder, "profile", AccessType.OFFLINE));
+    }
+
+    private static BCAuthorize getExpectedBCAuthorize() {
+        BCAuthorize bCAuthorize = new BCAuthorize();
+        bCAuthorize.setAuth_req_id(UUID.randomUUID().toString());
+        bCAuthorize.setExpires_in("3600");
+        bCAuthorize.setInterval("5");
+        return bCAuthorize;
     }
     
     private StatusResponse getExpectedStatusResponse(boolean haveReferenceId) {

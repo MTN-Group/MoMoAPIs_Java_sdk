@@ -20,4 +20,7 @@ public final class RequestType {
     
     //Disbursement
     public static final String REFUND = "refund";
+    
+    //Collection/Disbursement/Remittance
+    public static final String BC_AUTHORIZE = "bc-authorize";
 }

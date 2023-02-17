@@ -67,6 +67,9 @@ public final class Constants {
     //Account Holder Unique ID value
     public static final String ACCOUNT_HOLDER_ID = "{accountHolderId}";
 
+    //Variable name
+    public static final String VARIABLE = "{variable}";
+
     // Default SDK configuration file name
     public static final String DEFAULT_CONFIGURATION_FILE = "sdk_config.properties";
 
@@ -96,6 +99,9 @@ public final class Constants {
 
     // HTTP Content Type JSON
     public static final String HTTP_CONTENT_TYPE_JSON = "application/json";
+    
+    // HTTP Content Type x-www-form-urlencoded
+    public static final String HTTP_CONTENT_TYPE_URLENCODED = "application/x-www-form-urlencoded";
 
     // HTTP Content-Type Header
     public static final String HTTP_CONTENT_TYPE_HEADER = "Content-Type";
@@ -124,8 +130,14 @@ public final class Constants {
     // Null Value
     public static final String NULL_VALUE_ERROR = "The request could not be processed due to NULL value";
 
+    // Null Value
+    public static final String NULL_VALUE_ERROR_FOR_VARIABLE = "The request could not be processed due to NULL value for {variable}";
+
     // Empty string Value
     public static final String EMPTY_STRING_ERROR = "The request could not be processed due to Empty String";
+
+    // Empty string Value
+    public static final String EMPTY_STRING_ERROR_FOR_VARIABLE = "The request could not be processed due to Empty String for {variable}";
 
     // Empty or Null String
     public static final String NULL_ENVIRONMENT_ERROR = "Environment must not be null";
@@ -135,9 +147,15 @@ public final class Constants {
 
     // Request not created
     public static final String REQUEST_NOT_CREATED = "Make sure the corresponding request object is created with valid parameters before making API calls";
+    
+    // auth_req_id
+    public static final String AUTH_REQ_ID_ERROR = "Make sure auth_req_id is valid";
 
     // Pay Object Is Null
     public static final String PAY_OBJECT_INIT_ERROR = "Pay object is not initialized";
+
+    // Pay Object Is Null
+    public static final String BCAUTHORIZE_OBJECT_INIT_ERROR = "BCAuthorize object is not initialized";
 
     // Transfer Object Is Null
     public static final String TRANSFER_OBJECT_INIT_ERROR = "Transfer object is not initialized";

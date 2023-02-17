@@ -6,6 +6,7 @@ package com.momo.api.base.constants;
  */
 public enum IdType {
     //TODO do we need to validate each type accordingly?
+    //TODO maybe create separate IdType enum's based on the case sensitivity of values for easy validation(if validation needs to be performed on sdk level)
     MSISDN("MSISDN"),//Mobile Number validated according to ITU-T E.164
     EMAIL("EMAIL"),//Validated to be a valid e-mail format
     PARTY_CODE("PARTY_CODE");//UUID of the party

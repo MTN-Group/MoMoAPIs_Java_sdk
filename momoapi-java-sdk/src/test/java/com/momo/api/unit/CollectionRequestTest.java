@@ -1,9 +1,11 @@
 package com.momo.api.unit;
 
+import com.momo.api.base.constants.AccessType;
 import com.momo.api.base.constants.Constants;
 import com.momo.api.base.constants.IdType;
 import com.momo.api.base.context.collection.CollectionConfiguration;
 import com.momo.api.base.exception.MoMoException;
+import com.momo.api.base.model.BCAuthorize;
 import com.momo.api.base.model.StatusResponse;
 import com.momo.api.constants.Environment;
 import com.momo.api.models.AccountBalance;
@@ -12,6 +14,7 @@ import com.momo.api.models.BasicUserInfo;
 import com.momo.api.models.DeliveryNotification;
 import com.momo.api.models.Payer;
 import com.momo.api.models.Result;
+import com.momo.api.models.UserInfo;
 import com.momo.api.models.collection.RequestPayStatus;
 import com.momo.api.models.collection.RequestPay;
 import com.momo.api.models.collection.Withdraw;
@@ -58,7 +61,7 @@ public class CollectionRequestTest {
                 "API_KEY",
                 null,
                 Constants.SANDBOX));
-        assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_ENVIRONMENT_ERROR);
+        assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_VALUE_ERROR);
     }
 
     @Test
@@ -312,7 +315,57 @@ public class CollectionRequestTest {
 
         assertThrows(MoMoException.class, () -> collectionRequestSpy.getBasicUserinfo(MSISDN));
     }
+    
+    @Test
+    @DisplayName("Get Userinfo With Consent Test Success")
+    void getUserInfoWithConsentTestSuccess() throws MoMoException {
+        CollectionRequest collectionRequestSpy = spy(new CollectionRequest());
+        
+        AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getValue(), MSISDN);
+        UserInfo expectedUserInfo = getExpectedUserInfo();
+        doReturn(expectedUserInfo).when(collectionRequestSpy).getUserInfoWithConsent(accountHolder, "profile", AccessType.OFFLINE);
+        
+        UserInfo userInfo = collectionRequestSpy.getUserInfoWithConsent(accountHolder, "profile", AccessType.OFFLINE);
+        
+        assertEquals(userInfo.getName(), expectedUserInfo.getName());
+    }
 
+    @Test
+    @DisplayName("Get Userinfo With Consent Test Failure")
+    void getUserInfoWithConsentTestFailure() throws MoMoException {
+        CollectionRequest collectionRequestSpy = spy(new CollectionRequest());
+        
+        AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getValue(), MSISDN);
+        doThrow(MoMoException.class).when(collectionRequestSpy).getUserInfoWithConsent(accountHolder, "profile", AccessType.OFFLINE);
+
+        assertThrows(MoMoException.class, () -> collectionRequestSpy.getUserInfoWithConsent(accountHolder, "profile", AccessType.OFFLINE));
+    }
+    
+    @Test
+    @DisplayName("BCAuthorize Test Success")
+    void bCAuthorizeTestSuccess() throws MoMoException {
+        CollectionRequest collectionRequestSpy = spy(new CollectionRequest());
+        
+        AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getValue(), MSISDN);
+        BCAuthorize expectedBCAuthorize = getExpectedBCAuthorize();
+        doReturn(expectedBCAuthorize).when(collectionRequestSpy).bCAuthorize(accountHolder, "profile", AccessType.OFFLINE);
+        
+        BCAuthorize bCAuthorize = collectionRequestSpy.bCAuthorize(accountHolder, "profile", AccessType.OFFLINE);
+        
+        assertEquals(bCAuthorize.getAuth_req_id(), expectedBCAuthorize.getAuth_req_id());
+    }
+
+    @Test
+    @DisplayName("BCAuthorize Test Failure")
+    void bCAuthorizeTestFailure() throws MoMoException {
+        CollectionRequest collectionRequestSpy = spy(new CollectionRequest());
+        
+        AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getValue(), MSISDN);
+        doThrow(MoMoException.class).when(collectionRequestSpy).bCAuthorize(accountHolder, "profile", AccessType.OFFLINE);
+
+        assertThrows(MoMoException.class, () -> collectionRequestSpy.bCAuthorize(accountHolder, "profile", AccessType.OFFLINE));
+    }
+    
     private StatusResponse getExpectedStatusResponse(boolean haveReferenceId) {
         StatusResponse statusResponse = new StatusResponse();
         if (haveReferenceId) {
@@ -374,6 +427,27 @@ public class CollectionRequestTest {
         basicUserInfo.setLocale("sv_SE");
         basicUserInfo.setGender("MALE");
         return basicUserInfo;
+    }
+
+    private static UserInfo getExpectedUserInfo() {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setSub("0");
+        userInfo.setName("Sand Box");
+        userInfo.setUpdated_at(1676613526L);
+        userInfo.setGiven_name("Sand");
+        userInfo.setFamily_name("Box");
+        userInfo.setBirthdate("1976-08-13");
+        userInfo.setLocale("sv_SE");
+        userInfo.setGender("MALE");
+        return userInfo;
+    }
+
+    private static BCAuthorize getExpectedBCAuthorize() {
+        BCAuthorize bCAuthorize = new BCAuthorize();
+        bCAuthorize.setAuth_req_id(UUID.randomUUID().toString());
+        bCAuthorize.setExpires_in("3600");
+        bCAuthorize.setInterval("5");
+        return bCAuthorize;
     }
 
     private static Payer getPayer() {

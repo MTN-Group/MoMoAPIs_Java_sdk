@@ -25,11 +25,11 @@ public class Validator {
      */
     public static boolean configurationValidator(String subscriptionKey, String referenceId, String apiKey, Environment mode, String targetEnvironment) throws MoMoException {
 
-        if (throwIfNullOrEmpty(subscriptionKey)
-                && throwIfNullOrEmpty(referenceId)
-                && throwIfNullOrEmpty(apiKey)
-                && !Objects.isNull(mode)
-                && throwIfNullOrEmpty(targetEnvironment)) {
+        if (throwIfNullOrEmptyString(subscriptionKey)
+                && throwIfNullOrEmptyString(referenceId)
+                && throwIfNullOrEmptyString(apiKey)
+                && throwIfNullObject(mode)
+                && throwIfNullOrEmptyString(targetEnvironment)) {
             return true;
         } else {
             throw new MoMoException(
@@ -47,7 +47,7 @@ public class Validator {
      * @return
      * @throws MoMoException
      */
-    public static boolean throwIfNullOrEmpty(final String stringValue) throws MoMoException {
+    public static boolean throwIfNullOrEmptyString(final String stringValue) throws MoMoException {
         if (StringUtils.isNullOrEmpty(stringValue)) {
             throw new MoMoException(
                     new HttpErrorResponse.HttpErrorResponseBuilder(Constants.INTERNAL_ERROR_CATEGORY,
@@ -68,14 +68,53 @@ public class Validator {
      * @return
      * @throws MoMoException
      */
-    public static boolean throwIfNullOrEmpty(final String stringValue, final String variableName) throws MoMoException {
+    public static boolean throwIfNullOrEmptyString(final String stringValue, final String variableName) throws MoMoException {
         if (StringUtils.isNullOrEmpty(stringValue)) {
             throw new MoMoException(
                     new HttpErrorResponse.HttpErrorResponseBuilder(Constants.INTERNAL_ERROR_CATEGORY,
                             Constants.GENERIC_ERROR_CODE)
                             .errorDescription(stringValue == null
-                                    ? Constants.NULL_VALUE_ERROR + " for " + variableName
-                                    : Constants.EMPTY_STRING_ERROR + " for " + variableName).build());
+                                    ? Constants.NULL_VALUE_ERROR_FOR_VARIABLE.replace(Constants.VARIABLE, variableName)
+                                    : Constants.EMPTY_STRING_ERROR_FOR_VARIABLE.replace(Constants.VARIABLE, variableName)).build());
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * throws MoMoException if Object is null otherwise returns true.
+     *
+     * @param objectValue
+     * @return
+     * @throws MoMoException
+     */
+    public static boolean throwIfNullObject(final Object objectValue) throws MoMoException {
+        if (Objects.isNull(objectValue)) {
+            throw new MoMoException(
+                    new HttpErrorResponse.HttpErrorResponseBuilder(Constants.INTERNAL_ERROR_CATEGORY,
+                            Constants.GENERIC_ERROR_CODE)
+                            .errorDescription(Constants.NULL_VALUE_ERROR).build());
+        } else {
+            return true;
+        }
+    }
+
+    //TODO we can use this method if required for all strnig validations(null and empty checks), not yet used
+    /**
+     * throws MoMoException with specified variable name if Object is null
+     * otherwise returns true.
+     *
+     * @param objectValue
+     * @param variableName
+     * @return
+     * @throws MoMoException
+     */
+    public static boolean throwIfNullObject(final Object objectValue, final String variableName) throws MoMoException {
+        if (Objects.isNull(objectValue)) {
+            throw new MoMoException(
+                    new HttpErrorResponse.HttpErrorResponseBuilder(Constants.INTERNAL_ERROR_CATEGORY,
+                            Constants.GENERIC_ERROR_CODE)
+                            .errorDescription(Constants.NULL_VALUE_ERROR_FOR_VARIABLE.replace(Constants.VARIABLE, variableName)).build());
         } else {
             return true;
         }

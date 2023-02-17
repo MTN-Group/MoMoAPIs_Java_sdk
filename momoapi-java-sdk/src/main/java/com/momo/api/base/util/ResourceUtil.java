@@ -17,6 +17,7 @@ import com.momo.api.base.exception.UnauthorizedException;
 import com.momo.api.base.model.AccessToken;
 import com.momo.api.base.model.StatusResponse;
 import com.momo.api.base.model.HttpErrorResponse;
+import com.momo.api.base.model.Oauth2Token;
 import com.momo.api.constants.NotificationType;
 import com.momo.api.models.AccountHolder;
 import java.io.IOException;
@@ -32,7 +33,7 @@ public class ResourceUtil {
 
     // Used for dynamic configuration
     private static Map<String, String> configurationMap;
-
+    
     /**
      * *
      * Process requests
@@ -70,7 +71,36 @@ public class ResourceUtil {
             throws MoMoException {
         T sdkResponse = null;
 
-        HttpResponse requestResponse = requestExecute(httpMethod, resourcePath, payLoad, notificationType, callBackURL, currentContext);
+        HttpResponse requestResponse = requestExecute(httpMethod, resourcePath, payLoad, notificationType, callBackURL, currentContext, null);
+
+        if (requestResponse.getPayLoad() instanceof String) {
+            sdkResponse = JSONFormatter.fromJSON((String) requestResponse.getPayLoad(), responseObject);
+        }
+
+        return sdkResponse;
+    }
+
+    /**
+     * *
+     * Process requests
+     *
+     * @param httpMethod
+     * @param resourcePath
+     * @param payLoad
+     * @param notificationType
+     * @param callBackURL
+     * @param responseObject
+     * @param <T>
+     * @param currentContext
+     * @param auth_req_id
+     * @return
+     * @throws MoMoException
+     */
+    protected <T> T createRequest(HttpMethod httpMethod, String resourcePath, String payLoad,
+            NotificationType notificationType, String callBackURL, Class<T> responseObject, MoMoContext currentContext, String auth_req_id)
+            throws MoMoException {
+        T sdkResponse = null;
+        HttpResponse requestResponse = requestExecute(httpMethod, resourcePath, payLoad, notificationType, callBackURL, currentContext, auth_req_id);
 
         if (requestResponse.getPayLoad() instanceof String) {
             sdkResponse = JSONFormatter.fromJSON((String) requestResponse.getPayLoad(), responseObject);
@@ -95,7 +125,7 @@ public class ResourceUtil {
     protected StatusResponse createRequest(HttpMethod httpMethod, String resourcePath, String payLoad,
             NotificationType notificationType, String callBackURL, MoMoContext currentContext)
             throws MoMoException {
-        HttpResponse requestResponse = requestExecute(httpMethod, resourcePath, payLoad, notificationType, callBackURL, currentContext);
+        HttpResponse requestResponse = requestExecute(httpMethod, resourcePath, payLoad, notificationType, callBackURL, currentContext, null);
         StatusResponse statusResponse = new StatusResponse();
         //TODO remove after testing
         if (!StringUtils.isNullOrEmpty(requestResponse.getPayLoad().toString())) {
@@ -121,7 +151,7 @@ public class ResourceUtil {
      */
     protected static HttpResponse requestExecute(HttpMethod httpMethod, String resourcePath, MoMoContext currentContext)
             throws MoMoException {
-        return requestExecute(httpMethod, resourcePath, null, NotificationType.CALLBACK, null, currentContext);
+        return requestExecute(httpMethod, resourcePath, null, NotificationType.CALLBACK, null, currentContext, null);
     }
 
     /**
@@ -137,7 +167,7 @@ public class ResourceUtil {
      */
     protected static HttpResponse requestExecute(HttpMethod httpMethod, String resourcePath, String payLoad, MoMoContext currentContext)
             throws MoMoException {
-        return requestExecute(httpMethod, resourcePath, payLoad, NotificationType.CALLBACK, null, currentContext);
+        return requestExecute(httpMethod, resourcePath, payLoad, NotificationType.CALLBACK, null, currentContext, null);
     }
 
     /**
@@ -150,17 +180,18 @@ public class ResourceUtil {
      * @param notificationType
      * @param callBackURL
      * @param currentContext
+     * @param auth_req_id
      * @return
      * @throws MoMoException
      */
     protected static HttpResponse requestExecute(HttpMethod httpMethod, String resourcePath, String payLoad,
-            NotificationType notificationType, String callBackURL, MoMoContext currentContext) throws MoMoException {
+            NotificationType notificationType, String callBackURL, MoMoContext currentContext, String auth_req_id) throws MoMoException {
         HttpResponse responseData = null;
         Map<String, String> cMap;
         Map<String, String> headersMap;
 
         if (currentContext != null) {
-            AccessToken accessToken = currentContext.fetchAccessToken();
+            AccessToken accessToken = (!StringUtils.isNullOrEmpty(auth_req_id)) ? currentContext.fetchOauth2Token(auth_req_id) : currentContext.fetchAccessToken();
             if (accessToken == null || accessToken.getAccess_token() == null) {
                 throw new IllegalArgumentException(Constants.EMPTY_ACCESS_TOKEN_MESSAGE);
             }
@@ -227,7 +258,7 @@ public class ResourceUtil {
 
             HttpConfiguration httpConfiguration = getHttpConfiguration(httpMethod, apiManager);
 
-            responseData = executeWithRetries(currentContext, () -> execute(apiManager, httpConfiguration));
+            responseData = executeWithRetries(currentContext, auth_req_id, () -> execute(apiManager, httpConfiguration));
 
             validateResponseData(responseData);
         } else {
@@ -318,7 +349,7 @@ public class ResourceUtil {
      * @param task
      * @return
      */
-    private static HttpResponse executeWithRetries(MoMoContext currentContext, ExecuteTask task)
+    private static HttpResponse executeWithRetries(MoMoContext currentContext, String auth_req_id, ExecuteTask task)
             throws MoMoException {
         int count = 0;
         while (count < Constants.MAX_RETRIES) {
@@ -326,7 +357,7 @@ public class ResourceUtil {
                 return task.execute();
             } catch (UnauthorizedException e) {
                 System.out.println("1---------------------------------------------------token expired:");
-                AccessToken accessToken = currentContext.getRefreshToken();
+                AccessToken accessToken = (!StringUtils.isNullOrEmpty(auth_req_id)) ? currentContext.getRefreshOauth2Token(auth_req_id) : currentContext.getRefreshToken();
                 if (accessToken == null || accessToken.getAccess_token() == null) {
                     System.out.println("2---------------------------------------------------token expired error:");
                     throw new IllegalArgumentException(Constants.EMPTY_ACCESS_TOKEN_MESSAGE);

@@ -130,6 +130,8 @@ public class CommonRequest extends ResourceUtil {
                 .replace(Constants.REQUEST_TYPE, RequestType.REQUEST_TO_PAY)
                 .replace(Constants.REFERENCE_ID, referenceId);
         StatusResponse statusResponse = createRequest(HttpMethod.POST, resourcePath, deliveryNotification.toJSON(), notificationType, callBackURL, currentContext);
+        
+        //TODO check if header is removed correctly in case of exception
         if (haveHeader) {
             currentContext.getHTTPHeaders()
                     .remove(Constants.NOTIFICATION_MESSAGE);
@@ -170,6 +172,8 @@ public class CommonRequest extends ResourceUtil {
 
         BCAuthorize bCAuthorize = createRequest(HttpMethod.POST, resourcePath, payLoad, notificationType, callBackURL, BCAuthorize.class, currentContext);
 
+        currentContext.getHTTPHeaders()
+                    .remove(Constants.HTTP_CONTENT_TYPE_HEADER);
         return bCAuthorize;
     }
 

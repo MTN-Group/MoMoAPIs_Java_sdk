@@ -17,6 +17,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * *
@@ -106,9 +107,9 @@ public abstract class HttpConnection {
         try {
             setHttpHeaders(headers);
 
-            //TODO remove after testing
+//            //TODO remove after testing
 //            Map<String, String> headers2 =  headers.entrySet().stream()
-//                    .filter(m->m.getKey().equals("X-Callback-Url"))
+////                    .filter(m->m.getKey().equals("X-Callback-Url"))
 //                    .collect(Collectors.toMap(m -> m.getKey(), m -> m.getValue()));
 //            
 ////                    .map(k->k.getValue())
@@ -168,6 +169,10 @@ public abstract class HttpConnection {
             } while (retry < this.config.getMaxRetry());
         } catch (IOException e) {
         } finally {
+            
+            // Replace the headers back to JSON for any future use.
+            headers.put(Constants.HTTP_CONTENT_TYPE_HEADER, Constants.HTTP_CONTENT_TYPE_JSON);
+            
             if (writer != null) {
                 try {
                     writer.close();

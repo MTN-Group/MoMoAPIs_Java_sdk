@@ -102,6 +102,7 @@ public class UserProvisioningAuthentication extends BaseAuthentication {
             connection.createAndConfigureHttpConnection(httpConfiguration);
 
             // Sets authorization header
+            //TODO check if header is removed correctly in case of exception
             this.headers.remove(Constants.X_REFERENCE_ID);
             this.headers.put(Constants.SUBSCRIPTION_KEY, this.subscriptionKey);
 
@@ -144,6 +145,7 @@ public class UserProvisioningAuthentication extends BaseAuthentication {
             connection.createAndConfigureHttpConnection(httpConfiguration);
 
             // Sets authorization header
+            //TODO check if header is removed correctly in case of exception
             this.headers.remove(Constants.X_REFERENCE_ID);
             this.headers.put(Constants.SUBSCRIPTION_KEY, this.subscriptionKey);
 

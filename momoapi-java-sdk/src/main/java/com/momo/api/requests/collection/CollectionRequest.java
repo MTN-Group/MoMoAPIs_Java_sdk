@@ -13,7 +13,6 @@ import com.momo.api.base.model.StatusResponse;
 import com.momo.api.base.model.HttpErrorResponse;
 import com.momo.api.base.util.JSONFormatter;
 import com.momo.api.base.util.StringUtils;
-import com.momo.api.base.util.Validator;
 import com.momo.api.models.collection.RequestPayStatus;
 import com.momo.api.constants.RequestType;
 import com.momo.api.models.AccountBalance;
@@ -65,6 +64,7 @@ public class CollectionRequest extends CommonRequest {
                 .replace(Constants.SUBSCRIPTION_TYPE, SubscriptionType.COLLECTION)
                 .replace(Constants.REQUEST_TYPE, RequestType.REQUEST_TO_PAY);
         StatusResponse statusResponse = createRequest(HttpMethod.POST, resourcePath, JSONFormatter.toJSON(requestPay), notificationType, callBackURL, CollectionContext.getContext());
+        //TODO check if header is removed correctly in case of exception
         CollectionContext.getContext().getHTTPHeaders()
                 .remove(Constants.X_REFERENCE_ID);
         return statusResponse;
@@ -199,6 +199,7 @@ public class CollectionRequest extends CommonRequest {
                 .replace(Constants.SUBSCRIPTION_TYPE, SubscriptionType.COLLECTION)
                 .replace(Constants.REQUEST_TYPE, RequestType.REQUEST_TO_WITHDRAW);
         StatusResponse statusResponse = createRequest(HttpMethod.POST, resourcePath, JSONFormatter.toJSON(withdraw), notificationType, callBackURL, CollectionContext.getContext());
+        //TODO check if header is removed correctly in case of exception
         CollectionContext.getContext().getHTTPHeaders()
                 .remove(Constants.X_REFERENCE_ID);
         return statusResponse;
@@ -229,6 +230,7 @@ public class CollectionRequest extends CommonRequest {
                 .replace(Constants.SUBSCRIPTION_TYPE, SubscriptionType.COLLECTION)
                 .replace(Constants.REQUEST_TYPE, RequestType.REQUEST_TO_WITHDRAW);
         StatusResponse statusResponse = createRequest(HttpMethod.POST, resourcePath, JSONFormatter.toJSON(withdraw), notificationType, callBackURL, CollectionContext.getContext());
+        //TODO check if header is removed correctly in case of exception
         CollectionContext.getContext().getHTTPHeaders()
                 .remove(Constants.X_REFERENCE_ID);
         return statusResponse;

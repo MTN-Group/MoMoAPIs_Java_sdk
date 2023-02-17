@@ -33,7 +33,7 @@ public class ResourceUtil {
 
     // Used for dynamic configuration
     private static Map<String, String> configurationMap;
-    
+
     /**
      * *
      * Process requests
@@ -199,9 +199,9 @@ public class ResourceUtil {
             if (currentContext.getHTTPHeader(Constants.HTTP_CONTENT_TYPE_HEADER) == null) {
                 currentContext.addHTTPHeader(Constants.HTTP_CONTENT_TYPE_HEADER, Constants.HTTP_CONTENT_TYPE_JSON);
             }
-            
+
             if (currentContext.getHTTPHeader(Constants.TARGET_ENVIRONMENT) == null) {
-                if(currentContext.getConfigurationMap().containsKey(Constants.TARGET_ENVIRONMENT) && !StringUtils.isNullOrEmpty(currentContext.getConfigurationMap().get(Constants.TARGET_ENVIRONMENT))){
+                if (currentContext.getConfigurationMap().containsKey(Constants.TARGET_ENVIRONMENT) && !StringUtils.isNullOrEmpty(currentContext.getConfigurationMap().get(Constants.TARGET_ENVIRONMENT))) {
                     currentContext.addHTTPHeader(Constants.TARGET_ENVIRONMENT, currentContext.getConfigurationMap().get(Constants.TARGET_ENVIRONMENT));
                 } else {
                     currentContext.addHTTPHeader(Constants.TARGET_ENVIRONMENT, currentContext.getConfigurationMap().get("mode").toLowerCase());
@@ -260,6 +260,9 @@ public class ResourceUtil {
 
             responseData = executeWithRetries(currentContext, auth_req_id, () -> execute(apiManager, httpConfiguration));
 
+            // Replace the headers back to JSON for any future use.
+            currentContext.getHTTPHeaders().put(Constants.HTTP_CONTENT_TYPE_HEADER, Constants.HTTP_CONTENT_TYPE_JSON);
+
             validateResponseData(responseData);
         } else {
             throw new MoMoException(
@@ -294,7 +297,7 @@ public class ResourceUtil {
                             Constants.VALUE_NOT_SUPPLIED_ERROR_CODE)
                             .errorDescription(Constants.ACCOUNT_HOLDER_OBJECT_INIT_ERROR).build());
         }
-        if (accountHolder.getAccountHolderIdType()== null || accountHolder.getAccountHolderId()== null) {
+        if (accountHolder.getAccountHolderIdType() == null || accountHolder.getAccountHolderId() == null) {
             throw new MoMoException(
                     new HttpErrorResponse.HttpErrorResponseBuilder(Constants.INTERNAL_ERROR_CATEGORY,
                             Constants.GENERIC_ERROR_CODE).errorDescription(Constants.NULL_VALUE_ERROR).build());
@@ -442,6 +445,7 @@ public class ResourceUtil {
 
     /**
      * Check if the HttpResponse received is an error
+     *
      * @param responseData
      * @throws MoMoException
      */

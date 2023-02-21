@@ -77,8 +77,9 @@ public class UserProvisioningAuthentication extends BaseAuthentication {
         } catch (IOException e) {
             Logger.getLogger(UserProvisioningAuthentication.class.getName()).log(Level.SEVERE, e.toString(), e);
         } finally {
-            // Replace the headers back to JSON for any future use.
-            this.headers.put(Constants.HTTP_CONTENT_TYPE_HEADER, Constants.HTTP_CONTENT_TYPE_JSON);
+            if(this.headers.containsKey(Constants.X_REFERENCE_ID)){
+                this.headers.remove(Constants.X_REFERENCE_ID);
+            }
         }
         return null;
     }
@@ -102,8 +103,6 @@ public class UserProvisioningAuthentication extends BaseAuthentication {
             connection.createAndConfigureHttpConnection(httpConfiguration);
 
             // Sets authorization header
-            //TODO check if header is removed correctly in case of exception
-            this.headers.remove(Constants.X_REFERENCE_ID);
             this.headers.put(Constants.SUBSCRIPTION_KEY, this.subscriptionKey);
 
             this.headers.put(Constants.HTTP_CONTENT_TYPE_HEADER, Constants.HTTP_CONTENT_TYPE_JSON);
@@ -121,8 +120,6 @@ public class UserProvisioningAuthentication extends BaseAuthentication {
         } catch (IOException e) {
             Logger.getLogger(UserProvisioningAuthentication.class.getName()).log(Level.SEVERE, e.toString(), e);
         } finally {
-            // Replace the headers back to JSON for any future use.
-            this.headers.put(Constants.HTTP_CONTENT_TYPE_HEADER, Constants.HTTP_CONTENT_TYPE_JSON);
         }
         return null;
     }
@@ -145,8 +142,6 @@ public class UserProvisioningAuthentication extends BaseAuthentication {
             connection.createAndConfigureHttpConnection(httpConfiguration);
 
             // Sets authorization header
-            //TODO check if header is removed correctly in case of exception
-            this.headers.remove(Constants.X_REFERENCE_ID);
             this.headers.put(Constants.SUBSCRIPTION_KEY, this.subscriptionKey);
 
             this.headers.put(Constants.HTTP_CONTENT_TYPE_HEADER, Constants.HTTP_CONTENT_TYPE_JSON);
@@ -164,8 +159,6 @@ public class UserProvisioningAuthentication extends BaseAuthentication {
         } catch (IOException e) {
             Logger.getLogger(UserProvisioningAuthentication.class.getName()).log(Level.SEVERE, e.toString(), e);
         } finally {
-            // Replace the headers back to JSON for any future use.
-            this.headers.put(Constants.HTTP_CONTENT_TYPE_HEADER, Constants.HTTP_CONTENT_TYPE_JSON);
         }
         return null;
     }

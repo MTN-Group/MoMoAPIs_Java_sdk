@@ -130,12 +130,6 @@ public class CommonRequest extends ResourceUtil {
                 .replace(Constants.REQUEST_TYPE, RequestType.REQUEST_TO_PAY)
                 .replace(Constants.REFERENCE_ID, referenceId);
         StatusResponse statusResponse = createRequest(HttpMethod.POST, resourcePath, deliveryNotification.toJSON(), notificationType, callBackURL, currentContext);
-        
-        //TODO check if header is removed correctly in case of exception
-        if (haveHeader) {
-            currentContext.getHTTPHeaders()
-                    .remove(Constants.NOTIFICATION_MESSAGE);
-        }
         return statusResponse;
     }
 
@@ -146,18 +140,18 @@ public class CommonRequest extends ResourceUtil {
      *
      * @param accountHolder
      * @param scope
-     * @param access_type
+     * @param accesType
      * @param subscriptionType
      * @param currentContext
      * @return
      * @throws MoMoException
      */
-    protected BCAuthorize bCAuthorize(AccountHolder accountHolder, String scope, AccessType access_type, String subscriptionType, MoMoContext currentContext) throws MoMoException {
+    protected BCAuthorize bCAuthorize(AccountHolder accountHolder, String scope, AccessType accesType, String subscriptionType, MoMoContext currentContext) throws MoMoException {
         Validator.throwIfNullObject(accountHolder);
         Validator.throwIfNullOrEmptyString(accountHolder.getAccountHolderId());
         Validator.throwIfNullOrEmptyString(accountHolder.getAccountHolderIdType());
         Validator.throwIfNullOrEmptyString(scope);
-        Validator.throwIfNullObject(access_type);
+        Validator.throwIfNullObject(accesType);
 
         currentContext.getHTTPHeaders()
                 .put(Constants.HTTP_CONTENT_TYPE_HEADER, Constants.HTTP_CONTENT_TYPE_URLENCODED);
@@ -168,12 +162,10 @@ public class CommonRequest extends ResourceUtil {
 
         //TODO possible values for "msisdn", "scope" and "access_type" 
         //TODO make sure no unwanted strings are passed in as parameters eg:- "/"
-        String payLoad = "login_hint=ID:" + accountHolder.getAccountHolderId() + "/" + accountHolder.getAccountHolderIdType() + "&scope=" + scope + "&access_type=" + access_type.getValue();
+        String payLoad = "login_hint=ID:" + accountHolder.getAccountHolderId() + "/" + accountHolder.getAccountHolderIdType() + "&scope=" + scope + "&access_type=" + accesType.getValue();
 
         BCAuthorize bCAuthorize = createRequest(HttpMethod.POST, resourcePath, payLoad, notificationType, callBackURL, BCAuthorize.class, currentContext);
 
-        currentContext.getHTTPHeaders()
-                    .remove(Constants.HTTP_CONTENT_TYPE_HEADER);
         return bCAuthorize;
     }
 

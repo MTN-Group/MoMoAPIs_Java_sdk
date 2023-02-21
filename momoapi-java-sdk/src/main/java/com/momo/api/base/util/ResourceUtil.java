@@ -17,7 +17,6 @@ import com.momo.api.base.exception.UnauthorizedException;
 import com.momo.api.base.model.AccessToken;
 import com.momo.api.base.model.StatusResponse;
 import com.momo.api.base.model.HttpErrorResponse;
-import com.momo.api.base.model.Oauth2Token;
 import com.momo.api.constants.NotificationType;
 import com.momo.api.models.AccountHolder;
 import java.io.IOException;
@@ -196,7 +195,7 @@ public class ResourceUtil {
                 throw new IllegalArgumentException(Constants.EMPTY_ACCESS_TOKEN_MESSAGE);
             }
 
-            if (currentContext.getHTTPHeader(Constants.HTTP_CONTENT_TYPE_HEADER) == null) {
+            if (!currentContext.getHTTPHeaders().containsKey(Constants.HTTP_CONTENT_TYPE_HEADER) || currentContext.getHTTPHeader(Constants.HTTP_CONTENT_TYPE_HEADER) == null) {
                 currentContext.addHTTPHeader(Constants.HTTP_CONTENT_TYPE_HEADER, Constants.HTTP_CONTENT_TYPE_JSON);
             }
 
@@ -214,6 +213,7 @@ public class ResourceUtil {
                     || !StringUtils.isNullOrEmpty(currentContext.getCallBackUrl()))) {
                 if (!StringUtils.isNullOrEmpty(callBackURL)) {
                     if (isValidURL(callBackURL)) {
+                        //callBack Url set with the value passed in for current request
                         currentContext.addHTTPHeader(Constants.CALL_BACK_URL, callBackURL);
                     } else {
                         throw new MoMoException(
@@ -222,6 +222,7 @@ public class ResourceUtil {
                     }
                 } else if (!StringUtils.isNullOrEmpty(currentContext.getCallBackUrl())) {
                     if (isValidURL(currentContext.getCallBackUrl())) {
+                        //callBack Url set with the value passed during the creation of request/context. This will be the default one url if not specified for each request.
                         currentContext.addHTTPHeader(Constants.CALL_BACK_URL, currentContext.getCallBackUrl());
                     } else {
                         throw new MoMoException(
@@ -259,9 +260,6 @@ public class ResourceUtil {
             HttpConfiguration httpConfiguration = getHttpConfiguration(httpMethod, apiManager);
 
             responseData = executeWithRetries(currentContext, auth_req_id, () -> execute(apiManager, httpConfiguration));
-
-            // Replace the headers back to JSON for any future use.
-            currentContext.getHTTPHeaders().put(Constants.HTTP_CONTENT_TYPE_HEADER, Constants.HTTP_CONTENT_TYPE_JSON);
 
             validateResponseData(responseData);
         } else {

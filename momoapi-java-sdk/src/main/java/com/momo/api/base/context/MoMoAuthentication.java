@@ -120,8 +120,9 @@ public class MoMoAuthentication extends BaseAuthentication {
         } catch (IOException e) {
             Logger.getLogger(MoMoAuthentication.class.getName()).log(Level.SEVERE, e.toString(), e);
         } finally {
-            // Replace the headers back to JSON for any future use.
-            this.headers.put(Constants.HTTP_CONTENT_TYPE_HEADER, Constants.HTTP_CONTENT_TYPE_JSON);
+            if(this.headers.containsKey(Constants.HTTP_CONTENT_TYPE_HEADER)){
+                this.headers.remove(Constants.HTTP_CONTENT_TYPE_HEADER);
+            }
         }
         return null;
     }
@@ -149,7 +150,7 @@ public class MoMoAuthentication extends BaseAuthentication {
             this.headers.put(Constants.SUBSCRIPTION_KEY, this.subscriptionKey);
             this.headers.put(Constants.AUTHORIZATION_HEADER, Constants.BASIC + generateBase64String());
 
-            //will be reset to HTTP_CONTENT_TYPE_JSON in finally block
+            //will be reset in finally block
             this.headers.put(Constants.HTTP_CONTENT_TYPE_HEADER, Constants.HTTP_CONTENT_TYPE_URLENCODED);
             
             //TODO make sure the values "grant_type=urn:openid:params:grant-type:ciba&auth_req_id=" are static or if need to passed in as parameters in case of varying
@@ -168,8 +169,9 @@ public class MoMoAuthentication extends BaseAuthentication {
         } catch (IOException e) {
             Logger.getLogger(MoMoAuthentication.class.getName()).log(Level.SEVERE, e.toString(), e);
         } finally {
-            // Replace the headers back to JSON for any future use.
-            this.headers.put(Constants.HTTP_CONTENT_TYPE_HEADER, Constants.HTTP_CONTENT_TYPE_JSON);
+            if(this.headers.containsKey(Constants.HTTP_CONTENT_TYPE_HEADER)){
+                this.headers.remove(Constants.HTTP_CONTENT_TYPE_HEADER);
+            }
         }
         return null;
     }

@@ -84,9 +84,9 @@ public class CollectionRequestTest {
         statusResponse = collectionRequestFirst.requestToPay(getRequestPay(MSISDN_NUMBER));
         assertTrue(statusResponse.getStatus());
 
-        //case 4: Creating a new collectionRequestNew object and passing valid callback url. Callback will be received.
-        CollectionRequest collectionRequestNew = collectionConfiguration.createCollectionRequest();
-        statusResponse = collectionRequestNew.requestToPay(getRequestPay(MSISDN_NUMBER));
+        //case 4: Creating a new collectionRequestSecond object and passing valid callback url. Callback will be received.
+        CollectionRequest collectionRequestSecond = collectionConfiguration.createCollectionRequest();
+        statusResponse = collectionRequestSecond.requestToPay(getRequestPay(MSISDN_NUMBER));
         assertTrue(statusResponse.getStatus());
 
         //case 5: Correcting the CallBackUrl for "collectionRequestFirst" object will allow callBack's to be received again using this object.
@@ -118,7 +118,7 @@ public class CollectionRequestTest {
 
         //case 1: Pay object is null
         MoMoException moMoException = assertThrows(MoMoException.class, () -> collectionRequest.requestToPay(null));
-        assertEquals(moMoException.getError().getErrorDescription(), Constants.PAY_OBJECT_INIT_ERROR);
+        assertEquals(moMoException.getError().getErrorDescription(), Constants.REQUEST_TO_PAY_OBJECT_INIT_ERROR);
 
         //case 2: Pay object initialised, but varialbes are not defined
         RequestPay requestPay = new RequestPay();

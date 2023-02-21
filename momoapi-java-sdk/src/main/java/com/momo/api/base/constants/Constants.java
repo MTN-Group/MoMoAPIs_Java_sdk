@@ -152,7 +152,7 @@ public final class Constants {
     public static final String AUTH_REQ_ID_ERROR = "Make sure auth_req_id is valid";
 
     // Pay Object Is Null
-    public static final String PAY_OBJECT_INIT_ERROR = "Pay object is not initialized";
+    public static final String REQUEST_TO_PAY_OBJECT_INIT_ERROR = "Request to Pay object is not initialized";
 
     // Pay Object Is Null
     public static final String BCAUTHORIZE_OBJECT_INIT_ERROR = "BCAuthorize object is not initialized";

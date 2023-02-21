@@ -53,7 +53,7 @@ public class CollectionRequest extends CommonRequest {
             throw new MoMoException(
                     new HttpErrorResponse.HttpErrorResponseBuilder(Constants.VALIDATION_ERROR_CATEGORY,
                             Constants.VALUE_NOT_SUPPLIED_ERROR_CODE)
-                            .errorDescription(Constants.PAY_OBJECT_INIT_ERROR).build());
+                            .errorDescription(Constants.REQUEST_TO_PAY_OBJECT_INIT_ERROR).build());
         }
 
         this.referenceId = UUID.randomUUID().toString();
@@ -64,9 +64,6 @@ public class CollectionRequest extends CommonRequest {
                 .replace(Constants.SUBSCRIPTION_TYPE, SubscriptionType.COLLECTION)
                 .replace(Constants.REQUEST_TYPE, RequestType.REQUEST_TO_PAY);
         StatusResponse statusResponse = createRequest(HttpMethod.POST, resourcePath, JSONFormatter.toJSON(requestPay), notificationType, callBackURL, CollectionContext.getContext());
-        //TODO check if header is removed correctly in case of exception
-        CollectionContext.getContext().getHTTPHeaders()
-                .remove(Constants.X_REFERENCE_ID);
         return statusResponse;
     }
 
@@ -199,9 +196,6 @@ public class CollectionRequest extends CommonRequest {
                 .replace(Constants.SUBSCRIPTION_TYPE, SubscriptionType.COLLECTION)
                 .replace(Constants.REQUEST_TYPE, RequestType.REQUEST_TO_WITHDRAW);
         StatusResponse statusResponse = createRequest(HttpMethod.POST, resourcePath, JSONFormatter.toJSON(withdraw), notificationType, callBackURL, CollectionContext.getContext());
-        //TODO check if header is removed correctly in case of exception
-        CollectionContext.getContext().getHTTPHeaders()
-                .remove(Constants.X_REFERENCE_ID);
         return statusResponse;
     }
 
@@ -230,9 +224,6 @@ public class CollectionRequest extends CommonRequest {
                 .replace(Constants.SUBSCRIPTION_TYPE, SubscriptionType.COLLECTION)
                 .replace(Constants.REQUEST_TYPE, RequestType.REQUEST_TO_WITHDRAW);
         StatusResponse statusResponse = createRequest(HttpMethod.POST, resourcePath, JSONFormatter.toJSON(withdraw), notificationType, callBackURL, CollectionContext.getContext());
-        //TODO check if header is removed correctly in case of exception
-        CollectionContext.getContext().getHTTPHeaders()
-                .remove(Constants.X_REFERENCE_ID);
         return statusResponse;
     }
 
@@ -276,13 +267,13 @@ public class CollectionRequest extends CommonRequest {
      *
      * @param accountHolder
      * @param scope
-     * @param access_type
+     * @param accesType
      * @return
      * @throws MoMoException
      */
-    public UserInfo getUserInfoWithConsent(AccountHolder accountHolder, String scope, AccessType access_type) throws MoMoException {
+    public UserInfo getUserInfoWithConsent(AccountHolder accountHolder, String scope, AccessType accesType) throws MoMoException {
 
-        BCAuthorize bCAuthorize = bCAuthorize(accountHolder, scope, access_type);
+        BCAuthorize bCAuthorize = bCAuthorize(accountHolder, scope, accesType);
 
         //TODO find and remove all System.out.print
         if (bCAuthorize == null) {
@@ -310,12 +301,12 @@ public class CollectionRequest extends CommonRequest {
      *
      * @param accountHolder
      * @param scope
-     * @param access_type
+     * @param accesType
      * @return
      * @throws MoMoException
      */
-    public BCAuthorize bCAuthorize(AccountHolder accountHolder, String scope, AccessType access_type) throws MoMoException {
-        return bCAuthorize(accountHolder, scope, access_type, SubscriptionType.COLLECTION, CollectionContext.getContext());
+    public BCAuthorize bCAuthorize(AccountHolder accountHolder, String scope, AccessType accesType) throws MoMoException {
+        return bCAuthorize(accountHolder, scope, accesType, SubscriptionType.COLLECTION, CollectionContext.getContext());
     }
 
 }

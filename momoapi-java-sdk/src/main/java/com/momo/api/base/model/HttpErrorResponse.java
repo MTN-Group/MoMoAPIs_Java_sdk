@@ -1,6 +1,9 @@
 package com.momo.api.base.model;
 
+import com.momo.api.base.util.StringUtils;
 import com.momo.api.models.Reason;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -8,18 +11,18 @@ import java.util.List;
  * Class HttpErrorResponse
  */
 public final class HttpErrorResponse extends Reason {
-
+    
     private static final long serialVersionUID = 1L;
-
+    
     private String errorCategory;
     private String errorCode;
     private String errorDescription;
     private String errorDateTime;
     //TODO check if transient keyword can be used to remove this warning and doesn't affect printing error messages
     private List<HttpErrorMetaData> errorParameters;
-
+    
     private String statusCode;
-
+    
     private String error;
 
     /**
@@ -32,7 +35,8 @@ public final class HttpErrorResponse extends Reason {
         this.errorCategory = builder.errorCategory;
         this.errorCode = builder.errorCode;
         this.errorDescription = builder.errorDescription;
-        this.errorDateTime = builder.errorDateTime;
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
+        this.errorDateTime = StringUtils.isNullOrEmpty(builder.errorDateTime) ? formatter.format(new Date()) : builder.errorDateTime;
         this.errorParameters = builder.errorParameters;
     }
 
@@ -105,32 +109,32 @@ public final class HttpErrorResponse extends Reason {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getStatusCode() {
         return statusCode;
     }
 
     /**
-     * 
-     * @param statusCode 
+     *
+     * @param statusCode
      */
     public void setStatusCode(String statusCode) {
         this.statusCode = statusCode;
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getError() {
         return error;
     }
 
     /**
-     * 
-     * @param error 
+     *
+     * @param error
      */
     public void setError(String error) {
         this.error = error;
@@ -141,7 +145,7 @@ public final class HttpErrorResponse extends Reason {
      * Creates HttpErrorResponse object
      */
     public static class HttpErrorResponseBuilder {
-
+        
         private String errorCategory;
         private String errorCode;
         private String errorDescription;
@@ -210,15 +214,15 @@ public final class HttpErrorResponse extends Reason {
      * Creates HttpErrorResponse object
      */
     public static class HttpErrorReasonBuilder extends Reason {
-
+        
         private static final long serialVersionUID = 1L;
-
+        
         private String statusCode;
 
         /**
-         * 
+         *
          * @param statusCode
-         * @param code 
+         * @param code
          */
         public HttpErrorReasonBuilder(String statusCode, String code) {
             this.statusCode = statusCode;
@@ -226,10 +230,10 @@ public final class HttpErrorResponse extends Reason {
         }
 
         /**
-         * 
+         *
          * @param statusCode
          * @param code
-         * @param message 
+         * @param message
          */
         public HttpErrorReasonBuilder(String statusCode, String code, String message) {
             this.statusCode = statusCode;
@@ -238,9 +242,9 @@ public final class HttpErrorResponse extends Reason {
         }
 
         /**
-         * 
+         *
          * @param message
-         * @return 
+         * @return
          */
         public HttpErrorReasonBuilder message(String message) {
             this.message = message;
@@ -248,10 +252,10 @@ public final class HttpErrorResponse extends Reason {
         }
 
         /**
-         * 
+         *
          * @param code
          * @param message
-         * @return 
+         * @return
          */
         public HttpErrorReasonBuilder reason(String code, String message) {
             this.code = code;
@@ -269,7 +273,7 @@ public final class HttpErrorResponse extends Reason {
             HttpErrorResponse httpErrorResponse = new HttpErrorResponse(this);
             return httpErrorResponse;
         }
-
+        
     }
 
     /**
@@ -277,7 +281,7 @@ public final class HttpErrorResponse extends Reason {
      * Creates HttpErrorResponse object
      */
     public static class HttpErrorBuilder {
-
+        
         private String statusCode;
         private String error;
 

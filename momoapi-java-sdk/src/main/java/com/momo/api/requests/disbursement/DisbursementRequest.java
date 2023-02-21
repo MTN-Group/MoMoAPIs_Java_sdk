@@ -140,9 +140,6 @@ public class DisbursementRequest extends TransferRequest {
                 .replace(Constants.SUBSCRIPTION_TYPE, SubscriptionType.DISBURSEMENT)
                 .replace(Constants.REQUEST_TYPE, RequestType.DEPOSIT);
         StatusResponse statusResponse = createRequest(HttpMethod.POST, resourcePath, JSONFormatter.toJSON(deposit), notificationType, callBackURL, DisbursementContext.getContext());
-        //TODO check if header is removed correctly in case of exception
-        DisbursementContext.getContext().getHTTPHeaders()
-                .remove(Constants.X_REFERENCE_ID);
         return statusResponse;
     }
 
@@ -171,9 +168,6 @@ public class DisbursementRequest extends TransferRequest {
                 .replace(Constants.SUBSCRIPTION_TYPE, SubscriptionType.DISBURSEMENT)
                 .replace(Constants.REQUEST_TYPE, RequestType.DEPOSIT);
         StatusResponse statusResponse = createRequest(HttpMethod.POST, resourcePath, JSONFormatter.toJSON(deposit), notificationType, callBackURL, DisbursementContext.getContext());
-        //TODO check if header is removed correctly in case of exception
-        DisbursementContext.getContext().getHTTPHeaders()
-                .remove(Constants.X_REFERENCE_ID);
         return statusResponse;
     }
 
@@ -225,9 +219,6 @@ public class DisbursementRequest extends TransferRequest {
                 .replace(Constants.SUBSCRIPTION_TYPE, SubscriptionType.DISBURSEMENT)
                 .replace(Constants.REQUEST_TYPE, RequestType.REFUND);
         StatusResponse statusResponse = createRequest(HttpMethod.POST, resourcePath, JSONFormatter.toJSON(refund), notificationType, callBackURL, DisbursementContext.getContext());
-        //TODO check if header is removed correctly in case of exception
-        DisbursementContext.getContext().getHTTPHeaders()
-                .remove(Constants.X_REFERENCE_ID);
         return statusResponse;
     }
 
@@ -256,9 +247,6 @@ public class DisbursementRequest extends TransferRequest {
                 .replace(Constants.SUBSCRIPTION_TYPE, SubscriptionType.DISBURSEMENT)
                 .replace(Constants.REQUEST_TYPE, RequestType.REFUND);
         StatusResponse statusResponse = createRequest(HttpMethod.POST, resourcePath, JSONFormatter.toJSON(refund), notificationType, callBackURL, DisbursementContext.getContext());
-        //TODO check if header is removed correctly in case of exception
-        DisbursementContext.getContext().getHTTPHeaders()
-                .remove(Constants.X_REFERENCE_ID);
         return statusResponse;
     }
 

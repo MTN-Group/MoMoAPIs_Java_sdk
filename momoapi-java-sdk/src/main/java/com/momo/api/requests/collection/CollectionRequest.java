@@ -1,12 +1,14 @@
 package com.momo.api.requests.collection;
 
 import com.momo.api.base.constants.API;
+import com.momo.api.base.constants.AccessType;
 import com.momo.api.base.constants.Constants;
 import com.momo.api.base.constants.HttpMethod;
 import com.momo.api.base.constants.SubscriptionType;
 import com.momo.api.base.context.MoMoContext;
 import com.momo.api.base.context.collection.CollectionContext;
 import com.momo.api.base.exception.MoMoException;
+import com.momo.api.base.model.BCAuthorize;
 import com.momo.api.base.model.StatusResponse;
 import com.momo.api.base.model.HttpErrorResponse;
 import com.momo.api.base.util.JSONFormatter;
@@ -18,6 +20,7 @@ import com.momo.api.models.AccountHolder;
 import com.momo.api.models.BasicUserInfo;
 import com.momo.api.models.DeliveryNotification;
 import com.momo.api.models.Result;
+import com.momo.api.models.UserInfo;
 import com.momo.api.models.collection.RequestPay;
 import com.momo.api.models.collection.Withdraw;
 import com.momo.api.models.collection.WithdrawStatus;
@@ -50,7 +53,7 @@ public class CollectionRequest extends CommonRequest {
             throw new MoMoException(
                     new HttpErrorResponse.HttpErrorResponseBuilder(Constants.VALIDATION_ERROR_CATEGORY,
                             Constants.VALUE_NOT_SUPPLIED_ERROR_CODE)
-                            .errorDescription(Constants.PAY_OBJECT_INIT_ERROR).build());
+                            .errorDescription(Constants.REQUEST_TO_PAY_OBJECT_INIT_ERROR).build());
         }
 
         this.referenceId = UUID.randomUUID().toString();
@@ -61,8 +64,6 @@ public class CollectionRequest extends CommonRequest {
                 .replace(Constants.SUBSCRIPTION_TYPE, SubscriptionType.COLLECTION)
                 .replace(Constants.REQUEST_TYPE, RequestType.REQUEST_TO_PAY);
         StatusResponse statusResponse = createRequest(HttpMethod.POST, resourcePath, JSONFormatter.toJSON(requestPay), notificationType, callBackURL, CollectionContext.getContext());
-        CollectionContext.getContext().getHTTPHeaders()
-                .remove(Constants.X_REFERENCE_ID);
         return statusResponse;
     }
 
@@ -195,8 +196,6 @@ public class CollectionRequest extends CommonRequest {
                 .replace(Constants.SUBSCRIPTION_TYPE, SubscriptionType.COLLECTION)
                 .replace(Constants.REQUEST_TYPE, RequestType.REQUEST_TO_WITHDRAW);
         StatusResponse statusResponse = createRequest(HttpMethod.POST, resourcePath, JSONFormatter.toJSON(withdraw), notificationType, callBackURL, CollectionContext.getContext());
-        CollectionContext.getContext().getHTTPHeaders()
-                .remove(Constants.X_REFERENCE_ID);
         return statusResponse;
     }
 
@@ -225,8 +224,6 @@ public class CollectionRequest extends CommonRequest {
                 .replace(Constants.SUBSCRIPTION_TYPE, SubscriptionType.COLLECTION)
                 .replace(Constants.REQUEST_TYPE, RequestType.REQUEST_TO_WITHDRAW);
         StatusResponse statusResponse = createRequest(HttpMethod.POST, resourcePath, JSONFormatter.toJSON(withdraw), notificationType, callBackURL, CollectionContext.getContext());
-        CollectionContext.getContext().getHTTPHeaders()
-                .remove(Constants.X_REFERENCE_ID);
         return statusResponse;
     }
 
@@ -263,4 +260,53 @@ public class CollectionRequest extends CommonRequest {
     public BasicUserInfo getBasicUserinfo(String msisdn) throws MoMoException {
         return getBasicUserinfo(msisdn, SubscriptionType.COLLECTION, CollectionContext.getContext());
     }
+
+    /**
+     * This operation is used to get the details of the account holder for the
+     * requested scopes.
+     *
+     * @param accountHolder
+     * @param scope
+     * @param accesType
+     * @return
+     * @throws MoMoException
+     */
+    public UserInfo getUserInfoWithConsent(AccountHolder accountHolder, String scope, AccessType accesType) throws MoMoException {
+
+        BCAuthorize bCAuthorize = bCAuthorize(accountHolder, scope, accesType);
+
+        //TODO find and remove all System.out.print
+        if (bCAuthorize == null) {
+            throw new MoMoException(
+                    new HttpErrorResponse.HttpErrorResponseBuilder(Constants.VALIDATION_ERROR_CATEGORY,
+                            Constants.VALUE_NOT_SUPPLIED_ERROR_CODE)
+                            .errorDescription(Constants.BCAUTHORIZE_OBJECT_INIT_ERROR).build());
+        }
+
+        //TODO auth_req_id can also be validated with UUID format if needed
+        if (StringUtils.isNullOrEmpty(bCAuthorize.getAuth_req_id())) {
+            throw new MoMoException(
+                    new HttpErrorResponse.HttpErrorResponseBuilder(Constants.INTERNAL_ERROR_CATEGORY,
+                            Constants.GENERIC_ERROR_CODE).errorDescription(Constants.AUTH_REQ_ID_ERROR).build());
+        }
+        String resourcePath = API.SUBSCRIPTION_OAUTH2_USERINFO
+                .replace(Constants.SUBSCRIPTION_TYPE, SubscriptionType.COLLECTION);
+        return createRequest(HttpMethod.GET, resourcePath, "", notificationType, callBackURL, UserInfo.class, CollectionContext.getContext(), bCAuthorize.getAuth_req_id());
+    }
+
+    /**
+     * This operation is used to claim a consent by the account holder for the
+     * requested scopes.bCAuthorize receives a parameter "auth_req_id" which is
+     * passed into Oauth2 API which is then used in getUserInfoWithConsent API
+     *
+     * @param accountHolder
+     * @param scope
+     * @param accesType
+     * @return
+     * @throws MoMoException
+     */
+    public BCAuthorize bCAuthorize(AccountHolder accountHolder, String scope, AccessType accesType) throws MoMoException {
+        return bCAuthorize(accountHolder, scope, accesType, SubscriptionType.COLLECTION, CollectionContext.getContext());
+    }
+
 }

@@ -1,11 +1,13 @@
 package com.momo.api.integration;
 
 import com.momo.api.base.HttpStatusCode;
+import com.momo.api.base.constants.AccessType;
 import com.momo.api.base.constants.Constants;
 import com.momo.api.base.constants.IdType;
 import com.momo.api.base.context.collection.CollectionConfiguration;
 import com.momo.api.base.context.provisioning.UserProvisioningConfiguration;
 import com.momo.api.base.exception.MoMoException;
+import com.momo.api.base.model.BCAuthorize;
 import com.momo.api.base.model.StatusResponse;
 import com.momo.api.config.MSISDN;
 import com.momo.api.config.PropertiesLoader;
@@ -19,6 +21,7 @@ import com.momo.api.models.CallbackHost;
 import com.momo.api.models.DeliveryNotification;
 import com.momo.api.models.Payer;
 import com.momo.api.models.Result;
+import com.momo.api.models.UserInfo;
 import com.momo.api.models.collection.RequestPay;
 import com.momo.api.models.collection.RequestPayStatus;
 import com.momo.api.models.collection.Withdraw;
@@ -47,6 +50,7 @@ public class CollectionRequestTest {
 
     private final String incorrect_referenceId = "incorrect_referenceId";
     private final static String MSISDN_NUMBER = MSISDN.SUCCESSFUL.getValue();
+    private final static String EMAIL = "testmail@gmail.com";
     private final static String SUBSCRIPTION_KEY = "COLLECTION_SUBSCRIPTION_KEY";
 
     @Test
@@ -80,9 +84,9 @@ public class CollectionRequestTest {
         statusResponse = collectionRequestFirst.requestToPay(getRequestPay(MSISDN_NUMBER));
         assertTrue(statusResponse.getStatus());
 
-        //case 4: Creating a new collectionRequestNew object and passing valid callback url. Callback will be received.
-        CollectionRequest collectionRequestNew = collectionConfiguration.createCollectionRequest();
-        statusResponse = collectionRequestNew.requestToPay(getRequestPay(MSISDN_NUMBER));
+        //case 4: Creating a new collectionRequestSecond object and passing valid callback url. Callback will be received.
+        CollectionRequest collectionRequestSecond = collectionConfiguration.createCollectionRequest();
+        statusResponse = collectionRequestSecond.requestToPay(getRequestPay(MSISDN_NUMBER));
         assertTrue(statusResponse.getStatus());
 
         //case 5: Correcting the CallBackUrl for "collectionRequestFirst" object will allow callBack's to be received again using this object.
@@ -114,7 +118,7 @@ public class CollectionRequestTest {
 
         //case 1: Pay object is null
         MoMoException moMoException = assertThrows(MoMoException.class, () -> collectionRequest.requestToPay(null));
-        assertEquals(moMoException.getError().getErrorDescription(), Constants.PAY_OBJECT_INIT_ERROR);
+        assertEquals(moMoException.getError().getErrorDescription(), Constants.REQUEST_TO_PAY_OBJECT_INIT_ERROR);
 
         //case 2: Pay object initialised, but varialbes are not defined
         RequestPay requestPay = new RequestPay();
@@ -490,6 +494,115 @@ public class CollectionRequestTest {
         moMoException = assertThrows(MoMoException.class, () -> collectionRequest.getBasicUserinfo(""));
         assertEquals(moMoException.getError().getErrorDescription(), Constants.EMPTY_STRING_ERROR);
     }
+    
+    @Test
+    @DisplayName("Get Userinfo With Consent Test Success")
+    void getUserInfoWithConsentTestSuccess() throws MoMoException {
+        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX);
+        CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
+
+        AccountHolder accountHolderMSISDN = new AccountHolder(IdType.MSISDN.getValue(), MSISDN_NUMBER);
+        UserInfo userInfoMSISDN = collectionRequest.getUserInfoWithConsent(accountHolderMSISDN, "profile", AccessType.OFFLINE);
+        
+        assertNotNull(userInfoMSISDN);
+        assertNotNull(userInfoMSISDN.getGiven_name());
+        
+        AccountHolder accountHolderEMAIL = new AccountHolder(IdType.EMAIL.getValue(), EMAIL);
+        UserInfo userInfoEMAIL = collectionRequest.getUserInfoWithConsent(accountHolderEMAIL, "profile", AccessType.OFFLINE);
+        
+        assertNotNull(userInfoEMAIL);
+        assertNotNull(userInfoEMAIL.getGiven_name());
+        
+        //TODO if PARTY_CODE is not an acceptable pearameter, we may need to validate and make sure its not used
+        //TODO seems like it accepts any texts. so validations are not applicable as of now
+        
+//        AccountHolder accountHolderUUID = new AccountHolder(IdType.PARTY_CODE.getValue(), loader.get("REFERENCE_ID"));
+//        UserInfo userInfoUUID = collectionRequest.getUserInfoWithConsent(accountHolderUUID, "profile", AccessType.OFFLINE);
+//        
+//        assertNotNull(userInfoUUID);
+//        assertNotNull(userInfoUUID.getGiven_name());
+    }
+    
+    @Test
+    @DisplayName("Get Userinfo With Consent Test Failure")
+    void getUserInfoWithConsentTestFailure() throws MoMoException {
+        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX);
+        CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
+
+        AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getValue(), MSISDN_NUMBER);
+        MoMoException moMoException = assertThrows(MoMoException.class, ()->collectionRequest.getUserInfoWithConsent(accountHolder, "invalid", AccessType.OFFLINE));
+        
+        assertEquals(moMoException.getError().getStatusCode(), Integer.toString(HttpStatusCode.INTERNAL_SERVER_ERROR.getHttpStatusCode()));
+
+        AccountHolder accountHolder1 = new AccountHolder(null, null);
+        moMoException = assertThrows(MoMoException.class, ()->collectionRequest.getUserInfoWithConsent(accountHolder1, "profile", AccessType.OFFLINE));
+        
+        assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_VALUE_ERROR);
+        
+        AccountHolder accountHolder2 = new AccountHolder(IdType.MSISDN.getValue(), MSISDN_NUMBER);
+        moMoException = assertThrows(MoMoException.class, ()->collectionRequest.getUserInfoWithConsent(accountHolder2, "", AccessType.OFFLINE));
+        
+        assertEquals(moMoException.getError().getErrorDescription(), Constants.EMPTY_STRING_ERROR);
+        
+        AccountHolder accountHolder3 = new AccountHolder(IdType.MSISDN.getValue(), MSISDN_NUMBER);
+        moMoException = assertThrows(MoMoException.class, ()->collectionRequest.getUserInfoWithConsent(accountHolder3, "profile", null));
+        
+        assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_VALUE_ERROR);
+        
+        moMoException = assertThrows(MoMoException.class, ()->collectionRequest.getUserInfoWithConsent(null, "profile", AccessType.OFFLINE));
+        
+        assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_VALUE_ERROR);
+    }
+    
+    @Test
+    @DisplayName("BCAuthorize Test Success")
+    void bCAuthorizeTestSuccess() throws MoMoException {
+        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX);
+        CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
+
+        AccountHolder accountHolderMSISDN = new AccountHolder(IdType.MSISDN.getValue(), MSISDN_NUMBER);
+        BCAuthorize bCAuthorizeMSISDN = collectionRequest.bCAuthorize(accountHolderMSISDN, "profile", AccessType.OFFLINE);
+        
+        assertNotNull(bCAuthorizeMSISDN);
+        assertNotNull(bCAuthorizeMSISDN.getAuth_req_id());
+        
+        AccountHolder accountHolderEMAIL = new AccountHolder(IdType.EMAIL.getValue(), EMAIL);
+        BCAuthorize bCAuthorizeEMAIL = collectionRequest.bCAuthorize(accountHolderEMAIL, "profile", AccessType.OFFLINE);
+        
+        assertNotNull(bCAuthorizeEMAIL);
+        assertNotNull(bCAuthorizeEMAIL.getAuth_req_id());
+    }
+    
+    @Test
+    @DisplayName("BCAuthorize Test Failure")
+    void bCAuthorizeTestFailure() throws MoMoException {
+        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX);
+        CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
+
+        AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getValue(), MSISDN_NUMBER);
+        MoMoException moMoException = assertThrows(MoMoException.class, ()->collectionRequest.bCAuthorize(accountHolder, "invalid", AccessType.OFFLINE));
+        
+        assertEquals(moMoException.getError().getStatusCode(), Integer.toString(HttpStatusCode.INTERNAL_SERVER_ERROR.getHttpStatusCode()));
+
+        AccountHolder accountHolder1 = new AccountHolder(null, null);
+        moMoException = assertThrows(MoMoException.class, ()->collectionRequest.bCAuthorize(accountHolder1, "profile", AccessType.OFFLINE));
+        
+        assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_VALUE_ERROR);
+        
+        AccountHolder accountHolder2 = new AccountHolder(IdType.MSISDN.getValue(), MSISDN_NUMBER);
+        moMoException = assertThrows(MoMoException.class, ()->collectionRequest.bCAuthorize(accountHolder2, "", AccessType.OFFLINE));
+        
+        assertEquals(moMoException.getError().getErrorDescription(), Constants.EMPTY_STRING_ERROR);
+        
+        AccountHolder accountHolder3 = new AccountHolder(IdType.MSISDN.getValue(), MSISDN_NUMBER);
+        moMoException = assertThrows(MoMoException.class, ()->collectionRequest.bCAuthorize(accountHolder3, "profile", null));
+        
+        assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_VALUE_ERROR);
+        
+        moMoException = assertThrows(MoMoException.class, ()->collectionRequest.bCAuthorize(null, "profile", AccessType.OFFLINE));
+        
+        assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_VALUE_ERROR);
+    }
 
     @Test
     @DisplayName("Callback Host Test Success")
@@ -521,7 +634,7 @@ public class CollectionRequestTest {
         CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
 
         Payer payer = new Payer();
-        payer.setPartyId("testmail@gmail.com");
+        payer.setPartyId(EMAIL);
         payer.setPartyIdType(IdType.EMAIL.getValue());
         
         RequestPay requestPay = new RequestPay();

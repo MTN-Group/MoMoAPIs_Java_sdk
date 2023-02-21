@@ -1,15 +1,18 @@
 package com.momo.api.requests;
 
 import com.momo.api.base.constants.API;
+import com.momo.api.base.constants.AccessType;
 import com.momo.api.base.constants.Constants;
 import com.momo.api.base.constants.HttpMethod;
 import com.momo.api.base.constants.IdType;
 import com.momo.api.base.context.MoMoContext;
 import com.momo.api.base.exception.MoMoException;
+import com.momo.api.base.model.BCAuthorize;
 import com.momo.api.base.model.StatusResponse;
 import com.momo.api.base.model.HttpErrorResponse;
 import com.momo.api.base.util.ResourceUtil;
 import com.momo.api.base.util.StringUtils;
+import com.momo.api.base.util.Validator;
 import com.momo.api.constants.NotificationType;
 import com.momo.api.constants.RequestType;
 import com.momo.api.models.AccountBalance;
@@ -26,7 +29,7 @@ public class CommonRequest extends ResourceUtil {
 
     protected NotificationType notificationType = NotificationType.CALLBACK;
     protected String callBackURL;
-    
+
     /**
      * This operation is used to check if an account holder is registered and
      * active in the system.
@@ -37,7 +40,7 @@ public class CommonRequest extends ResourceUtil {
      * @return
      * @throws MoMoException
      */
-    public Result validateAccountHolderStatus(AccountHolder accountHolder, String subscriptionType, MoMoContext currentContext) throws MoMoException {
+    protected Result validateAccountHolderStatus(AccountHolder accountHolder, String subscriptionType, MoMoContext currentContext) throws MoMoException {
         String resourcePath = getResourcePathAccountHolder(API.SUBSCRIPTION_VER_ACCOUNTHOLDER_STATUS, accountHolder);
 
         resourcePath = resourcePath
@@ -52,7 +55,7 @@ public class CommonRequest extends ResourceUtil {
      * @param currentContext
      * @return @throws MoMoException
      */
-    public AccountBalance getAccountBalance(String subscriptionType, MoMoContext currentContext) throws MoMoException {
+    protected AccountBalance getAccountBalance(String subscriptionType, MoMoContext currentContext) throws MoMoException {
         String resourcePath = API.SUBSCRIPTION_VER_ACCOUNT_BALANCE
                 .replace(Constants.SUBSCRIPTION_TYPE, subscriptionType);
         return createRequest(HttpMethod.GET, resourcePath, null, notificationType, callBackURL, AccountBalance.class, currentContext);
@@ -68,7 +71,7 @@ public class CommonRequest extends ResourceUtil {
      * @return
      * @throws MoMoException
      */
-    public BasicUserInfo getBasicUserinfo(String msisdn, String subscriptionType, MoMoContext currentContext) throws MoMoException {
+    protected BasicUserInfo getBasicUserinfo(String msisdn, String subscriptionType, MoMoContext currentContext) throws MoMoException {
         if (StringUtils.isNullOrEmpty(msisdn)) {
             throw new MoMoException(
                     new HttpErrorResponse.HttpErrorResponseBuilder(Constants.INTERNAL_ERROR_CATEGORY,
@@ -98,7 +101,7 @@ public class CommonRequest extends ResourceUtil {
      * @return
      * @throws MoMoException
      */
-    public StatusResponse requestToPayDeliveryNotification(String referenceId, DeliveryNotification deliveryNotification, String deliveryNotificationHeader, boolean haveHeader, String subscriptionType, MoMoContext currentContext) throws MoMoException {
+    protected StatusResponse requestToPayDeliveryNotification(String referenceId, DeliveryNotification deliveryNotification, String deliveryNotificationHeader, boolean haveHeader, String subscriptionType, MoMoContext currentContext) throws MoMoException {
 
         if (StringUtils.isNullOrEmpty(referenceId)) {
             throw new MoMoException(
@@ -127,11 +130,43 @@ public class CommonRequest extends ResourceUtil {
                 .replace(Constants.REQUEST_TYPE, RequestType.REQUEST_TO_PAY)
                 .replace(Constants.REFERENCE_ID, referenceId);
         StatusResponse statusResponse = createRequest(HttpMethod.POST, resourcePath, deliveryNotification.toJSON(), notificationType, callBackURL, currentContext);
-        if (haveHeader) {
-            currentContext.getHTTPHeaders()
-                    .remove(Constants.NOTIFICATION_MESSAGE);
-        }
         return statusResponse;
+    }
+
+    /**
+     * This operation is used to claim a consent by the account holder for the
+     * requested scopes.bCAuthorize receives a parameter "auth_req_id" which is
+     * passed into Oauth2 API which is then used in getUserInfoWithConsent API
+     *
+     * @param accountHolder
+     * @param scope
+     * @param accesType
+     * @param subscriptionType
+     * @param currentContext
+     * @return
+     * @throws MoMoException
+     */
+    protected BCAuthorize bCAuthorize(AccountHolder accountHolder, String scope, AccessType accesType, String subscriptionType, MoMoContext currentContext) throws MoMoException {
+        Validator.throwIfNullObject(accountHolder);
+        Validator.throwIfNullOrEmptyString(accountHolder.getAccountHolderId());
+        Validator.throwIfNullOrEmptyString(accountHolder.getAccountHolderIdType());
+        Validator.throwIfNullOrEmptyString(scope);
+        Validator.throwIfNullObject(accesType);
+
+        currentContext.getHTTPHeaders()
+                .put(Constants.HTTP_CONTENT_TYPE_HEADER, Constants.HTTP_CONTENT_TYPE_URLENCODED);
+
+        String resourcePath = API.SUBSCRIPTION_VER_REQUEST
+                .replace(Constants.SUBSCRIPTION_TYPE, subscriptionType)
+                .replace(Constants.REQUEST_TYPE, RequestType.BC_AUTHORIZE);
+
+        //TODO possible values for "msisdn", "scope" and "access_type" 
+        //TODO make sure no unwanted strings are passed in as parameters eg:- "/"
+        String payLoad = "login_hint=ID:" + accountHolder.getAccountHolderId() + "/" + accountHolder.getAccountHolderIdType() + "&scope=" + scope + "&access_type=" + accesType.getValue();
+
+        BCAuthorize bCAuthorize = createRequest(HttpMethod.POST, resourcePath, payLoad, notificationType, callBackURL, BCAuthorize.class, currentContext);
+
+        return bCAuthorize;
     }
 
     /**

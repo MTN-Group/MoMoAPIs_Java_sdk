@@ -1,4 +1,4 @@
-REFERENCE_ID=UUID/referenceId
+REFERENCE_ID=API_User/referenceId
 API_KEY=received after creating user
 CALLBACK_URL=http://sample.com/callbackurl
 COLLECTION_SUBSCRIPTION_KEY=place your COLLECTION subscription key here

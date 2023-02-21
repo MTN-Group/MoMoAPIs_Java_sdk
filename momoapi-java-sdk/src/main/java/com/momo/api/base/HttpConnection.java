@@ -17,6 +17,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * *
@@ -106,15 +107,15 @@ public abstract class HttpConnection {
         try {
             setHttpHeaders(headers);
 
-            //TODO remove after testing
+////            //TODO remove after testing
 //            Map<String, String> headers2 =  headers.entrySet().stream()
-//                    .filter(m->m.getKey().equals("X-Callback-Url"))
+////                    .filter(m->m.getKey().equals("X-Callback-Url"))
 //                    .collect(Collectors.toMap(m -> m.getKey(), m -> m.getValue()));
 //            
 ////                    .map(k->k.getValue())
 ////                    .collect(Collectors.f)
 ////                    ;
-//            System.out.println("X-Callback-Url::::"+url);
+//            System.out.println("api-url::::"+url);
 //            headers2.forEach((k,v)->System.out.println(k+" : "+v));
 
             int retry = 0;
@@ -167,7 +168,21 @@ public abstract class HttpConnection {
                 break retryLoop;
             } while (retry < this.config.getMaxRetry());
         } catch (IOException e) {
+            Logger.getLogger(HttpConnection.class.getName()).log(Level.SEVERE, e.toString(), e);
         } finally {
+            if(headers.containsKey(Constants.HTTP_CONTENT_TYPE_HEADER)){
+                headers.remove(Constants.HTTP_CONTENT_TYPE_HEADER);
+            }
+            if(headers.containsKey(Constants.NOTIFICATION_MESSAGE)){
+                headers.remove(Constants.NOTIFICATION_MESSAGE);
+            }
+            if(headers.containsKey(Constants.X_REFERENCE_ID)){
+                headers.remove(Constants.X_REFERENCE_ID);
+            }
+            if(headers.containsKey(Constants.CALL_BACK_URL)){
+                headers.remove(Constants.CALL_BACK_URL);
+            }
+            
             if (writer != null) {
                 try {
                     writer.close();

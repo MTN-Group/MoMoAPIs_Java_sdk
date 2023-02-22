@@ -13,6 +13,7 @@ import com.momo.api.base.model.StatusResponse;
 import com.momo.api.base.model.HttpErrorResponse;
 import com.momo.api.base.util.JSONFormatter;
 import com.momo.api.base.util.StringUtils;
+import com.momo.api.constants.NotificationType;
 import com.momo.api.constants.RequestType;
 import com.momo.api.models.AccountBalance;
 import com.momo.api.models.AccountHolder;
@@ -324,6 +325,36 @@ public class DisbursementRequest extends TransferRequest {
      */
     public BCAuthorize bCAuthorize(AccountHolder accountHolder, String scope, AccessType access_type) throws MoMoException {
         return bCAuthorize(accountHolder, scope, access_type, SubscriptionType.DISBURSEMENT, DisbursementContext.getContext());
+    }
+
+    /**
+     * This callBackURL will have higher priority and will override the
+     * callBackURL set for the Context
+     *
+     * @param callBackURL
+     * @return
+     */
+    public DisbursementRequest addCallBackUrl(final String callBackURL) {
+        this.callBackURL = callBackURL;
+        if(!StringUtils.isNullOrEmpty(callBackURL)){
+            return setNotificationType(NotificationType.CALLBACK);
+        } else {
+            return this;
+        }
+    }
+
+    /**
+     * NotificationType can be set to CALLBACK or POLLING. If it is CALLBACK, a
+     * response will be sent to the callBackURL set for the DisbursementRequest
+     * object or for the DisbursementConfiguration . If it is POLLING, no response
+     * will be sent to the callBackURL
+     *
+     * @param notificationType
+     * @return
+     */
+    public DisbursementRequest setNotificationType(final NotificationType notificationType) {
+        this.notificationType = notificationType;
+        return this;
     }
 
 }

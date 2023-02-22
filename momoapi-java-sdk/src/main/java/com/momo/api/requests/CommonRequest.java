@@ -27,6 +27,7 @@ import com.momo.api.models.Result;
  */
 public class CommonRequest extends ResourceUtil {
 
+    protected String referenceId;
     protected NotificationType notificationType = NotificationType.CALLBACK;
     protected String callBackURL;
 
@@ -167,31 +168,5 @@ public class CommonRequest extends ResourceUtil {
         BCAuthorize bCAuthorize = createRequest(HttpMethod.POST, resourcePath, payLoad, notificationType, callBackURL, BCAuthorize.class, currentContext);
 
         return bCAuthorize;
-    }
-
-    /**
-     * This callBackURL will have higher priority and will override the
-     * callBackURL set for the Context
-     *
-     * @param callBackURL
-     * @return
-     */
-    public CommonRequest addCallBackUrl(final String callBackURL) {
-        this.callBackURL = callBackURL;
-        return setNotificationType(NotificationType.CALLBACK);
-    }
-
-    /**
-     * NotificationType can be set to CALLBACK or POLLING. If it is CALLBACK, a
-     * response will be sent to the callBackURL set for the current context of
-     * the request. If it is POLLING, no response will be sent to the
-     * callBackURL
-     *
-     * @param notificationType
-     * @return
-     */
-    public CommonRequest setNotificationType(final NotificationType notificationType) {
-        this.notificationType = notificationType;
-        return this;
     }
 }

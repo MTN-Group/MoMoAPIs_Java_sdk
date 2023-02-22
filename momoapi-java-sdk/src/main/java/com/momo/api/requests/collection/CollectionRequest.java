@@ -13,6 +13,7 @@ import com.momo.api.base.model.StatusResponse;
 import com.momo.api.base.model.HttpErrorResponse;
 import com.momo.api.base.util.JSONFormatter;
 import com.momo.api.base.util.StringUtils;
+import com.momo.api.constants.NotificationType;
 import com.momo.api.models.collection.RequestPayStatus;
 import com.momo.api.constants.RequestType;
 import com.momo.api.models.AccountBalance;
@@ -32,8 +33,6 @@ import java.util.UUID;
  * Class CollectionRequest
  */
 public class CollectionRequest extends CommonRequest {
-
-    private String referenceId;
 
     /**
      * This operation is used to request a payment from a consumer (Payer). The
@@ -307,6 +306,36 @@ public class CollectionRequest extends CommonRequest {
      */
     public BCAuthorize bCAuthorize(AccountHolder accountHolder, String scope, AccessType accesType) throws MoMoException {
         return bCAuthorize(accountHolder, scope, accesType, SubscriptionType.COLLECTION, CollectionContext.getContext());
+    }
+
+    /**
+     * This callBackURL will have higher priority and will override the
+     * callBackURL set for the Context
+     *
+     * @param callBackURL
+     * @return
+     */
+    public CollectionRequest addCallBackUrl(final String callBackURL) {
+        this.callBackURL = callBackURL;
+        if(!StringUtils.isNullOrEmpty(callBackURL)){
+            return setNotificationType(NotificationType.CALLBACK);
+        } else {
+            return this;
+        }
+    }
+
+    /**
+     * NotificationType can be set to CALLBACK or POLLING. If it is CALLBACK, a
+     * response will be sent to the callBackURL set for the CollectionRequest
+     * object or for the CollectionConfiguration . If it is POLLING, no response
+     * will be sent to the callBackURL
+     *
+     * @param notificationType
+     * @return
+     */
+    public CollectionRequest setNotificationType(final NotificationType notificationType) {
+        this.notificationType = notificationType;
+        return this;
     }
 
 }

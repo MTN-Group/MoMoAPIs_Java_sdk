@@ -34,6 +34,9 @@ import java.util.UUID;
  */
 public class CollectionRequest extends CommonRequest {
 
+    protected NotificationType notificationType = NotificationType.CALLBACK;
+    protected String callBackURL;
+    
     /**
      * This operation is used to request a payment from a consumer (Payer). The
      * payer will be asked to authorize the payment. The transaction will be
@@ -98,7 +101,7 @@ public class CollectionRequest extends CommonRequest {
      * @throws MoMoException
      */
     public StatusResponse requestToPayDeliveryNotification(String referenceId, DeliveryNotification deliveryNotification) throws MoMoException {
-        return requestToPayDeliveryNotification(referenceId, deliveryNotification, null, false, SubscriptionType.COLLECTION, CollectionContext.getContext());
+        return requestToPayDeliveryNotification(referenceId, deliveryNotification, null, false, SubscriptionType.COLLECTION, CollectionContext.getContext(), this.notificationType, this.callBackURL);
     }
 
     /**
@@ -112,7 +115,7 @@ public class CollectionRequest extends CommonRequest {
      * @throws MoMoException
      */
     public StatusResponse requestToPayDeliveryNotification(String referenceId, DeliveryNotification deliveryNotification, String deliveryNotificationHeader) throws MoMoException {
-        return requestToPayDeliveryNotification(referenceId, deliveryNotification, deliveryNotificationHeader, true, SubscriptionType.COLLECTION, CollectionContext.getContext());
+        return requestToPayDeliveryNotification(referenceId, deliveryNotification, deliveryNotificationHeader, true, SubscriptionType.COLLECTION, CollectionContext.getContext(), this.notificationType, this.callBackURL);
     }
 
     /**
@@ -124,7 +127,7 @@ public class CollectionRequest extends CommonRequest {
      * @throws MoMoException
      */
     public Result validateAccountHolderStatus(AccountHolder accountHolder) throws MoMoException {
-        return validateAccountHolderStatus(accountHolder, SubscriptionType.COLLECTION, CollectionContext.getContext());
+        return validateAccountHolderStatus(accountHolder, SubscriptionType.COLLECTION, CollectionContext.getContext(), this.notificationType, this.callBackURL);
     }
 
     /**
@@ -133,7 +136,7 @@ public class CollectionRequest extends CommonRequest {
      * @return @throws MoMoException
      */
     public AccountBalance getAccountBalance() throws MoMoException {
-        return getAccountBalance(SubscriptionType.COLLECTION, CollectionContext.getContext());
+        return getAccountBalance(SubscriptionType.COLLECTION, CollectionContext.getContext(), this.notificationType, this.callBackURL);
     }
 
     /**
@@ -257,7 +260,7 @@ public class CollectionRequest extends CommonRequest {
      * @throws MoMoException
      */
     public BasicUserInfo getBasicUserinfo(String msisdn) throws MoMoException {
-        return getBasicUserinfo(msisdn, SubscriptionType.COLLECTION, CollectionContext.getContext());
+        return getBasicUserinfo(msisdn, SubscriptionType.COLLECTION, CollectionContext.getContext(), this.notificationType, this.callBackURL);
     }
 
     /**
@@ -305,7 +308,7 @@ public class CollectionRequest extends CommonRequest {
      * @throws MoMoException
      */
     public BCAuthorize bCAuthorize(AccountHolder accountHolder, String scope, AccessType accesType) throws MoMoException {
-        return bCAuthorize(accountHolder, scope, accesType, SubscriptionType.COLLECTION, CollectionContext.getContext());
+        return bCAuthorize(accountHolder, scope, accesType, SubscriptionType.COLLECTION, CollectionContext.getContext(), this.notificationType, this.callBackURL);
     }
 
     /**

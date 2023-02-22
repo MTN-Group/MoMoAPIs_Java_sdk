@@ -1,0 +1,158 @@
+package com.momo.api.requests.remittance;
+
+import com.momo.api.base.constants.AccessType;
+import com.momo.api.base.constants.SubscriptionType;
+import com.momo.api.base.context.remittance.RemittanceContext;
+import com.momo.api.base.exception.MoMoException;
+import com.momo.api.base.model.BCAuthorize;
+import com.momo.api.base.model.StatusResponse;
+import com.momo.api.base.util.StringUtils;
+import com.momo.api.constants.NotificationType;
+import com.momo.api.models.DeliveryNotification;
+import com.momo.api.models.AccountBalance;
+import com.momo.api.models.AccountHolder;
+import com.momo.api.models.BasicUserInfo;
+import com.momo.api.models.Result;
+import com.momo.api.models.Transfer;
+import com.momo.api.models.TransferStatus;
+import com.momo.api.requests.TransferRequest;
+
+/**
+ *
+ * Class RemittanceRequest
+ */
+public class RemittanceRequest extends TransferRequest {
+
+    protected NotificationType notificationType = NotificationType.CALLBACK;
+    protected String callBackURL;
+    
+    /**
+     * Transfer operation is used to transfer an amount from the own account to
+     * a payee account. Status of the transaction can validated by using the
+     * getTransferStatus(String referenceId) request method.
+     *
+     * @param transfer
+     * @return
+     * @throws MoMoException
+     */
+    public StatusResponse transfer(Transfer transfer) throws MoMoException {
+        return transfer(SubscriptionType.REMITTANCE, RemittanceContext.getContext(), transfer, this.notificationType, this.callBackURL);
+    }
+
+    /**
+     * This operation is used to get the status of a transfer. "referenceId"
+     * that was created during transfer method is passed in as the parameter to
+     * this request method.
+     *
+     * @param referenceId
+     * @return
+     * @throws MoMoException
+     */
+    public TransferStatus getTransferStatus(String referenceId) throws MoMoException {
+        return getTransferStatus(referenceId, SubscriptionType.REMITTANCE, RemittanceContext.getContext(), this.notificationType, this.callBackURL);
+    }
+
+    /**
+     * This operation is used to check if an account holder is registered and
+     * active in the system.
+     *
+     * @param accountHolder
+     * @return
+     * @throws MoMoException
+     */
+    public Result validateAccountHolderStatus(AccountHolder accountHolder) throws MoMoException {
+        return validateAccountHolderStatus(accountHolder, SubscriptionType.REMITTANCE, RemittanceContext.getContext(), this.notificationType, this.callBackURL);
+    }
+
+    /**
+     * Get the balance of the account.
+     *
+     * @return @throws MoMoException
+     */
+    public AccountBalance getAccountBalance() throws MoMoException {
+        return getAccountBalance(SubscriptionType.REMITTANCE, RemittanceContext.getContext(), this.notificationType, this.callBackURL);
+    }
+
+    /**
+     * This operation returns personal information of the account holder. The
+     * operation does not need any consent by the account holder.
+     *
+     * @param msisdn
+     * @return
+     * @throws MoMoException
+     */
+    public BasicUserInfo getBasicUserinfo(String msisdn) throws MoMoException {
+        return getBasicUserinfo(msisdn, SubscriptionType.REMITTANCE, RemittanceContext.getContext(), this.notificationType, this.callBackURL);
+    }
+
+    /**
+     * This operation is used to send additional Notification to an End User.
+     *
+     * @param referenceId
+     * @param deliveryNotification
+     * @return
+     * @throws MoMoException
+     */
+    public StatusResponse requestToPayDeliveryNotification(String referenceId, DeliveryNotification deliveryNotification) throws MoMoException {
+        return requestToPayDeliveryNotification(referenceId, deliveryNotification, null, false, SubscriptionType.REMITTANCE, RemittanceContext.getContext(), this.notificationType, this.callBackURL);
+    }
+
+    /**
+     * This operation is used to send additional Notification to an End User.
+     * The notification message is also passed in as a header.
+     *
+     * @param referenceId
+     * @param deliveryNotification
+     * @param deliveryNotificationHeader
+     * @return
+     * @throws MoMoException
+     */
+    public StatusResponse requestToPayDeliveryNotification(String referenceId, DeliveryNotification deliveryNotification, String deliveryNotificationHeader) throws MoMoException {
+        return requestToPayDeliveryNotification(referenceId, deliveryNotification, deliveryNotificationHeader, true, SubscriptionType.REMITTANCE, RemittanceContext.getContext(), this.notificationType, this.callBackURL);
+    }
+
+    /**
+     * This operation is used to claim a consent by the account holder for the
+     * requested scopes.bCAuthorize receives a parameter "auth_req_id" which is
+     * passed into Oauth2 API which is then used in getUserInfoWithConsent API
+     *
+     * @param accountHolder
+     * @param scope
+     * @param access_type
+     * @return
+     * @throws MoMoException
+     */
+    public BCAuthorize bCAuthorize(AccountHolder accountHolder, String scope, AccessType access_type) throws MoMoException {
+        return bCAuthorize(accountHolder, scope, access_type, SubscriptionType.REMITTANCE, RemittanceContext.getContext(), this.notificationType, this.callBackURL);
+    }
+
+    /**
+     * This callBackURL will have higher priority and will override the
+     * callBackURL set for the Context
+     *
+     * @param callBackURL
+     * @return
+     */
+    public RemittanceRequest addCallBackUrl(final String callBackURL) {
+        this.callBackURL = callBackURL;
+        if (!StringUtils.isNullOrEmpty(callBackURL)) {
+            return setNotificationType(NotificationType.CALLBACK);
+        } else {
+            return this;
+        }
+    }
+
+    /**
+     * NotificationType can be set to CALLBACK or POLLING. If it is CALLBACK, a
+     * response will be sent to the callBackURL set for the RemittanceRequest
+     * object or for the RemittanceConfiguration . If it is POLLING, no response
+     * will be sent to the callBackURL
+     *
+     * @param notificationType
+     * @return
+     */
+    public RemittanceRequest setNotificationType(final NotificationType notificationType) {
+        this.notificationType = notificationType;
+        return this;
+    }
+}

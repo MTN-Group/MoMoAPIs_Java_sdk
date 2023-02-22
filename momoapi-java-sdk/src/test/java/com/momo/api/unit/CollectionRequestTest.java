@@ -3,6 +3,7 @@ package com.momo.api.unit;
 import com.momo.api.base.constants.AccessType;
 import com.momo.api.base.constants.Constants;
 import com.momo.api.base.constants.IdType;
+import com.momo.api.base.constants.TargetEnvironment;
 import com.momo.api.base.context.collection.CollectionConfiguration;
 import com.momo.api.base.exception.MoMoException;
 import com.momo.api.base.model.BCAuthorize;
@@ -46,21 +47,21 @@ public class CollectionRequestTest {
                 "REFERENCE_ID",
                 "API_KEY",
                 Environment.SANDBOX,
-                Constants.SANDBOX));
+                TargetEnvironment.sandbox.getValue()));
         assertEquals(moMoException.getError().getErrorDescription(), Constants.EMPTY_STRING_ERROR);
         moMoException = assertThrows(MoMoException.class, () -> new CollectionConfiguration(
                 "SUBSCRIPTION_KEY",
                 null,
                 "API_KEY",
                 Environment.SANDBOX,
-                Constants.SANDBOX));
+                TargetEnvironment.sandbox.getValue()));
         assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_VALUE_ERROR);
         moMoException = assertThrows(MoMoException.class, () -> new CollectionConfiguration(
                 "SUBSCRIPTION_KEY",
                 "REFERENCE_ID",
                 "API_KEY",
                 null,
-                Constants.SANDBOX));
+                TargetEnvironment.sandbox.getValue()));
         assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_VALUE_ERROR);
     }
 
@@ -197,7 +198,7 @@ public class CollectionRequestTest {
         CollectionRequest collectionRequestSpy = spy(new CollectionRequest());
 
         Result expectedResult = getExpectedResult();
-        AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getValueInLowerCase(), MSISDN);
+        AccountHolder accountHolder = new AccountHolder(IdType.msisdn.getValue(), MSISDN);
         doReturn(expectedResult).when(collectionRequestSpy).validateAccountHolderStatus(accountHolder);
 
         Result actualResult = collectionRequestSpy.validateAccountHolderStatus(accountHolder);
@@ -210,7 +211,7 @@ public class CollectionRequestTest {
     void validateAccountHolderStatusTestFailure() throws MoMoException {
         CollectionRequest collectionRequestSpy = spy(new CollectionRequest());
 
-        AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getValueInLowerCase(), MSISDN);
+        AccountHolder accountHolder = new AccountHolder(IdType.msisdn.getValue(), MSISDN);
         doThrow(MoMoException.class).when(collectionRequestSpy).validateAccountHolderStatus(accountHolder);
 
         assertThrows(MoMoException.class, () -> collectionRequestSpy.validateAccountHolderStatus(accountHolder));

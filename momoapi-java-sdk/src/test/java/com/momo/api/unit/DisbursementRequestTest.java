@@ -3,6 +3,7 @@ package com.momo.api.unit;
 import com.momo.api.base.constants.AccessType;
 import com.momo.api.base.constants.Constants;
 import com.momo.api.base.constants.IdType;
+import com.momo.api.base.constants.TargetEnvironment;
 import com.momo.api.base.context.disbursement.DisbursementConfiguration;
 import com.momo.api.base.exception.MoMoException;
 import com.momo.api.base.model.BCAuthorize;
@@ -47,21 +48,21 @@ public class DisbursementRequestTest {
                 "REFERENCE_ID",
                 "API_KEY",
                 Environment.SANDBOX,
-                Constants.SANDBOX));
+                TargetEnvironment.sandbox.getValue()));
         assertEquals(moMoException.getError().getErrorDescription(), Constants.EMPTY_STRING_ERROR);
         moMoException = assertThrows(MoMoException.class, () -> new DisbursementConfiguration(
                 "SUBSCRIPTION_KEY",
                 null,
                 "API_KEY",
                 Environment.SANDBOX,
-                Constants.SANDBOX));
+                TargetEnvironment.sandbox.getValue()));
         assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_VALUE_ERROR);
         moMoException = assertThrows(MoMoException.class, () -> new DisbursementConfiguration(
                 "SUBSCRIPTION_KEY",
                 "REFERENCE_ID",
                 "API_KEY",
                 null,
-                Constants.SANDBOX));
+                TargetEnvironment.sandbox.getValue()));
         assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_VALUE_ERROR);
     }
     
@@ -169,7 +170,7 @@ public class DisbursementRequestTest {
         DisbursementRequest disbursementRequestSpy = spy(new DisbursementRequest());
         
         Result expectedResult = getExpectedResult();
-        AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getValueInLowerCase(), MSISDN);
+        AccountHolder accountHolder = new AccountHolder(IdType.msisdn.getValue(), MSISDN);
         doReturn(expectedResult).when(disbursementRequestSpy).validateAccountHolderStatus(accountHolder);
 
         Result actualResult = disbursementRequestSpy.validateAccountHolderStatus(accountHolder);
@@ -182,7 +183,7 @@ public class DisbursementRequestTest {
     void validateAccountHolderStatusTestFailure() throws MoMoException {
         DisbursementRequest disbursementRequestSpy = spy(new DisbursementRequest());
         
-        AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getValueInLowerCase(), MSISDN);
+        AccountHolder accountHolder = new AccountHolder(IdType.msisdn.getValue(), MSISDN);
         doThrow(MoMoException.class).when(disbursementRequestSpy).validateAccountHolderStatus(accountHolder);
         
         assertThrows(MoMoException.class, () -> disbursementRequestSpy.validateAccountHolderStatus(accountHolder));

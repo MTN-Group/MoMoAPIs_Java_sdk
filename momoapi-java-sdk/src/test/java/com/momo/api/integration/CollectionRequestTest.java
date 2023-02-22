@@ -4,6 +4,7 @@ import com.momo.api.base.HttpStatusCode;
 import com.momo.api.base.constants.AccessType;
 import com.momo.api.base.constants.Constants;
 import com.momo.api.base.constants.IdType;
+import com.momo.api.base.constants.TargetEnvironment;
 import com.momo.api.base.context.collection.CollectionConfiguration;
 import com.momo.api.base.context.provisioning.UserProvisioningConfiguration;
 import com.momo.api.base.exception.MoMoException;
@@ -57,7 +58,7 @@ public class CollectionRequestTest {
     @DisplayName("Call Back Url Test")
     public void callBackUrlTest() throws MoMoException {
         //Collection request made without calling "addCallBackUrl(String)" with "CollectionConfiguration" object
-        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX);
+        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue());
         CollectionRequest collectionRequestFirst = collectionConfiguration.createCollectionRequest();
 
         StatusResponse statusResponse;
@@ -98,7 +99,7 @@ public class CollectionRequestTest {
     @Test
     @DisplayName("Request To Pay Test Success")
     void requestToPayTestSuccess() throws MoMoException {
-        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
 
         RequestPay pay = getRequestPay(MSISDN_NUMBER);
@@ -113,7 +114,7 @@ public class CollectionRequestTest {
     @Test
     @DisplayName("Request To Pay Test Failure")
     void requestToPayTestFailure() throws MoMoException {
-        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
 
         //case 1: Pay object is null
@@ -134,7 +135,7 @@ public class CollectionRequestTest {
     @Test
     @DisplayName("Request To Pay Transaction Status Test Success")
     void requestToPayTransactionStatusTestSuccess() throws MoMoException {
-        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
 
         RequestPay requestPay = getRequestPay(MSISDN_NUMBER);
@@ -163,7 +164,7 @@ public class CollectionRequestTest {
     @Test
     @DisplayName("Request To Pay Transaction Status Test Failure")
     void requestToPayTransactionStatusTestFailure() throws MoMoException {
-        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
 
         //case 1: referenceId is null
@@ -182,7 +183,7 @@ public class CollectionRequestTest {
     @Test
     @DisplayName("Get Account Balance Test Success")
     void getAccountBalanceTestSuccess() throws MoMoException {
-        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX);
+        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue());
         CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
 
         AccountBalance accountBalance = collectionRequest.getAccountBalance();
@@ -210,7 +211,7 @@ public class CollectionRequestTest {
     @Test
     @DisplayName("Get Account Balance In Specific Currency Test Success")
     void getAccountBalanceInSpecificCurrencyTestSuccess() throws MoMoException {
-        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX);
+        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue());
         CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
 
         AccountBalance accountBalance = collectionRequest.getAccountBalanceInSpecificCurrency("EUR");
@@ -222,7 +223,7 @@ public class CollectionRequestTest {
     @Test
     @DisplayName("Get Account Balance In Specific Currency Test Failure")
     void getAccountBalanceInSpecificCurrencyTestFailure() throws MoMoException {
-        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX);
+        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue());
         CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
 
         //case 1: currency is null
@@ -237,7 +238,7 @@ public class CollectionRequestTest {
     @Test
     @DisplayName("Request To Pay Delivery Notification Test Success")
     void requestToPayDeliveryNotificationTestSuccess() throws MoMoException {
-        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
 
         RequestPay requestPay = getRequestPay(MSISDN_NUMBER);
@@ -258,7 +259,7 @@ public class CollectionRequestTest {
     @Test
     @DisplayName("Request To Pay Delivery Notification Test Failure")
     void requestToPayDeliveryNotificationTestFailure() throws MoMoException {
-        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
 
         RequestPay requestPay = getRequestPay(MSISDN_NUMBER);
@@ -315,10 +316,10 @@ public class CollectionRequestTest {
     @Test
     @DisplayName("Validate Account Holder Status Test Success")
     void validateAccountHolderStatusTestSuccess() throws MoMoException {
-        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX);
+        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue());
         CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
 
-        AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getValueInLowerCase(), MSISDN_NUMBER);
+        AccountHolder accountHolder = new AccountHolder(IdType.msisdn.getValue(), MSISDN_NUMBER);
         Result result = collectionRequest.validateAccountHolderStatus(accountHolder);
         assertNotNull(result);
         assertTrue(result.getResult());
@@ -327,7 +328,7 @@ public class CollectionRequestTest {
     @Test
     @DisplayName("Validate Account Holder Status Test Failure")
     void validateAccountHolderStatusTestFailure() throws MoMoException {
-        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX);
+        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue());
         CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
 
         MoMoException moMoException;
@@ -337,7 +338,7 @@ public class CollectionRequestTest {
         assertEquals(moMoException.getError().getErrorDescription(), Constants.ACCOUNT_HOLDER_OBJECT_INIT_ERROR);
 
         //case 2: Key or Value is null
-        moMoException = assertThrows(MoMoException.class, () -> collectionRequest.validateAccountHolderStatus(new AccountHolder(IdType.MSISDN.getValueInLowerCase(), null)));
+        moMoException = assertThrows(MoMoException.class, () -> collectionRequest.validateAccountHolderStatus(new AccountHolder(IdType.msisdn.getValue(), null)));
         assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_VALUE_ERROR);
 
         //case 3: Key or Value is empty
@@ -348,7 +349,7 @@ public class CollectionRequestTest {
     @Test
     @DisplayName("Request To Withdraw V1 Test Success")
     void requestToWithdrawV1TestSuccess() throws MoMoException {
-        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
 
         Withdraw withdraw = getWithdraw(MSISDN_NUMBER);
@@ -362,7 +363,7 @@ public class CollectionRequestTest {
     @Test
     @DisplayName("Request To Withdraw V1 Test Failure")
     void requestToWithdrawV1TestFailure() throws MoMoException {
-        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
 
         //case 1: Withdraw object is null
@@ -383,7 +384,7 @@ public class CollectionRequestTest {
     @Test
     @DisplayName("Request To Withdraw V2 Test Success")
     void requestToWithdrawV2TestSuccess() throws MoMoException {
-        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
 
         Withdraw withdraw = getWithdraw(MSISDN_NUMBER);
@@ -397,7 +398,7 @@ public class CollectionRequestTest {
     @Test
     @DisplayName("Request To Withdraw V2 Test Failure")
     void requestToWithdrawV2TestFailure() throws MoMoException {
-        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
 
         //case 1: Withdraw object is null
@@ -418,7 +419,7 @@ public class CollectionRequestTest {
     @Test
     @DisplayName("Request To Withdraw Transaction Status Test Success")
     void requestToWithdrawTransactionStatusTestSuccess() throws MoMoException {
-        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
 
         Withdraw withdraw = getWithdraw(MSISDN_NUMBER);
@@ -446,7 +447,7 @@ public class CollectionRequestTest {
     @Test
     @DisplayName("Request To Withdraw Transaction Status Test Failure")
     void requestToWithdrawTransactionStatusTestFailure() throws MoMoException {
-        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
 
         //case 1: referenceId is null
@@ -465,7 +466,7 @@ public class CollectionRequestTest {
     @Test
     @DisplayName("Get Basic Userinfo Test Success")
     void getBasicUserinfoTestSuccess() throws MoMoException {
-        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX);
+        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue());
         CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
 
         BasicUserInfo basicUserInfo = collectionRequest.getBasicUserinfo(MSISDN_NUMBER);
@@ -481,7 +482,7 @@ public class CollectionRequestTest {
     @Test
     @DisplayName("Get Basic Userinfo Test Failure")
     void getBasicUserinfoTestFailure() throws MoMoException {
-        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX);
+        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue());
         CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
 
         MoMoException moMoException;
@@ -498,7 +499,7 @@ public class CollectionRequestTest {
     @Test
     @DisplayName("Get Userinfo With Consent Test Success")
     void getUserInfoWithConsentTestSuccess() throws MoMoException {
-        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX);
+        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue());
         CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
 
         AccountHolder accountHolderMSISDN = new AccountHolder(IdType.MSISDN.getValue(), MSISDN_NUMBER);
@@ -526,7 +527,7 @@ public class CollectionRequestTest {
     @Test
     @DisplayName("Get Userinfo With Consent Test Failure")
     void getUserInfoWithConsentTestFailure() throws MoMoException {
-        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX);
+        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue());
         CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
 
         AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getValue(), MSISDN_NUMBER);
@@ -557,7 +558,7 @@ public class CollectionRequestTest {
     @Test
     @DisplayName("BCAuthorize Test Success")
     void bCAuthorizeTestSuccess() throws MoMoException {
-        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX);
+        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue());
         CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
 
         AccountHolder accountHolderMSISDN = new AccountHolder(IdType.MSISDN.getValue(), MSISDN_NUMBER);
@@ -576,7 +577,7 @@ public class CollectionRequestTest {
     @Test
     @DisplayName("BCAuthorize Test Failure")
     void bCAuthorizeTestFailure() throws MoMoException {
-        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX);
+        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue());
         CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
 
         AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getValue(), MSISDN_NUMBER);
@@ -615,7 +616,7 @@ public class CollectionRequestTest {
 
         ApiKey apiKey = userProvisioningRequest.createApiKey(statusResponse.getReferenceId());
 
-        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), statusResponse.getReferenceId(), apiKey.getApiKey(), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), statusResponse.getReferenceId(), apiKey.getApiKey(), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
 
         RequestPay requestPay = getRequestPay(MSISDN_NUMBER);
@@ -630,7 +631,7 @@ public class CollectionRequestTest {
     @Test
     @DisplayName("Request To Pay With EMAIL Test Success")
     void requestToPayWithEMAILTestSuccess() throws MoMoException {
-        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
 
         Payer payer = new Payer();
@@ -655,7 +656,7 @@ public class CollectionRequestTest {
     @Test
     @DisplayName("Request To Pay With PARTY_CODE Test Success")
     void requestToPayWithPARTY_CODETestSuccess() throws MoMoException {
-        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
 
         Payer payer = new Payer();
@@ -701,7 +702,7 @@ public class CollectionRequestTest {
 //        //destroying the exising collection singleton instance, to create new instance with the above parameters 
 //        CollectionConfiguration.destroyContext();
 //        //here 'loader.get("CALLBACK_URL")' need to contain a callBackUrl with a host address different than "something.site", so that it throws error
-//        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), statusResponse.getReferenceId(), apiKey.getApiKey(), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+//        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), statusResponse.getReferenceId(), apiKey.getApiKey(), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
 //        CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
 //
 //        RequestPay requestPay = getRequestPay(MSISDN_NUMBER);

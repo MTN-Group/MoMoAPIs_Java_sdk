@@ -11,8 +11,6 @@ public final class Constants {
     //Mode(sandbox/production)
     public static final String MODE = "mode";
 
-    public static final String SANDBOX = "sandbox";
-
     //REST API resource endpoint
     public static final String ENDPOINT = "resource.endpoint";
 

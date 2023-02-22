@@ -4,6 +4,7 @@ import com.momo.api.base.HttpStatusCode;
 import com.momo.api.base.constants.AccessType;
 import com.momo.api.base.constants.Constants;
 import com.momo.api.base.constants.IdType;
+import com.momo.api.base.constants.TargetEnvironment;
 import com.momo.api.base.context.collection.CollectionConfiguration;
 import com.momo.api.base.context.disbursement.DisbursementConfiguration;
 import com.momo.api.base.exception.MoMoException;
@@ -61,7 +62,7 @@ public class DisbursementRequestTest {
     @DisplayName("Call Back Url Test Success")
     public void callBackUrlTest() throws MoMoException {
         //Disbursement request made without calling "addCallBackUrl(String)" with "disbursementConfiguration" object
-        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX);
+        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue());
         DisbursementRequest disbursementRequestFirst = disbursementConfiguration.createDisbursementRequest();
 
         StatusResponse statusResponse;
@@ -90,7 +91,7 @@ public class DisbursementRequestTest {
     @Test
     @DisplayName("Transfer Test Success")
     void transferTestSuccess() throws MoMoException {
-        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         DisbursementRequest disbursementRequest = disbursementConfiguration.createDisbursementRequest();
 
         Transfer transfer = getTransfer(MSISDN_NUMBER);
@@ -104,7 +105,7 @@ public class DisbursementRequestTest {
     @Test
     @DisplayName("Transfer Test Failure")
     void transferTestFailure() throws MoMoException {
-        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         DisbursementRequest disbursementRequest = disbursementConfiguration.createDisbursementRequest();
 
         //case 1: Transfer object is null
@@ -125,7 +126,7 @@ public class DisbursementRequestTest {
     @Test
     @DisplayName("Transfer Status Test Success")
     void transferStatusTestSuccess() throws MoMoException {
-        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         DisbursementRequest disbursementRequest = disbursementConfiguration.createDisbursementRequest();
 
         Transfer transfer = getTransfer(MSISDN_NUMBER);
@@ -153,7 +154,7 @@ public class DisbursementRequestTest {
     @Test
     @DisplayName("Transfer Status Test Failure")
     void transferStatusTestFailure() throws MoMoException {
-        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         DisbursementRequest disbursementRequest = disbursementConfiguration.createDisbursementRequest();
 
         //case 1: referenceId is null
@@ -172,7 +173,7 @@ public class DisbursementRequestTest {
     @Test
     @DisplayName("Get Account Balance Test Success")
     void getAccountBalanceTestSuccess() throws MoMoException {
-        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX);
+        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue());
         DisbursementRequest disbursementRequest = disbursementConfiguration.createDisbursementRequest();
 
         AccountBalance accountBalance = disbursementRequest.getAccountBalance();
@@ -200,7 +201,7 @@ public class DisbursementRequestTest {
     @Test
     @DisplayName("Get Account Balance In Specific Currency Test Success")
     void getAccountBalanceInSpecificCurrencyTestSuccess() throws MoMoException {
-        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX);
+        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue());
         DisbursementRequest disbursementRequest = disbursementConfiguration.createDisbursementRequest();
 
         AccountBalance accountBalance = disbursementRequest.getAccountBalanceInSpecificCurrency("EUR");
@@ -212,7 +213,7 @@ public class DisbursementRequestTest {
     @Test
     @DisplayName("Get Account Balance In Specific Currency Test Failure")
     void getAccountBalanceInSpecificCurrencyTestFailure() throws MoMoException {
-        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX);
+        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue());
         DisbursementRequest disbursementRequest = disbursementConfiguration.createDisbursementRequest();
 
         //case 1: currency is null
@@ -227,10 +228,10 @@ public class DisbursementRequestTest {
     @Test
     @DisplayName("Validate Account Holder Status Test Success")
     void validateAccountHolderStatusTestSuccess() throws MoMoException {
-        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX);
+        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue());
         DisbursementRequest disbursementRequest = disbursementConfiguration.createDisbursementRequest();
 
-        AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getValueInLowerCase(), MSISDN_NUMBER);
+        AccountHolder accountHolder = new AccountHolder(IdType.msisdn.getValue(), MSISDN_NUMBER);
         Result result = disbursementRequest.validateAccountHolderStatus(accountHolder);
         assertNotNull(result);
         assertTrue(result.getResult());
@@ -239,7 +240,7 @@ public class DisbursementRequestTest {
     @Test
     @DisplayName("Validate Account Holder Status Test Failure")
     void validateAccountHolderStatusTestFailure() throws MoMoException {
-        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX);
+        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue());
         DisbursementRequest disbursementRequest = disbursementConfiguration.createDisbursementRequest();
 
         MoMoException moMoException;
@@ -249,7 +250,7 @@ public class DisbursementRequestTest {
         assertEquals(moMoException.getError().getErrorDescription(), Constants.ACCOUNT_HOLDER_OBJECT_INIT_ERROR);
 
         //case 2: Key or Value is null
-        moMoException = assertThrows(MoMoException.class, () -> disbursementRequest.validateAccountHolderStatus(new AccountHolder(IdType.MSISDN.getValueInLowerCase(), null)));
+        moMoException = assertThrows(MoMoException.class, () -> disbursementRequest.validateAccountHolderStatus(new AccountHolder(IdType.msisdn.getValue(), null)));
         assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_VALUE_ERROR);
 
         //case 3: Key or Value is empty
@@ -260,7 +261,7 @@ public class DisbursementRequestTest {
     @Test
     @DisplayName("Deposit V1 Test Success")
     void depositV1TestSuccess() throws MoMoException {
-        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         DisbursementRequest disbursementRequest = disbursementConfiguration.createDisbursementRequest();
 
         Deposit deposit = getDeposit(MSISDN_NUMBER);
@@ -274,7 +275,7 @@ public class DisbursementRequestTest {
     @Test
     @DisplayName("Deposit V1 Test Failure")
     void depositV1TestFailure() throws MoMoException {
-        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         DisbursementRequest disbursementRequest = disbursementConfiguration.createDisbursementRequest();
 
         //case 1: Deposit object is null
@@ -295,7 +296,7 @@ public class DisbursementRequestTest {
     @Test
     @DisplayName("Deposit V2 Test Success")
     void depositV2TestSuccess() throws MoMoException {
-        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         DisbursementRequest disbursementRequest = disbursementConfiguration.createDisbursementRequest();
 
         Deposit deposit = getDeposit(MSISDN_NUMBER);
@@ -309,7 +310,7 @@ public class DisbursementRequestTest {
     @Test
     @DisplayName("Deposit V2 Test Failure")
     void depositV2TestFailure() throws MoMoException {
-        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         DisbursementRequest disbursementRequest = disbursementConfiguration.createDisbursementRequest();
 
         //case 1: Deposit object is null
@@ -330,7 +331,7 @@ public class DisbursementRequestTest {
     @Test
     @DisplayName("Get Deposit Status Test Success")
     void getDepositStatusTestSuccess() throws MoMoException {
-        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         DisbursementRequest disbursementRequest = disbursementConfiguration.createDisbursementRequest();
 
         Deposit deposit = getDeposit(MSISDN_NUMBER);
@@ -358,7 +359,7 @@ public class DisbursementRequestTest {
     @Test
     @DisplayName("Get Deposit Status Test Failure")
     void getDepositStatusTestFailure() throws MoMoException {
-        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         DisbursementRequest disbursementRequest = disbursementConfiguration.createDisbursementRequest();
 
         //case 1: referenceId is null
@@ -377,14 +378,14 @@ public class DisbursementRequestTest {
     @Test
     @DisplayName("Refund V1 Test Success")
     void refundV1TestSuccess() throws MoMoException {
-        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(COLLECTION_SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(COLLECTION_SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
 
         RequestPay requestPay = getRequestPay(MSISDN_NUMBER);
 
         StatusResponse statusResponse = collectionRequest.requestToPay(requestPay);
 
-        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         DisbursementRequest disbursementRequest = disbursementConfiguration.createDisbursementRequest();
 
         Refund refund = getRefund(statusResponse.getReferenceId());
@@ -398,7 +399,7 @@ public class DisbursementRequestTest {
     @Test
     @DisplayName("Refund V1 Test Failure")
     void refundV1TestFailure() throws MoMoException {
-        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         DisbursementRequest disbursementRequest = disbursementConfiguration.createDisbursementRequest();
 
         //case 1: Refund object is null
@@ -419,14 +420,14 @@ public class DisbursementRequestTest {
     @Test
     @DisplayName("Refund V2 Test Success")
     void refundV2TestSuccess() throws MoMoException {
-        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(COLLECTION_SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(COLLECTION_SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
 
         RequestPay requestPay = getRequestPay(MSISDN_NUMBER);
 
         StatusResponse statusResponse = collectionRequest.requestToPay(requestPay);
 
-        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         DisbursementRequest disbursementRequest = disbursementConfiguration.createDisbursementRequest();
 
         Refund refund = getRefund(statusResponse.getReferenceId());
@@ -440,7 +441,7 @@ public class DisbursementRequestTest {
     @Test
     @DisplayName("Refund V2 Test Failure")
     void refundV2TestFailure() throws MoMoException {
-        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         DisbursementRequest disbursementRequest = disbursementConfiguration.createDisbursementRequest();
 
         //case 1: Refund object is null
@@ -461,14 +462,14 @@ public class DisbursementRequestTest {
     @Test
     @DisplayName("Get Refund Status Test Success")
     void getRefundStatusTestSuccess() throws MoMoException {
-        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(COLLECTION_SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(COLLECTION_SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
 
         RequestPay requestPay = getRequestPay(MSISDN_NUMBER);
 
         StatusResponse statusResponse = collectionRequest.requestToPay(requestPay);
 
-        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         DisbursementRequest disbursementRequest = disbursementConfiguration.createDisbursementRequest();
 
         Refund refund = getRefund(statusResponse.getReferenceId());
@@ -496,7 +497,7 @@ public class DisbursementRequestTest {
     @Test
     @DisplayName("Get Refund Status Test Failure")
     void getRefundStatusTestFailure() throws MoMoException {
-        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         DisbursementRequest disbursementRequest = disbursementConfiguration.createDisbursementRequest();
 
         //case 1: referenceId is null
@@ -515,7 +516,7 @@ public class DisbursementRequestTest {
     @Test
     @DisplayName("Request To Pay Delivery Notification Test Success")
     void requestToPayDeliveryNotificationTestSuccess() throws MoMoException {
-        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(COLLECTION_SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(COLLECTION_SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
 
         RequestPay requestPay = getRequestPay(MSISDN_NUMBER);
@@ -524,7 +525,7 @@ public class DisbursementRequestTest {
         DeliveryNotification deliveryNotification = new DeliveryNotification();
         deliveryNotification.setNotificationMessage("test message");
 
-        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         DisbursementRequest disbursementRequest = disbursementConfiguration.createDisbursementRequest();
 
         StatusResponse statusResponseDeliveryNotification = disbursementRequest.requestToPayDeliveryNotification(statusResponsePay.getReferenceId(), deliveryNotification);
@@ -534,10 +535,10 @@ public class DisbursementRequestTest {
     @Test
     @DisplayName("Request To Pay Delivery Notification Test Failure")
     void requestToPayDeliveryNotificationTestFailure() throws MoMoException {
-        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         DisbursementRequest disbursementRequest = disbursementConfiguration.createDisbursementRequest();
 
-        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(COLLECTION_SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX).addCallBackUrl(loader.get("CALLBACK_URL"));
+        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(COLLECTION_SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
         RequestPay requestPay = getRequestPay(MSISDN_NUMBER);
         StatusResponse statusResponsePay = collectionRequest.requestToPay(requestPay);
@@ -563,7 +564,7 @@ public class DisbursementRequestTest {
     @Test
     @DisplayName("Get Basic Userinfo Test Success")
     void getBasicUserinfoTestSuccess() throws MoMoException {
-        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX);
+        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue());
         DisbursementRequest disbursementRequest = disbursementConfiguration.createDisbursementRequest();
 
         BasicUserInfo basicUserInfo = disbursementRequest.getBasicUserinfo(MSISDN_NUMBER);
@@ -579,7 +580,7 @@ public class DisbursementRequestTest {
     @Test
     @DisplayName("Get Basic Userinfo Test Failure")
     void getBasicUserinfoTestFailure() throws MoMoException {
-        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX);
+        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue());
         DisbursementRequest disbursementRequest = disbursementConfiguration.createDisbursementRequest();
 
         MoMoException moMoException;
@@ -596,7 +597,7 @@ public class DisbursementRequestTest {
     @Test
     @DisplayName("BCAuthorize Test Success")
     void bCAuthorizeTestSuccess() throws MoMoException {
-        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX);
+        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue());
         DisbursementRequest disbursementRequest = disbursementConfiguration.createDisbursementRequest();
 
         AccountHolder accountHolderMSISDN = new AccountHolder(IdType.MSISDN.getValue(), MSISDN_NUMBER);
@@ -615,7 +616,7 @@ public class DisbursementRequestTest {
     @Test
     @DisplayName("BCAuthorize Test Failure")
     void bCAuthorizeTestFailure() throws MoMoException {
-        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, Constants.SANDBOX);
+        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue());
         DisbursementRequest disbursementRequest = disbursementConfiguration.createDisbursementRequest();
 
         AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getValue(), MSISDN_NUMBER);

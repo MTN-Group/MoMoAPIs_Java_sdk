@@ -1,6 +1,6 @@
 package com.momo.api.base.context.disbursement;
 
-import com.momo.api.base.constants.Constants;
+import com.momo.api.base.constants.TargetEnvironment;
 import com.momo.api.base.exception.MoMoException;
 import com.momo.api.base.util.Validator;
 import com.momo.api.constants.Environment;
@@ -50,7 +50,7 @@ public class DisbursementConfiguration {
      * @throws MoMoException
      */
     public DisbursementConfiguration(String subscriptionKey, String referenceId, String apiKey) throws MoMoException {
-        this(subscriptionKey, referenceId, apiKey, Environment.SANDBOX, Constants.SANDBOX);
+        this(subscriptionKey, referenceId, apiKey, Environment.SANDBOX, TargetEnvironment.sandbox.getValue());
     }
 
     /**

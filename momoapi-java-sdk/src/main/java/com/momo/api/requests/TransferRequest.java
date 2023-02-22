@@ -20,8 +20,6 @@ import java.util.UUID;
  */
 public class TransferRequest extends CommonRequest {
 
-    protected String referenceId;
-    
     /**
      * 
      * @param subscriptionType

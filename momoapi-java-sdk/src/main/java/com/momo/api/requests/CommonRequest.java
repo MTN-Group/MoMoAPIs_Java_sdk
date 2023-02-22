@@ -28,8 +28,6 @@ import com.momo.api.models.Result;
 public class CommonRequest extends ResourceUtil {
 
     protected String referenceId;
-    protected NotificationType notificationType = NotificationType.CALLBACK;
-    protected String callBackURL;
 
     /**
      * This operation is used to check if an account holder is registered and
@@ -38,10 +36,12 @@ public class CommonRequest extends ResourceUtil {
      * @param accountHolder
      * @param subscriptionType
      * @param currentContext
+     * @param notificationType
+     * @param callBackURL
      * @return
      * @throws MoMoException
      */
-    protected Result validateAccountHolderStatus(AccountHolder accountHolder, String subscriptionType, MoMoContext currentContext) throws MoMoException {
+    protected Result validateAccountHolderStatus(AccountHolder accountHolder, String subscriptionType, MoMoContext currentContext, NotificationType notificationType, String callBackURL) throws MoMoException {
         String resourcePath = getResourcePathAccountHolder(API.SUBSCRIPTION_VER_ACCOUNTHOLDER_STATUS, accountHolder);
 
         resourcePath = resourcePath
@@ -54,25 +54,29 @@ public class CommonRequest extends ResourceUtil {
      *
      * @param subscriptionType
      * @param currentContext
+     * @param notificationType
+     * @param callBackURL
      * @return @throws MoMoException
      */
-    protected AccountBalance getAccountBalance(String subscriptionType, MoMoContext currentContext) throws MoMoException {
+    protected AccountBalance getAccountBalance(String subscriptionType, MoMoContext currentContext, NotificationType notificationType, String callBackURL) throws MoMoException {
         String resourcePath = API.SUBSCRIPTION_VER_ACCOUNT_BALANCE
                 .replace(Constants.SUBSCRIPTION_TYPE, subscriptionType);
         return createRequest(HttpMethod.GET, resourcePath, null, notificationType, callBackURL, AccountBalance.class, currentContext);
     }
 
     /**
-     * This operation returns personal information of the account holder. The
-     * operation does not need any consent by the account holder.
+     * This operation returns personal information of the account holder.The
+ operation does not need any consent by the account holder.
      *
      * @param msisdn
      * @param subscriptionType
      * @param currentContext
+     * @param notificationType
+     * @param callBackURL
      * @return
      * @throws MoMoException
      */
-    protected BasicUserInfo getBasicUserinfo(String msisdn, String subscriptionType, MoMoContext currentContext) throws MoMoException {
+    protected BasicUserInfo getBasicUserinfo(String msisdn, String subscriptionType, MoMoContext currentContext, NotificationType notificationType, String callBackURL) throws MoMoException {
         if (StringUtils.isNullOrEmpty(msisdn)) {
             throw new MoMoException(
                     new HttpErrorResponse.HttpErrorResponseBuilder(Constants.INTERNAL_ERROR_CATEGORY,
@@ -99,10 +103,12 @@ public class CommonRequest extends ResourceUtil {
      * @param haveHeader
      * @param subscriptionType
      * @param currentContext
+     * @param notificationType
+     * @param callBackURL
      * @return
      * @throws MoMoException
      */
-    protected StatusResponse requestToPayDeliveryNotification(String referenceId, DeliveryNotification deliveryNotification, String deliveryNotificationHeader, boolean haveHeader, String subscriptionType, MoMoContext currentContext) throws MoMoException {
+    protected StatusResponse requestToPayDeliveryNotification(String referenceId, DeliveryNotification deliveryNotification, String deliveryNotificationHeader, boolean haveHeader, String subscriptionType, MoMoContext currentContext, NotificationType notificationType, String callBackURL) throws MoMoException {
 
         if (StringUtils.isNullOrEmpty(referenceId)) {
             throw new MoMoException(
@@ -144,10 +150,12 @@ public class CommonRequest extends ResourceUtil {
      * @param accesType
      * @param subscriptionType
      * @param currentContext
+     * @param notificationType
+     * @param callBackURL
      * @return
      * @throws MoMoException
      */
-    protected BCAuthorize bCAuthorize(AccountHolder accountHolder, String scope, AccessType accesType, String subscriptionType, MoMoContext currentContext) throws MoMoException {
+    protected BCAuthorize bCAuthorize(AccountHolder accountHolder, String scope, AccessType accesType, String subscriptionType, MoMoContext currentContext, NotificationType notificationType, String callBackURL) throws MoMoException {
         Validator.throwIfNullObject(accountHolder);
         Validator.throwIfNullOrEmptyString(accountHolder.getAccountHolderId());
         Validator.throwIfNullOrEmptyString(accountHolder.getAccountHolderIdType());

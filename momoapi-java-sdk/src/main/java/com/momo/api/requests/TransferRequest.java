@@ -9,6 +9,7 @@ import com.momo.api.base.model.StatusResponse;
 import com.momo.api.base.model.HttpErrorResponse;
 import com.momo.api.base.util.JSONFormatter;
 import com.momo.api.base.util.StringUtils;
+import com.momo.api.constants.NotificationType;
 import com.momo.api.constants.RequestType;
 import com.momo.api.models.Transfer;
 import com.momo.api.models.TransferStatus;
@@ -25,10 +26,12 @@ public class TransferRequest extends CommonRequest {
      * @param subscriptionType
      * @param currentContext
      * @param transfer
+     * @param notificationType
+     * @param callBackURL
      * @return
      * @throws MoMoException 
      */
-    public StatusResponse transfer(String subscriptionType, MoMoContext currentContext, Transfer transfer) throws MoMoException {
+    public StatusResponse transfer(String subscriptionType, MoMoContext currentContext, Transfer transfer, NotificationType notificationType, String callBackURL) throws MoMoException {
         if (transfer == null) {
             throw new MoMoException(
                     new HttpErrorResponse.HttpErrorResponseBuilder(Constants.VALIDATION_ERROR_CATEGORY,
@@ -52,10 +55,12 @@ public class TransferRequest extends CommonRequest {
      * @param referenceId
      * @param subscriptionType
      * @param currentContext
+     * @param notificationType
+     * @param callBackURL
      * @return
      * @throws MoMoException 
      */
-    public TransferStatus getTransferStatus(String referenceId, String subscriptionType, MoMoContext currentContext) throws MoMoException {
+    public TransferStatus getTransferStatus(String referenceId, String subscriptionType, MoMoContext currentContext, NotificationType notificationType, String callBackURL) throws MoMoException {
         if (StringUtils.isNullOrEmpty(referenceId)) {
             throw new MoMoException(
                     new HttpErrorResponse.HttpErrorResponseBuilder(Constants.INTERNAL_ERROR_CATEGORY,

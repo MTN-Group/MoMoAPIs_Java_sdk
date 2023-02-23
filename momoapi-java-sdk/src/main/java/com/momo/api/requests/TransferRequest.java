@@ -31,7 +31,7 @@ public class TransferRequest extends CommonRequest {
      * @return
      * @throws MoMoException 
      */
-    public StatusResponse transfer(String subscriptionType, MoMoContext currentContext, Transfer transfer, NotificationType notificationType, String callBackURL) throws MoMoException {
+    protected StatusResponse transfer(String subscriptionType, MoMoContext currentContext, Transfer transfer, NotificationType notificationType, String callBackURL) throws MoMoException {
         if (transfer == null) {
             throw new MoMoException(
                     new HttpErrorResponse.HttpErrorResponseBuilder(Constants.VALIDATION_ERROR_CATEGORY,
@@ -55,12 +55,10 @@ public class TransferRequest extends CommonRequest {
      * @param referenceId
      * @param subscriptionType
      * @param currentContext
-     * @param notificationType
-     * @param callBackURL
      * @return
      * @throws MoMoException 
      */
-    public TransferStatus getTransferStatus(String referenceId, String subscriptionType, MoMoContext currentContext, NotificationType notificationType, String callBackURL) throws MoMoException {
+    protected TransferStatus getTransferStatus(String referenceId, String subscriptionType, MoMoContext currentContext) throws MoMoException {
         if (StringUtils.isNullOrEmpty(referenceId)) {
             throw new MoMoException(
                     new HttpErrorResponse.HttpErrorResponseBuilder(Constants.INTERNAL_ERROR_CATEGORY,
@@ -71,6 +69,6 @@ public class TransferRequest extends CommonRequest {
                 .replace(Constants.SUBSCRIPTION_TYPE, subscriptionType)
                 .replace(Constants.REQUEST_TYPE, RequestType.TRANSFER)
                 .replace(Constants.REFERENCE_ID, referenceId);
-        return createRequest(HttpMethod.GET, resourcePath, null, notificationType, callBackURL, TransferStatus.class, currentContext);
+        return createRequest(HttpMethod.GET, resourcePath, null, NotificationType.POLLING, null, TransferStatus.class, currentContext);
     }
 }

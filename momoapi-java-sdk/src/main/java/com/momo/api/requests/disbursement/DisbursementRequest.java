@@ -33,11 +33,11 @@ import java.util.UUID;
  *
  * Class DisbursementRequest
  */
-public class DisbursementRequest extends TransferRequest {
+public class DisbursementRequest extends TransferRequest implements DisbursementRequestWithCallBackUrl {
 
     protected NotificationType notificationType = NotificationType.CALLBACK;
     protected String callBackURL;
-    
+
     /**
      * Transfer operation is used to transfer an amount from the own account to
      * a payee account. Status of the transaction can validated by using the
@@ -47,6 +47,7 @@ public class DisbursementRequest extends TransferRequest {
      * @return
      * @throws MoMoException
      */
+    @Override
     public StatusResponse transfer(Transfer transfer) throws MoMoException {
         return transfer(SubscriptionType.DISBURSEMENT, DisbursementContext.getContext(), transfer, this.notificationType, this.callBackURL);
     }
@@ -61,7 +62,7 @@ public class DisbursementRequest extends TransferRequest {
      * @throws MoMoException
      */
     public TransferStatus getTransferStatus(String referenceId) throws MoMoException {
-        return getTransferStatus(referenceId, SubscriptionType.DISBURSEMENT, DisbursementContext.getContext(), this.notificationType, this.callBackURL);
+        return getTransferStatus(referenceId, SubscriptionType.DISBURSEMENT, DisbursementContext.getContext());
     }
 
     /**
@@ -73,7 +74,7 @@ public class DisbursementRequest extends TransferRequest {
      * @throws MoMoException
      */
     public Result validateAccountHolderStatus(AccountHolder accountHolder) throws MoMoException {
-        return validateAccountHolderStatus(accountHolder, SubscriptionType.DISBURSEMENT, DisbursementContext.getContext(), this.notificationType, this.callBackURL);
+        return validateAccountHolderStatus(accountHolder, SubscriptionType.DISBURSEMENT, DisbursementContext.getContext());
     }
 
     /**
@@ -82,7 +83,7 @@ public class DisbursementRequest extends TransferRequest {
      * @return @throws MoMoException
      */
     public AccountBalance getAccountBalance() throws MoMoException {
-        return getAccountBalance(SubscriptionType.DISBURSEMENT, DisbursementContext.getContext(), this.notificationType, this.callBackURL);
+        return getAccountBalance(SubscriptionType.DISBURSEMENT, DisbursementContext.getContext());
     }
 
     /**
@@ -95,7 +96,7 @@ public class DisbursementRequest extends TransferRequest {
     public AccountBalance getAccountBalanceInSpecificCurrency(String currency) throws MoMoException {
         return getAccountBalanceInSpecificCurrency(currency, SubscriptionType.DISBURSEMENT, DisbursementContext.getContext());
     }
-    
+
     /**
      *
      * @param currency
@@ -116,7 +117,7 @@ public class DisbursementRequest extends TransferRequest {
         String resourcePath = API.SUBSCRIPTION_VER_ACCOUNT_BALANCE_CURRENCY
                 .replace(Constants.SUBSCRIPTION_TYPE, subscriptionType)
                 .replace(Constants.CURRENCY, currency);
-        return createRequest(HttpMethod.GET, resourcePath, null, notificationType, callBackURL, AccountBalance.class, currentContext);
+        return createRequest(HttpMethod.GET, resourcePath, null, NotificationType.POLLING, null, AccountBalance.class, currentContext);
     }
 
     /**
@@ -128,6 +129,7 @@ public class DisbursementRequest extends TransferRequest {
      * @return
      * @throws MoMoException
      */
+    @Override
     public StatusResponse depositV1(Deposit deposit) throws MoMoException {
         if (deposit == null) {
             throw new MoMoException(
@@ -156,6 +158,7 @@ public class DisbursementRequest extends TransferRequest {
      * @return
      * @throws MoMoException
      */
+    @Override
     public StatusResponse depositV2(Deposit deposit) throws MoMoException {
         if (deposit == null) {
             throw new MoMoException(
@@ -195,7 +198,7 @@ public class DisbursementRequest extends TransferRequest {
                 .replace(Constants.SUBSCRIPTION_TYPE, SubscriptionType.DISBURSEMENT)
                 .replace(Constants.REQUEST_TYPE, RequestType.DEPOSIT)
                 .replace(Constants.REFERENCE_ID, referenceId);
-        return createRequest(HttpMethod.GET, resourcePath, null, notificationType, callBackURL, DepositStatus.class, DisbursementContext.getContext());
+        return createRequest(HttpMethod.GET, resourcePath, null, NotificationType.POLLING, null, DepositStatus.class, DisbursementContext.getContext());
     }
 
     /**
@@ -207,6 +210,7 @@ public class DisbursementRequest extends TransferRequest {
      * @return
      * @throws MoMoException
      */
+    @Override
     public StatusResponse refundV1(Refund refund) throws MoMoException {
         if (refund == null) {
             throw new MoMoException(
@@ -235,6 +239,7 @@ public class DisbursementRequest extends TransferRequest {
      * @return
      * @throws MoMoException
      */
+    @Override
     public StatusResponse refundV2(Refund refund) throws MoMoException {
         if (refund == null) {
             throw new MoMoException(
@@ -274,7 +279,7 @@ public class DisbursementRequest extends TransferRequest {
                 .replace(Constants.SUBSCRIPTION_TYPE, SubscriptionType.DISBURSEMENT)
                 .replace(Constants.REQUEST_TYPE, RequestType.REFUND)
                 .replace(Constants.REFERENCE_ID, referenceId);
-        return createRequest(HttpMethod.GET, resourcePath, null, notificationType, callBackURL, RefundStatus.class, DisbursementContext.getContext());
+        return createRequest(HttpMethod.GET, resourcePath, null, NotificationType.POLLING, null, RefundStatus.class, DisbursementContext.getContext());
     }
 
     /**
@@ -286,21 +291,21 @@ public class DisbursementRequest extends TransferRequest {
      * @throws MoMoException
      */
     public StatusResponse requestToPayDeliveryNotification(String referenceId, DeliveryNotification deliveryNotification) throws MoMoException {
-        return requestToPayDeliveryNotification(referenceId, deliveryNotification, null, false, SubscriptionType.DISBURSEMENT, DisbursementContext.getContext(), this.notificationType, this.callBackURL);
+        return requestToPayDeliveryNotification(referenceId, deliveryNotification, null, null, SubscriptionType.DISBURSEMENT, DisbursementContext.getContext());
     }
 
     /**
-     * This operation is used to send additional Notification to an End User.
-     * The notification message is also passed in as a header.
+     * This operation is used to send additional Notification to an End User.The notification message is also passed in as a header.
      *
      * @param referenceId
      * @param deliveryNotification
      * @param deliveryNotificationHeader
+     * @param language
      * @return
      * @throws MoMoException
      */
-    public StatusResponse requestToPayDeliveryNotification(String referenceId, DeliveryNotification deliveryNotification, String deliveryNotificationHeader) throws MoMoException {
-        return requestToPayDeliveryNotification(referenceId, deliveryNotification, deliveryNotificationHeader, true, SubscriptionType.DISBURSEMENT, DisbursementContext.getContext(), this.notificationType, this.callBackURL);
+    public StatusResponse requestToPayDeliveryNotification(String referenceId, DeliveryNotification deliveryNotification, String deliveryNotificationHeader, String language) throws MoMoException {
+        return requestToPayDeliveryNotification(referenceId, deliveryNotification, deliveryNotificationHeader, language, SubscriptionType.DISBURSEMENT, DisbursementContext.getContext());
     }
 
     /**
@@ -312,7 +317,7 @@ public class DisbursementRequest extends TransferRequest {
      * @throws MoMoException
      */
     public BasicUserInfo getBasicUserinfo(String msisdn) throws MoMoException {
-        return getBasicUserinfo(msisdn, SubscriptionType.DISBURSEMENT, DisbursementContext.getContext(), this.notificationType, this.callBackURL);
+        return getBasicUserinfo(msisdn, SubscriptionType.DISBURSEMENT, DisbursementContext.getContext());
     }
 
     /**
@@ -326,6 +331,7 @@ public class DisbursementRequest extends TransferRequest {
      * @return
      * @throws MoMoException
      */
+    @Override
     public BCAuthorize bCAuthorize(AccountHolder accountHolder, String scope, AccessType access_type) throws MoMoException {
         return bCAuthorize(accountHolder, scope, access_type, SubscriptionType.DISBURSEMENT, DisbursementContext.getContext(), this.notificationType, this.callBackURL);
     }
@@ -337,9 +343,10 @@ public class DisbursementRequest extends TransferRequest {
      * @param callBackURL
      * @return
      */
+    @Override
     public DisbursementRequest addCallBackUrl(final String callBackURL) {
         this.callBackURL = callBackURL;
-        if(!StringUtils.isNullOrEmpty(callBackURL)){
+        if (!StringUtils.isNullOrEmpty(callBackURL)) {
             return setNotificationType(NotificationType.CALLBACK);
         } else {
             return this;
@@ -349,12 +356,13 @@ public class DisbursementRequest extends TransferRequest {
     /**
      * NotificationType can be set to CALLBACK or POLLING. If it is CALLBACK, a
      * response will be sent to the callBackURL set for the DisbursementRequest
-     * object or for the DisbursementConfiguration . If it is POLLING, no response
-     * will be sent to the callBackURL
+     * object or for the DisbursementConfiguration . If it is POLLING, no
+     * response will be sent to the callBackURL
      *
      * @param notificationType
      * @return
      */
+    @Override
     public DisbursementRequest setNotificationType(final NotificationType notificationType) {
         this.notificationType = notificationType;
         return this;

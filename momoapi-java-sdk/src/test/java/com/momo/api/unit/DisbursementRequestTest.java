@@ -350,9 +350,9 @@ public class DisbursementRequestTest {
         deliveryNotification.setNotificationMessage("test message");
 
         StatusResponse expectedStatusResponse = getExpectedStatusResponse(false);
-        doReturn(expectedStatusResponse).when(disbursementRequestSpy).requestToPayDeliveryNotification(REFERENCE_ID_PARAMETER, deliveryNotification, "Header Message");
+        doReturn(expectedStatusResponse).when(disbursementRequestSpy).requestToPayDeliveryNotification(REFERENCE_ID_PARAMETER, deliveryNotification, "Header Message", "eng");
 
-        StatusResponse statusResponse = disbursementRequestSpy.requestToPayDeliveryNotification(REFERENCE_ID_PARAMETER, deliveryNotification, "Header Message");
+        StatusResponse statusResponse = disbursementRequestSpy.requestToPayDeliveryNotification(REFERENCE_ID_PARAMETER, deliveryNotification, "Header Message", "eng");
         assertNotNull(statusResponse);
         assertNotNull(statusResponse.getStatus());
         assertEquals(statusResponse.getReferenceId(), null);
@@ -365,9 +365,9 @@ public class DisbursementRequestTest {
         DisbursementRequest disbursementRequestSpy = spy(new DisbursementRequest());
         
         DeliveryNotification deliveryNotification = new DeliveryNotification();
-        doThrow(MoMoException.class).when(disbursementRequestSpy).requestToPayDeliveryNotification(REFERENCE_ID_PARAMETER, deliveryNotification, "Header Message");
+        doThrow(MoMoException.class).when(disbursementRequestSpy).requestToPayDeliveryNotification(REFERENCE_ID_PARAMETER, deliveryNotification, "Header Message", "eng");
         
-        assertThrows(MoMoException.class, () -> disbursementRequestSpy.requestToPayDeliveryNotification(REFERENCE_ID_PARAMETER, deliveryNotification, "Header Message"));
+        assertThrows(MoMoException.class, () -> disbursementRequestSpy.requestToPayDeliveryNotification(REFERENCE_ID_PARAMETER, deliveryNotification, "Header Message", "eng"));
     }
     
     @Test

@@ -32,11 +32,11 @@ import java.util.UUID;
  *
  * Class CollectionRequest
  */
-public class CollectionRequest extends CommonRequest {
+public class CollectionRequest extends CommonRequest implements CollectionRequestWithCallBackUrl {
 
     protected NotificationType notificationType = NotificationType.CALLBACK;
     protected String callBackURL;
-    
+
     /**
      * This operation is used to request a payment from a consumer (Payer). The
      * payer will be asked to authorize the payment. The transaction will be
@@ -50,6 +50,7 @@ public class CollectionRequest extends CommonRequest {
      * @return
      * @throws MoMoException
      */
+    @Override
     public StatusResponse requestToPay(RequestPay requestPay) throws MoMoException {
         if (requestPay == null) {
             throw new MoMoException(
@@ -88,7 +89,7 @@ public class CollectionRequest extends CommonRequest {
                 .replace(Constants.SUBSCRIPTION_TYPE, SubscriptionType.COLLECTION)
                 .replace(Constants.REQUEST_TYPE, RequestType.REQUEST_TO_PAY)
                 .replace(Constants.REFERENCE_ID, referenceId);
-        return createRequest(HttpMethod.GET, resourcePath, null, notificationType, callBackURL, RequestPayStatus.class, CollectionContext.getContext());
+        return createRequest(HttpMethod.GET, resourcePath, null, NotificationType.POLLING, null, RequestPayStatus.class, CollectionContext.getContext());
 
     }
 
@@ -101,21 +102,21 @@ public class CollectionRequest extends CommonRequest {
      * @throws MoMoException
      */
     public StatusResponse requestToPayDeliveryNotification(String referenceId, DeliveryNotification deliveryNotification) throws MoMoException {
-        return requestToPayDeliveryNotification(referenceId, deliveryNotification, null, false, SubscriptionType.COLLECTION, CollectionContext.getContext(), this.notificationType, this.callBackURL);
+        return requestToPayDeliveryNotification(referenceId, deliveryNotification, null, null, SubscriptionType.COLLECTION, CollectionContext.getContext());
     }
 
     /**
-     * This operation is used to send additional Notification to an End User.
-     * The notification message is also passed in as a header.
+     * This operation is used to send additional Notification to an End User.The notification message is also passed in as a header.
      *
      * @param referenceId
      * @param deliveryNotification
      * @param deliveryNotificationHeader
+     * @param language
      * @return
      * @throws MoMoException
      */
-    public StatusResponse requestToPayDeliveryNotification(String referenceId, DeliveryNotification deliveryNotification, String deliveryNotificationHeader) throws MoMoException {
-        return requestToPayDeliveryNotification(referenceId, deliveryNotification, deliveryNotificationHeader, true, SubscriptionType.COLLECTION, CollectionContext.getContext(), this.notificationType, this.callBackURL);
+    public StatusResponse requestToPayDeliveryNotification(String referenceId, DeliveryNotification deliveryNotification, String deliveryNotificationHeader, String language) throws MoMoException {
+        return requestToPayDeliveryNotification(referenceId, deliveryNotification, deliveryNotificationHeader, language, SubscriptionType.COLLECTION, CollectionContext.getContext());
     }
 
     /**
@@ -127,7 +128,7 @@ public class CollectionRequest extends CommonRequest {
      * @throws MoMoException
      */
     public Result validateAccountHolderStatus(AccountHolder accountHolder) throws MoMoException {
-        return validateAccountHolderStatus(accountHolder, SubscriptionType.COLLECTION, CollectionContext.getContext(), this.notificationType, this.callBackURL);
+        return validateAccountHolderStatus(accountHolder, SubscriptionType.COLLECTION, CollectionContext.getContext());
     }
 
     /**
@@ -136,7 +137,7 @@ public class CollectionRequest extends CommonRequest {
      * @return @throws MoMoException
      */
     public AccountBalance getAccountBalance() throws MoMoException {
-        return getAccountBalance(SubscriptionType.COLLECTION, CollectionContext.getContext(), this.notificationType, this.callBackURL);
+        return getAccountBalance(SubscriptionType.COLLECTION, CollectionContext.getContext());
     }
 
     /**
@@ -170,7 +171,7 @@ public class CollectionRequest extends CommonRequest {
         String resourcePath = API.SUBSCRIPTION_VER_ACCOUNT_BALANCE_CURRENCY
                 .replace(Constants.SUBSCRIPTION_TYPE, subscriptionType)
                 .replace(Constants.CURRENCY, currency);
-        return createRequest(HttpMethod.GET, resourcePath, null, notificationType, callBackURL, AccountBalance.class, currentContext);
+        return createRequest(HttpMethod.GET, resourcePath, null, NotificationType.POLLING, null, AccountBalance.class, currentContext);
     }
 
     /**
@@ -182,6 +183,7 @@ public class CollectionRequest extends CommonRequest {
      * @return
      * @throws MoMoException
      */
+    @Override
     public StatusResponse requestToWithdrawV1(Withdraw withdraw) throws MoMoException {
         if (withdraw == null) {
             throw new MoMoException(
@@ -210,6 +212,7 @@ public class CollectionRequest extends CommonRequest {
      * @return
      * @throws MoMoException
      */
+    @Override
     public StatusResponse requestToWithdrawV2(Withdraw withdraw) throws MoMoException {
         if (withdraw == null) {
             throw new MoMoException(
@@ -248,7 +251,7 @@ public class CollectionRequest extends CommonRequest {
                 .replace(Constants.SUBSCRIPTION_TYPE, SubscriptionType.COLLECTION)
                 .replace(Constants.REQUEST_TYPE, RequestType.REQUEST_TO_WITHDRAW)
                 .replace(Constants.REFERENCE_ID, referenceId);
-        return createRequest(HttpMethod.GET, resourcePath, null, notificationType, callBackURL, WithdrawStatus.class, CollectionContext.getContext());
+        return createRequest(HttpMethod.GET, resourcePath, null, NotificationType.POLLING, null, WithdrawStatus.class, CollectionContext.getContext());
     }
 
     /**
@@ -260,7 +263,7 @@ public class CollectionRequest extends CommonRequest {
      * @throws MoMoException
      */
     public BasicUserInfo getBasicUserinfo(String msisdn) throws MoMoException {
-        return getBasicUserinfo(msisdn, SubscriptionType.COLLECTION, CollectionContext.getContext(), this.notificationType, this.callBackURL);
+        return getBasicUserinfo(msisdn, SubscriptionType.COLLECTION, CollectionContext.getContext());
     }
 
     /**
@@ -273,6 +276,7 @@ public class CollectionRequest extends CommonRequest {
      * @return
      * @throws MoMoException
      */
+    @Override
     public UserInfo getUserInfoWithConsent(AccountHolder accountHolder, String scope, AccessType accesType) throws MoMoException {
 
         BCAuthorize bCAuthorize = bCAuthorize(accountHolder, scope, accesType);
@@ -307,6 +311,7 @@ public class CollectionRequest extends CommonRequest {
      * @return
      * @throws MoMoException
      */
+    @Override
     public BCAuthorize bCAuthorize(AccountHolder accountHolder, String scope, AccessType accesType) throws MoMoException {
         return bCAuthorize(accountHolder, scope, accesType, SubscriptionType.COLLECTION, CollectionContext.getContext(), this.notificationType, this.callBackURL);
     }
@@ -318,9 +323,10 @@ public class CollectionRequest extends CommonRequest {
      * @param callBackURL
      * @return
      */
-    public CollectionRequest addCallBackUrl(final String callBackURL) {
+    @Override
+    public CollectionRequestWithCallBackUrl addCallBackUrl(final String callBackURL) {
         this.callBackURL = callBackURL;
-        if(!StringUtils.isNullOrEmpty(callBackURL)){
+        if (!StringUtils.isNullOrEmpty(callBackURL)) {
             return setNotificationType(NotificationType.CALLBACK);
         } else {
             return this;
@@ -336,7 +342,8 @@ public class CollectionRequest extends CommonRequest {
      * @param notificationType
      * @return
      */
-    public CollectionRequest setNotificationType(final NotificationType notificationType) {
+    @Override
+    public CollectionRequestWithCallBackUrl setNotificationType(final NotificationType notificationType) {
         this.notificationType = notificationType;
         return this;
     }

@@ -299,10 +299,10 @@ public class RemittanceRequestTest {
         //case 7: Using the same referenceId for requestToPayDeliveryNotification after a successful request was made
         deliveryNotification.setNotificationMessage("test message");
         //making the first request
-        StatusResponse statusResponseDeliveryNotification = remittanceRequest.requestToPayDeliveryNotification(statusResponsePay.getReferenceId(), deliveryNotification, "Header Message");
+        StatusResponse statusResponseDeliveryNotification = remittanceRequest.requestToPayDeliveryNotification(statusResponsePay.getReferenceId(), deliveryNotification, "Header Message", "eng");
         assertEquals(statusResponseDeliveryNotification.getStatus(), true);
         //making the second request
-        moMoException = assertThrows(MoMoException.class, ()->remittanceRequest.requestToPayDeliveryNotification(statusResponsePay.getReferenceId(), deliveryNotification, "Header Message"));
+        moMoException = assertThrows(MoMoException.class, ()->remittanceRequest.requestToPayDeliveryNotification(statusResponsePay.getReferenceId(), deliveryNotification, "Header Message", "eng"));
         assertEquals(moMoException.getError().getStatusCode(), Integer.toString(HttpStatusCode.TOO_MANY_REQUESTS.getHttpStatusCode()));
     }
     

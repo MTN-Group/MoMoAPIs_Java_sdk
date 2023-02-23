@@ -21,11 +21,11 @@ import com.momo.api.requests.TransferRequest;
  *
  * Class RemittanceRequest
  */
-public class RemittanceRequest extends TransferRequest {
+public class RemittanceRequest extends TransferRequest implements RemittanceRequestWithCallBackUrl {
 
     protected NotificationType notificationType = NotificationType.CALLBACK;
     protected String callBackURL;
-    
+
     /**
      * Transfer operation is used to transfer an amount from the own account to
      * a payee account. Status of the transaction can validated by using the
@@ -35,6 +35,7 @@ public class RemittanceRequest extends TransferRequest {
      * @return
      * @throws MoMoException
      */
+    @Override
     public StatusResponse transfer(Transfer transfer) throws MoMoException {
         return transfer(SubscriptionType.REMITTANCE, RemittanceContext.getContext(), transfer, this.notificationType, this.callBackURL);
     }
@@ -49,7 +50,7 @@ public class RemittanceRequest extends TransferRequest {
      * @throws MoMoException
      */
     public TransferStatus getTransferStatus(String referenceId) throws MoMoException {
-        return getTransferStatus(referenceId, SubscriptionType.REMITTANCE, RemittanceContext.getContext(), this.notificationType, this.callBackURL);
+        return getTransferStatus(referenceId, SubscriptionType.REMITTANCE, RemittanceContext.getContext());
     }
 
     /**
@@ -61,7 +62,7 @@ public class RemittanceRequest extends TransferRequest {
      * @throws MoMoException
      */
     public Result validateAccountHolderStatus(AccountHolder accountHolder) throws MoMoException {
-        return validateAccountHolderStatus(accountHolder, SubscriptionType.REMITTANCE, RemittanceContext.getContext(), this.notificationType, this.callBackURL);
+        return validateAccountHolderStatus(accountHolder, SubscriptionType.REMITTANCE, RemittanceContext.getContext());
     }
 
     /**
@@ -70,7 +71,7 @@ public class RemittanceRequest extends TransferRequest {
      * @return @throws MoMoException
      */
     public AccountBalance getAccountBalance() throws MoMoException {
-        return getAccountBalance(SubscriptionType.REMITTANCE, RemittanceContext.getContext(), this.notificationType, this.callBackURL);
+        return getAccountBalance(SubscriptionType.REMITTANCE, RemittanceContext.getContext());
     }
 
     /**
@@ -82,7 +83,7 @@ public class RemittanceRequest extends TransferRequest {
      * @throws MoMoException
      */
     public BasicUserInfo getBasicUserinfo(String msisdn) throws MoMoException {
-        return getBasicUserinfo(msisdn, SubscriptionType.REMITTANCE, RemittanceContext.getContext(), this.notificationType, this.callBackURL);
+        return getBasicUserinfo(msisdn, SubscriptionType.REMITTANCE, RemittanceContext.getContext());
     }
 
     /**
@@ -94,21 +95,21 @@ public class RemittanceRequest extends TransferRequest {
      * @throws MoMoException
      */
     public StatusResponse requestToPayDeliveryNotification(String referenceId, DeliveryNotification deliveryNotification) throws MoMoException {
-        return requestToPayDeliveryNotification(referenceId, deliveryNotification, null, false, SubscriptionType.REMITTANCE, RemittanceContext.getContext(), this.notificationType, this.callBackURL);
+        return requestToPayDeliveryNotification(referenceId, deliveryNotification, null, null, SubscriptionType.REMITTANCE, RemittanceContext.getContext());
     }
 
     /**
-     * This operation is used to send additional Notification to an End User.
-     * The notification message is also passed in as a header.
+     * This operation is used to send additional Notification to an End User.The notification message is also passed in as a header.
      *
      * @param referenceId
      * @param deliveryNotification
      * @param deliveryNotificationHeader
+     * @param language
      * @return
      * @throws MoMoException
      */
-    public StatusResponse requestToPayDeliveryNotification(String referenceId, DeliveryNotification deliveryNotification, String deliveryNotificationHeader) throws MoMoException {
-        return requestToPayDeliveryNotification(referenceId, deliveryNotification, deliveryNotificationHeader, true, SubscriptionType.REMITTANCE, RemittanceContext.getContext(), this.notificationType, this.callBackURL);
+    public StatusResponse requestToPayDeliveryNotification(String referenceId, DeliveryNotification deliveryNotification, String deliveryNotificationHeader, String language) throws MoMoException {
+        return requestToPayDeliveryNotification(referenceId, deliveryNotification, deliveryNotificationHeader, language, SubscriptionType.REMITTANCE, RemittanceContext.getContext());
     }
 
     /**
@@ -122,6 +123,7 @@ public class RemittanceRequest extends TransferRequest {
      * @return
      * @throws MoMoException
      */
+    @Override
     public BCAuthorize bCAuthorize(AccountHolder accountHolder, String scope, AccessType access_type) throws MoMoException {
         return bCAuthorize(accountHolder, scope, access_type, SubscriptionType.REMITTANCE, RemittanceContext.getContext(), this.notificationType, this.callBackURL);
     }
@@ -133,6 +135,7 @@ public class RemittanceRequest extends TransferRequest {
      * @param callBackURL
      * @return
      */
+    @Override
     public RemittanceRequest addCallBackUrl(final String callBackURL) {
         this.callBackURL = callBackURL;
         if (!StringUtils.isNullOrEmpty(callBackURL)) {
@@ -151,6 +154,7 @@ public class RemittanceRequest extends TransferRequest {
      * @param notificationType
      * @return
      */
+    @Override
     public RemittanceRequest setNotificationType(final NotificationType notificationType) {
         this.notificationType = notificationType;
         return this;

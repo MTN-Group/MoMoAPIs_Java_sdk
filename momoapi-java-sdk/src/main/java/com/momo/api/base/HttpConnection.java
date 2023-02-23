@@ -17,7 +17,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 /**
  * *
@@ -105,6 +104,7 @@ public abstract class HttpConnection {
         }
 
         try {
+            //TODO make sure there is option to add "optional_headers"
             setHttpHeaders(headers);
 
 ////            //TODO remove after testing
@@ -181,6 +181,9 @@ public abstract class HttpConnection {
             }
             if(headers.containsKey(Constants.CALL_BACK_URL)){
                 headers.remove(Constants.CALL_BACK_URL);
+            }
+            if(headers.containsKey(Constants.LANGUAGE)){
+                headers.remove(Constants.LANGUAGE);
             }
             
             if (writer != null) {

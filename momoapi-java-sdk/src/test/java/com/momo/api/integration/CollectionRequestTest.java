@@ -68,31 +68,33 @@ public class CollectionRequestTest {
         //A new apiUser:apiKey combination will need to generated and used, for callBackUrl to work again later.
         //No callback will be received for any "CollectionRequest" object created, unless a valid callback url is set for "CollectionConfiguration" or for "CollectionRequest".
 //        collectionConfiguration.addCallBackUrl(loader.get("CALLBACK_URL")+"invalid");
-//        statusResponse = collectionRequestFirst.requestToPay(getPay("callBackUrlTest case 0"));
+//        statusResponse = collectionRequestFirst.requestToPay(getRequestPay(MSISDN_NUMBER+"0"));
 
         //case 1: Passing a correct CallBackUrl with the collectionRequestFirst object. This allows callBack's to be received for all requests made with this "collectionRequestFirst" object.
         collectionRequestFirst.addCallBackUrl(loader.get("CALLBACK_URL"));
-        statusResponse = collectionRequestFirst.requestToPay(getRequestPay(MSISDN_NUMBER));
+        statusResponse = collectionRequestFirst.requestToPay(getRequestPay(MSISDN_NUMBER+"1"));
         assertTrue(statusResponse.getStatus());
 
         //case 2: Passing NotificationType as "POLLING" with the collectionRequestFirst object. No callBack's will be received for any requests made with this "collectionRequestFirst" object unless the addCallBackUrl(String) is set again.
         collectionRequestFirst.setNotificationType(NotificationType.POLLING);
-        statusResponse = collectionRequestFirst.requestToPay(getRequestPay(MSISDN_NUMBER));
+        statusResponse = collectionRequestFirst.requestToPay(getRequestPay(MSISDN_NUMBER+"2"));
         assertTrue(statusResponse.getStatus());
 
         //case 3: Passing a correct CallBackUrl with the collectionConfiguration object. But will not receive callBack's since the request is made with "collectionRequestFirst" having a "NotificationType" as "POLLING". To receive callback's again, we need to change "NotificationType" to "CALLBACK" or call the method "addCallBackUrl" with "collectionRequestFirst" with a valid callback url(as show in a later step below).
         collectionConfiguration.addCallBackUrl(loader.get("CALLBACK_URL"));
-        statusResponse = collectionRequestFirst.requestToPay(getRequestPay(MSISDN_NUMBER));
+        statusResponse = collectionRequestFirst.requestToPay(getRequestPay(MSISDN_NUMBER+"3"));
         assertTrue(statusResponse.getStatus());
 
         //case 4: Creating a new collectionRequestSecond object and passing valid callback url. Callback will be received.
         CollectionRequest collectionRequestSecond = collectionConfiguration.createCollectionRequest();
-        statusResponse = collectionRequestSecond.requestToPay(getRequestPay(MSISDN_NUMBER));
+        statusResponse = collectionRequestSecond.requestToPay(getRequestPay(MSISDN_NUMBER+"4"));
         assertTrue(statusResponse.getStatus());
 
         //case 5: Correcting the CallBackUrl for "collectionRequestFirst" object will allow callBack's to be received again using this object.
-        collectionRequestFirst.addCallBackUrl(loader.get("CALLBACK_URL"));
-        statusResponse = collectionRequestFirst.requestToPay(getRequestPay(MSISDN_NUMBER));
+        statusResponse = collectionRequestFirst
+                .addCallBackUrl(loader.get("CALLBACK_URL"))
+                .requestToPay(getRequestPay(MSISDN_NUMBER+"5"));
+//        statusResponse = collectionRequestFirst.requestToPay(getRequestPay(MSISDN_NUMBER+"5"));
         assertTrue(statusResponse.getStatus());
     }
 
@@ -252,7 +254,7 @@ public class CollectionRequestTest {
 
         statusResponsePay = collectionRequest.requestToPay(requestPay);
 
-        statusResponseDeliveryNotification = collectionRequest.requestToPayDeliveryNotification(statusResponsePay.getReferenceId(), deliveryNotification, "Header Message");
+        statusResponseDeliveryNotification = collectionRequest.requestToPayDeliveryNotification(statusResponsePay.getReferenceId(), deliveryNotification, "Header Message", "eng");
         assertEquals(statusResponseDeliveryNotification.getStatus(), true);
     }
 
@@ -285,10 +287,6 @@ public class CollectionRequestTest {
 
         deliveryNotification.setNotificationMessage("test message");
 
-        //case 5: NotificationMessage string in header is null
-        moMoException = assertThrows(MoMoException.class, () -> collectionRequest.requestToPayDeliveryNotification(statusResponsePay.getReferenceId(), deliveryNotification, null));
-        assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_VALUE_ERROR);
-
         //TODO Header:-Do we need to validate the notification message string in header to be not more than 160 characters? No error is thrown during the actual API call
         //case _: NotificationMessage string in header is more than 160 characters
 //        moMoException = assertThrows(MoMoException.class, ()->collectionRequest.requestToPayDeliveryNotification(statusResponsePay.getReferenceId(), deliveryNotification, stringLength_161));
@@ -297,18 +295,18 @@ public class CollectionRequestTest {
         //161 character string
         String stringLength_161 = "01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890";
 
-        //case 6: NotificationMessage string in DeliveryNotification object is more than 160 characters
+        //case 5: NotificationMessage string in DeliveryNotification object is more than 160 characters
         deliveryNotification.setNotificationMessage(stringLength_161);
         moMoException = assertThrows(MoMoException.class, () -> collectionRequest.requestToPayDeliveryNotification(statusResponsePay.getReferenceId(), deliveryNotification));
         assertEquals(moMoException.getError().getStatusCode(), Integer.toString(HttpStatusCode.BAD_REQUEST.getHttpStatusCode()));
 
-        //case 7: Using the same referenceId for requestToPayDeliveryNotification after a successful request was made
+        //case 6: Using the same referenceId for requestToPayDeliveryNotification after a successful request was made
         deliveryNotification.setNotificationMessage("test message");
         //making the first request
-        StatusResponse statusResponseDeliveryNotification = collectionRequest.requestToPayDeliveryNotification(statusResponsePay.getReferenceId(), deliveryNotification, "Header Message");
+        StatusResponse statusResponseDeliveryNotification = collectionRequest.requestToPayDeliveryNotification(statusResponsePay.getReferenceId(), deliveryNotification, "Header Message", "eng");
         assertEquals(statusResponseDeliveryNotification.getStatus(), true);
         //making the second request
-        moMoException = assertThrows(MoMoException.class, () -> collectionRequest.requestToPayDeliveryNotification(statusResponsePay.getReferenceId(), deliveryNotification, "Header Message"));
+        moMoException = assertThrows(MoMoException.class, () -> collectionRequest.requestToPayDeliveryNotification(statusResponsePay.getReferenceId(), deliveryNotification, "Header Message", "eng"));
         assertEquals(moMoException.getError().getStatusCode(), Integer.toString(HttpStatusCode.TOO_MANY_REQUESTS.getHttpStatusCode()));
 
     }

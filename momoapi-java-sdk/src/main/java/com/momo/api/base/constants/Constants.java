@@ -58,6 +58,9 @@ public final class Constants {
 
     //Delivery Notification Header
     public static final String NOTIFICATION_MESSAGE = "notificationMessage";
+    
+    //Language Header
+    public static final String LANGUAGE = "Language";
 
     //Account Holder Type
     public static final String ACCOUNT_HOLDER_ID_TYPE = "{accountHolderIdType}";

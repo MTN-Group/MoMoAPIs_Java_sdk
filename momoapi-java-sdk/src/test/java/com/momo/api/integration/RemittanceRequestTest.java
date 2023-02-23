@@ -308,50 +308,50 @@ public class RemittanceRequestTest {
     
     @Test
     @DisplayName("BCAuthorize Test Success")
-    void bCAuthorizeTestSuccess() throws MoMoException {
+    void bcAuthorizeTestSuccess() throws MoMoException {
         RemittanceConfiguration remittanceConfiguration = new RemittanceConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         RemittanceRequest remittanceRequest = remittanceConfiguration.createRemittanceRequest();
 
         AccountHolder accountHolderMSISDN = new AccountHolder(IdType.MSISDN.getValue(), MSISDN_NUMBER);
-        BCAuthorize bCAuthorizeMSISDN = remittanceRequest.bCAuthorize(accountHolderMSISDN, "profile", AccessType.OFFLINE);
+        BCAuthorize bcAuthorizeMSISDN = remittanceRequest.bcAuthorize(accountHolderMSISDN, "profile", AccessType.OFFLINE);
         
-        assertNotNull(bCAuthorizeMSISDN);
-        assertNotNull(bCAuthorizeMSISDN.getAuth_req_id());
+        assertNotNull(bcAuthorizeMSISDN);
+        assertNotNull(bcAuthorizeMSISDN.getAuth_req_id());
         
         AccountHolder accountHolderEMAIL = new AccountHolder(IdType.EMAIL.getValue(), EMAIL);
-        BCAuthorize bCAuthorizeEMAIL = remittanceRequest.bCAuthorize(accountHolderEMAIL, "profile", AccessType.OFFLINE);
+        BCAuthorize bcAuthorizeEMAIL = remittanceRequest.bcAuthorize(accountHolderEMAIL, "profile", AccessType.OFFLINE);
         
-        assertNotNull(bCAuthorizeEMAIL);
-        assertNotNull(bCAuthorizeEMAIL.getAuth_req_id());
+        assertNotNull(bcAuthorizeEMAIL);
+        assertNotNull(bcAuthorizeEMAIL.getAuth_req_id());
     }
     
     @Test
     @DisplayName("BCAuthorize Test Failure")
-    void bCAuthorizeTestFailure() throws MoMoException {
+    void bcAuthorizeTestFailure() throws MoMoException {
         RemittanceConfiguration remittanceConfiguration = new RemittanceConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue()).addCallBackUrl(loader.get("CALLBACK_URL"));
         RemittanceRequest remittanceRequest = remittanceConfiguration.createRemittanceRequest();
 
         AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getValue(), MSISDN_NUMBER);
-        MoMoException moMoException = assertThrows(MoMoException.class, ()->remittanceRequest.bCAuthorize(accountHolder, "invalid", AccessType.OFFLINE));
+        MoMoException moMoException = assertThrows(MoMoException.class, ()->remittanceRequest.bcAuthorize(accountHolder, "invalid", AccessType.OFFLINE));
         
         assertEquals(moMoException.getError().getStatusCode(), Integer.toString(HttpStatusCode.INTERNAL_SERVER_ERROR.getHttpStatusCode()));
 
         AccountHolder accountHolder1 = new AccountHolder(null, null);
-        moMoException = assertThrows(MoMoException.class, ()->remittanceRequest.bCAuthorize(accountHolder1, "profile", AccessType.OFFLINE));
+        moMoException = assertThrows(MoMoException.class, ()->remittanceRequest.bcAuthorize(accountHolder1, "profile", AccessType.OFFLINE));
         
         assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_VALUE_ERROR);
         
         AccountHolder accountHolder2 = new AccountHolder(IdType.MSISDN.getValue(), MSISDN_NUMBER);
-        moMoException = assertThrows(MoMoException.class, ()->remittanceRequest.bCAuthorize(accountHolder2, "", AccessType.OFFLINE));
+        moMoException = assertThrows(MoMoException.class, ()->remittanceRequest.bcAuthorize(accountHolder2, "", AccessType.OFFLINE));
         
         assertEquals(moMoException.getError().getErrorDescription(), Constants.EMPTY_STRING_ERROR);
         
         AccountHolder accountHolder3 = new AccountHolder(IdType.MSISDN.getValue(), MSISDN_NUMBER);
-        moMoException = assertThrows(MoMoException.class, ()->remittanceRequest.bCAuthorize(accountHolder3, "profile", null));
+        moMoException = assertThrows(MoMoException.class, ()->remittanceRequest.bcAuthorize(accountHolder3, "profile", null));
         
         assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_VALUE_ERROR);
         
-        moMoException = assertThrows(MoMoException.class, ()->remittanceRequest.bCAuthorize(null, "profile", AccessType.OFFLINE));
+        moMoException = assertThrows(MoMoException.class, ()->remittanceRequest.bcAuthorize(null, "profile", AccessType.OFFLINE));
         
         assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_VALUE_ERROR);
     }

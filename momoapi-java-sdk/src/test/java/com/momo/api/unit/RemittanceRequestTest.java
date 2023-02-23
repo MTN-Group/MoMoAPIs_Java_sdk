@@ -216,35 +216,35 @@ public class RemittanceRequestTest {
     
     @Test
     @DisplayName("BCAuthorize Test Success")
-    void bCAuthorizeTestSuccess() throws MoMoException {
+    void bcAuthorizeTestSuccess() throws MoMoException {
         RemittanceRequest remittanceRequestSpy = spy(new RemittanceRequest());
         
         AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getValue(), MSISDN);
         BCAuthorize expectedBCAuthorize = getExpectedBCAuthorize();
-        doReturn(expectedBCAuthorize).when(remittanceRequestSpy).bCAuthorize(accountHolder, "profile", AccessType.OFFLINE);
+        doReturn(expectedBCAuthorize).when(remittanceRequestSpy).bcAuthorize(accountHolder, "profile", AccessType.OFFLINE);
         
-        BCAuthorize bCAuthorize = remittanceRequestSpy.bCAuthorize(accountHolder, "profile", AccessType.OFFLINE);
+        BCAuthorize bcAuthorize = remittanceRequestSpy.bcAuthorize(accountHolder, "profile", AccessType.OFFLINE);
         
-        assertEquals(bCAuthorize.getAuth_req_id(), expectedBCAuthorize.getAuth_req_id());
+        assertEquals(bcAuthorize.getAuth_req_id(), expectedBCAuthorize.getAuth_req_id());
     }
 
     @Test
     @DisplayName("BCAuthorize Test Failure")
-    void bCAuthorizeTestFailure() throws MoMoException {
+    void bcAuthorizeTestFailure() throws MoMoException {
         RemittanceRequest remittanceRequestSpy = spy(new RemittanceRequest());
         
         AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getValue(), MSISDN);
-        doThrow(MoMoException.class).when(remittanceRequestSpy).bCAuthorize(accountHolder, "profile", AccessType.OFFLINE);
+        doThrow(MoMoException.class).when(remittanceRequestSpy).bcAuthorize(accountHolder, "profile", AccessType.OFFLINE);
 
-        assertThrows(MoMoException.class, () -> remittanceRequestSpy.bCAuthorize(accountHolder, "profile", AccessType.OFFLINE));
+        assertThrows(MoMoException.class, () -> remittanceRequestSpy.bcAuthorize(accountHolder, "profile", AccessType.OFFLINE));
     }
 
     private static BCAuthorize getExpectedBCAuthorize() {
-        BCAuthorize bCAuthorize = new BCAuthorize();
-        bCAuthorize.setAuth_req_id(UUID.randomUUID().toString());
-        bCAuthorize.setExpires_in("3600");
-        bCAuthorize.setInterval("5");
-        return bCAuthorize;
+        BCAuthorize bcAuthorize = new BCAuthorize();
+        bcAuthorize.setAuth_req_id(UUID.randomUUID().toString());
+        bcAuthorize.setExpires_in("3600");
+        bcAuthorize.setInterval("5");
+        return bcAuthorize;
     }
     
     private StatusResponse getExpectedStatusResponse(boolean haveReferenceId) {

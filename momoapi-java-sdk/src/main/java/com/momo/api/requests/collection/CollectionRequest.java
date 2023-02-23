@@ -276,13 +276,12 @@ public class CollectionRequest extends CommonRequest implements CollectionReques
      * @return
      * @throws MoMoException
      */
-    @Override
     public UserInfo getUserInfoWithConsent(AccountHolder accountHolder, String scope, AccessType accesType) throws MoMoException {
 
-        BCAuthorize bCAuthorize = bCAuthorize(accountHolder, scope, accesType);
+        BCAuthorize bcAuthorize = bcAuthorize(accountHolder, scope, accesType);
 
         //TODO find and remove all System.out.print
-        if (bCAuthorize == null) {
+        if (bcAuthorize == null) {
             throw new MoMoException(
                     new HttpErrorResponse.HttpErrorResponseBuilder(Constants.VALIDATION_ERROR_CATEGORY,
                             Constants.VALUE_NOT_SUPPLIED_ERROR_CODE)
@@ -290,19 +289,19 @@ public class CollectionRequest extends CommonRequest implements CollectionReques
         }
 
         //TODO auth_req_id can also be validated with UUID format if needed
-        if (StringUtils.isNullOrEmpty(bCAuthorize.getAuth_req_id())) {
+        if (StringUtils.isNullOrEmpty(bcAuthorize.getAuth_req_id())) {
             throw new MoMoException(
                     new HttpErrorResponse.HttpErrorResponseBuilder(Constants.INTERNAL_ERROR_CATEGORY,
                             Constants.GENERIC_ERROR_CODE).errorDescription(Constants.AUTH_REQ_ID_ERROR).build());
         }
         String resourcePath = API.SUBSCRIPTION_OAUTH2_USERINFO
                 .replace(Constants.SUBSCRIPTION_TYPE, SubscriptionType.COLLECTION);
-        return createRequest(HttpMethod.GET, resourcePath, "", notificationType, callBackURL, UserInfo.class, CollectionContext.getContext(), bCAuthorize.getAuth_req_id());
+        return createRequest(HttpMethod.GET, resourcePath, "", NotificationType.POLLING, null, UserInfo.class, CollectionContext.getContext(), bcAuthorize.getAuth_req_id());
     }
 
     /**
      * This operation is used to claim a consent by the account holder for the
-     * requested scopes.bCAuthorize receives a parameter "auth_req_id" which is
+     * requested scopes.bcAuthorize receives a parameter "auth_req_id" which is
      * passed into Oauth2 API which is then used in getUserInfoWithConsent API
      *
      * @param accountHolder
@@ -312,8 +311,8 @@ public class CollectionRequest extends CommonRequest implements CollectionReques
      * @throws MoMoException
      */
     @Override
-    public BCAuthorize bCAuthorize(AccountHolder accountHolder, String scope, AccessType accesType) throws MoMoException {
-        return bCAuthorize(accountHolder, scope, accesType, SubscriptionType.COLLECTION, CollectionContext.getContext(), this.notificationType, this.callBackURL);
+    public BCAuthorize bcAuthorize(AccountHolder accountHolder, String scope, AccessType accesType) throws MoMoException {
+        return bcAuthorize(accountHolder, scope, accesType, SubscriptionType.COLLECTION, CollectionContext.getContext(), this.notificationType, this.callBackURL);
     }
 
     /**

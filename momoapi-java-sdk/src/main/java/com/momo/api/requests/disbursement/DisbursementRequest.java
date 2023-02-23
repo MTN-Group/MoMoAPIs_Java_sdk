@@ -322,7 +322,7 @@ public class DisbursementRequest extends TransferRequest implements Disbursement
 
     /**
      * This operation is used to claim a consent by the account holder for the
-     * requested scopes.bCAuthorize receives a parameter "auth_req_id" which is
+     * requested scopes.bcAuthorize receives a parameter "auth_req_id" which is
      * passed into Oauth2 API which is then used in getUserInfoWithConsent API
      *
      * @param accountHolder
@@ -332,8 +332,8 @@ public class DisbursementRequest extends TransferRequest implements Disbursement
      * @throws MoMoException
      */
     @Override
-    public BCAuthorize bCAuthorize(AccountHolder accountHolder, String scope, AccessType access_type) throws MoMoException {
-        return bCAuthorize(accountHolder, scope, access_type, SubscriptionType.DISBURSEMENT, DisbursementContext.getContext(), this.notificationType, this.callBackURL);
+    public BCAuthorize bcAuthorize(AccountHolder accountHolder, String scope, AccessType access_type) throws MoMoException {
+        return bcAuthorize(accountHolder, scope, access_type, SubscriptionType.DISBURSEMENT, DisbursementContext.getContext(), this.notificationType, this.callBackURL);
     }
 
     /**

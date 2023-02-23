@@ -22,9 +22,7 @@ public interface CollectionRequestWithCallBackUrl {
 
     public StatusResponse requestToWithdrawV2(Withdraw withdraw) throws MoMoException;
 
-    public UserInfo getUserInfoWithConsent(AccountHolder accountHolder, String scope, AccessType accesType) throws MoMoException;
-
-    public BCAuthorize bCAuthorize(AccountHolder accountHolder, String scope, AccessType accesType) throws MoMoException;
+    public BCAuthorize bcAuthorize(AccountHolder accountHolder, String scope, AccessType accesType) throws MoMoException;
 
     public CollectionRequestWithCallBackUrl addCallBackUrl(final String callBackURL);
 

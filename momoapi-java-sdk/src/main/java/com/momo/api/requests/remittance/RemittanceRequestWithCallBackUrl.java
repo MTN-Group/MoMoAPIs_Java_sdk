@@ -16,9 +16,7 @@ public interface RemittanceRequestWithCallBackUrl {
 
     public StatusResponse transfer(Transfer transfer) throws MoMoException;
 
-//    public UserInfo getUserInfoWithConsent(AccountHolder accountHolder, String scope, AccessType accesType) throws MoMoException;
-
-    public BCAuthorize bCAuthorize(AccountHolder accountHolder, String scope, AccessType accesType) throws MoMoException;
+    public BCAuthorize bcAuthorize(AccountHolder accountHolder, String scope, AccessType accesType) throws MoMoException;
 
     public RemittanceRequestWithCallBackUrl addCallBackUrl(final String callBackURL);
 

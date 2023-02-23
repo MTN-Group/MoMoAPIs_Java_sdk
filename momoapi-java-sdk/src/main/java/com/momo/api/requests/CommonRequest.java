@@ -136,7 +136,7 @@ public class CommonRequest extends ResourceUtil {
 
     /**
      * This operation is used to claim a consent by the account holder for the
-     * requested scopes.bCAuthorize receives a parameter "auth_req_id" which is
+     * requested scopes.bcAuthorize receives a parameter "auth_req_id" which is
      * passed into Oauth2 API which is then used in getUserInfoWithConsent API
      *
      * @param accountHolder
@@ -149,7 +149,7 @@ public class CommonRequest extends ResourceUtil {
      * @return
      * @throws MoMoException
      */
-    protected BCAuthorize bCAuthorize(AccountHolder accountHolder, String scope, AccessType accesType, String subscriptionType, MoMoContext currentContext, NotificationType notificationType, String callBackURL) throws MoMoException {
+    protected BCAuthorize bcAuthorize(AccountHolder accountHolder, String scope, AccessType accesType, String subscriptionType, MoMoContext currentContext, NotificationType notificationType, String callBackURL) throws MoMoException {
         Validator.throwIfNullObject(accountHolder);
         Validator.throwIfNullOrEmptyString(accountHolder.getAccountHolderId());
         Validator.throwIfNullOrEmptyString(accountHolder.getAccountHolderIdType());
@@ -167,8 +167,8 @@ public class CommonRequest extends ResourceUtil {
         //TODO make sure no unwanted strings are passed in as parameters eg:- "/"
         String payLoad = "login_hint=ID:" + accountHolder.getAccountHolderId() + "/" + accountHolder.getAccountHolderIdType() + "&scope=" + scope + "&access_type=" + accesType.getValue();
 
-        BCAuthorize bCAuthorize = createRequest(HttpMethod.POST, resourcePath, payLoad, notificationType, callBackURL, BCAuthorize.class, currentContext);
+        BCAuthorize bcAuthorize = createRequest(HttpMethod.POST, resourcePath, payLoad, notificationType, callBackURL, BCAuthorize.class, currentContext);
 
-        return bCAuthorize;
+        return bcAuthorize;
     }
 }

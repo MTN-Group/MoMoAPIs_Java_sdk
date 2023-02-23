@@ -26,9 +26,7 @@ public interface DisbursementRequestWithCallBackUrl {
     
     public StatusResponse refundV2(Refund refund) throws MoMoException;
 
-//    public UserInfo getUserInfoWithConsent(AccountHolder accountHolder, String scope, AccessType accesType) throws MoMoException;
-
-    public BCAuthorize bCAuthorize(AccountHolder accountHolder, String scope, AccessType accesType) throws MoMoException;
+    public BCAuthorize bcAuthorize(AccountHolder accountHolder, String scope, AccessType accesType) throws MoMoException;
 
     public DisbursementRequestWithCallBackUrl addCallBackUrl(final String callBackURL);
 

@@ -344,27 +344,27 @@ public class CollectionRequestTest {
     
     @Test
     @DisplayName("BCAuthorize Test Success")
-    void bCAuthorizeTestSuccess() throws MoMoException {
+    void bcAuthorizeTestSuccess() throws MoMoException {
         CollectionRequest collectionRequestSpy = spy(new CollectionRequest());
         
         AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getValue(), MSISDN);
         BCAuthorize expectedBCAuthorize = getExpectedBCAuthorize();
-        doReturn(expectedBCAuthorize).when(collectionRequestSpy).bCAuthorize(accountHolder, "profile", AccessType.OFFLINE);
+        doReturn(expectedBCAuthorize).when(collectionRequestSpy).bcAuthorize(accountHolder, "profile", AccessType.OFFLINE);
         
-        BCAuthorize bCAuthorize = collectionRequestSpy.bCAuthorize(accountHolder, "profile", AccessType.OFFLINE);
+        BCAuthorize bcAuthorize = collectionRequestSpy.bcAuthorize(accountHolder, "profile", AccessType.OFFLINE);
         
-        assertEquals(bCAuthorize.getAuth_req_id(), expectedBCAuthorize.getAuth_req_id());
+        assertEquals(bcAuthorize.getAuth_req_id(), expectedBCAuthorize.getAuth_req_id());
     }
 
     @Test
     @DisplayName("BCAuthorize Test Failure")
-    void bCAuthorizeTestFailure() throws MoMoException {
+    void bcAuthorizeTestFailure() throws MoMoException {
         CollectionRequest collectionRequestSpy = spy(new CollectionRequest());
         
         AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getValue(), MSISDN);
-        doThrow(MoMoException.class).when(collectionRequestSpy).bCAuthorize(accountHolder, "profile", AccessType.OFFLINE);
+        doThrow(MoMoException.class).when(collectionRequestSpy).bcAuthorize(accountHolder, "profile", AccessType.OFFLINE);
 
-        assertThrows(MoMoException.class, () -> collectionRequestSpy.bCAuthorize(accountHolder, "profile", AccessType.OFFLINE));
+        assertThrows(MoMoException.class, () -> collectionRequestSpy.bcAuthorize(accountHolder, "profile", AccessType.OFFLINE));
     }
     
     private StatusResponse getExpectedStatusResponse(boolean haveReferenceId) {
@@ -444,11 +444,11 @@ public class CollectionRequestTest {
     }
 
     private static BCAuthorize getExpectedBCAuthorize() {
-        BCAuthorize bCAuthorize = new BCAuthorize();
-        bCAuthorize.setAuth_req_id(UUID.randomUUID().toString());
-        bCAuthorize.setExpires_in("3600");
-        bCAuthorize.setInterval("5");
-        return bCAuthorize;
+        BCAuthorize bcAuthorize = new BCAuthorize();
+        bcAuthorize.setAuth_req_id(UUID.randomUUID().toString());
+        bcAuthorize.setExpires_in("3600");
+        bcAuthorize.setInterval("5");
+        return bcAuthorize;
     }
 
     private static Payer getPayer() {

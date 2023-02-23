@@ -555,50 +555,50 @@ public class CollectionRequestTest {
     
     @Test
     @DisplayName("BCAuthorize Test Success")
-    void bCAuthorizeTestSuccess() throws MoMoException {
+    void bcAuthorizeTestSuccess() throws MoMoException {
         CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue());
         CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
 
         AccountHolder accountHolderMSISDN = new AccountHolder(IdType.MSISDN.getValue(), MSISDN_NUMBER);
-        BCAuthorize bCAuthorizeMSISDN = collectionRequest.bCAuthorize(accountHolderMSISDN, "profile", AccessType.OFFLINE);
+        BCAuthorize bcAuthorizeMSISDN = collectionRequest.bcAuthorize(accountHolderMSISDN, "profile", AccessType.OFFLINE);
         
-        assertNotNull(bCAuthorizeMSISDN);
-        assertNotNull(bCAuthorizeMSISDN.getAuth_req_id());
+        assertNotNull(bcAuthorizeMSISDN);
+        assertNotNull(bcAuthorizeMSISDN.getAuth_req_id());
         
         AccountHolder accountHolderEMAIL = new AccountHolder(IdType.EMAIL.getValue(), EMAIL);
-        BCAuthorize bCAuthorizeEMAIL = collectionRequest.bCAuthorize(accountHolderEMAIL, "profile", AccessType.OFFLINE);
+        BCAuthorize bcAuthorizeEMAIL = collectionRequest.bcAuthorize(accountHolderEMAIL, "profile", AccessType.OFFLINE);
         
-        assertNotNull(bCAuthorizeEMAIL);
-        assertNotNull(bCAuthorizeEMAIL.getAuth_req_id());
+        assertNotNull(bcAuthorizeEMAIL);
+        assertNotNull(bcAuthorizeEMAIL.getAuth_req_id());
     }
     
     @Test
     @DisplayName("BCAuthorize Test Failure")
-    void bCAuthorizeTestFailure() throws MoMoException {
+    void bcAuthorizeTestFailure() throws MoMoException {
         CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue());
         CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
 
         AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getValue(), MSISDN_NUMBER);
-        MoMoException moMoException = assertThrows(MoMoException.class, ()->collectionRequest.bCAuthorize(accountHolder, "invalid", AccessType.OFFLINE));
+        MoMoException moMoException = assertThrows(MoMoException.class, ()->collectionRequest.bcAuthorize(accountHolder, "invalid", AccessType.OFFLINE));
         
         assertEquals(moMoException.getError().getStatusCode(), Integer.toString(HttpStatusCode.INTERNAL_SERVER_ERROR.getHttpStatusCode()));
 
         AccountHolder accountHolder1 = new AccountHolder(null, null);
-        moMoException = assertThrows(MoMoException.class, ()->collectionRequest.bCAuthorize(accountHolder1, "profile", AccessType.OFFLINE));
+        moMoException = assertThrows(MoMoException.class, ()->collectionRequest.bcAuthorize(accountHolder1, "profile", AccessType.OFFLINE));
         
         assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_VALUE_ERROR);
         
         AccountHolder accountHolder2 = new AccountHolder(IdType.MSISDN.getValue(), MSISDN_NUMBER);
-        moMoException = assertThrows(MoMoException.class, ()->collectionRequest.bCAuthorize(accountHolder2, "", AccessType.OFFLINE));
+        moMoException = assertThrows(MoMoException.class, ()->collectionRequest.bcAuthorize(accountHolder2, "", AccessType.OFFLINE));
         
         assertEquals(moMoException.getError().getErrorDescription(), Constants.EMPTY_STRING_ERROR);
         
         AccountHolder accountHolder3 = new AccountHolder(IdType.MSISDN.getValue(), MSISDN_NUMBER);
-        moMoException = assertThrows(MoMoException.class, ()->collectionRequest.bCAuthorize(accountHolder3, "profile", null));
+        moMoException = assertThrows(MoMoException.class, ()->collectionRequest.bcAuthorize(accountHolder3, "profile", null));
         
         assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_VALUE_ERROR);
         
-        moMoException = assertThrows(MoMoException.class, ()->collectionRequest.bCAuthorize(null, "profile", AccessType.OFFLINE));
+        moMoException = assertThrows(MoMoException.class, ()->collectionRequest.bcAuthorize(null, "profile", AccessType.OFFLINE));
         
         assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_VALUE_ERROR);
     }

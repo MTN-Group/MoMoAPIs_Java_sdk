@@ -11,31 +11,31 @@
 CollectionConfiguration collectionConfiguration = new CollectionConfiguration("<COLLECTION_SUBSCRIPTION_KEY>", "<REFERENCE_ID>", "<API_KEY>","<MODE>","<TARGET_ENVIRONMENT>").addCallBackUrl("<CALLBACK_URL>");
 CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
 
-   Payer payer = new Payer();
-    payer.setPartyId("<MSISDN>");
-    payer.setPartyIdType(IdType.MSISDN.getValue());
+Payer payer = new Payer();
+payer.setPartyId("<MSISDN>");
+payer.setPartyIdType(IdType.MSISDN.getValue());
 
-    RequestPay requestPay = new RequestPay();
-    requestPay.setAmount("6.0");
-    requestPay.setCurrency("EUR");
-    requestPay.setExternalId("6353636");
-    requestPay.setPayeeNote("payer note");
-    requestPay.setPayerMessage("Pay for product a");
-    requestPay.setPayer(payer);
+RequestPay requestPay = new RequestPay();
+requestPay.setAmount("6.0");
+requestPay.setCurrency("EUR");
+requestPay.setExternalId("6353636");
+requestPay.setPayeeNote("payer note");
+requestPay.setPayerMessage("Pay for product a");
+requestPay.setPayer(payer);
             
-    StatusResponse statusResponse = collectionRequest.requestToPay(requestPay);
+StatusResponse statusResponse = collectionRequest.requestToPay(requestPay);
 
 
 DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration("<DISBURSEMENT_SUBSCRIPTION_KEY>", "<REFERENCE_ID>", "<API_KEY>","<MODE>","<TARGET_ENVIRONMENT>").addCallBackUrl("<CALLBACK_URL>");
 DisbursementRequest disbursementRequest = disbursementConfiguration.createDisbursementRequest();
 
 Refund refund = new Refund();
- refund.setAmount("6.0");
- refund.setCurrency("EUR");
- refund.setExternalId("6353636");
- refund.setPayeeNote("payer note");
- refund.setPayerMessage("Pay for product a");
- refund.setReferenceIdToRefund(statusResponse.getReferenceId());
+refund.setAmount("6.0");
+refund.setCurrency("EUR");
+refund.setExternalId("6353636");
+refund.setPayeeNote("payer note");
+refund.setPayerMessage("Pay for product a");
+refund.setReferenceIdToRefund(statusResponse.getReferenceId());
 
 statusResponse = disbursementRequest.refundV1(refund);
 

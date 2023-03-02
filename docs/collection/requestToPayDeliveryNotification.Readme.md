@@ -12,7 +12,7 @@ CollectionRequest collectionRequest = collectionConfiguration.createCollectionRe
 
 Payer payer = new Payer();
 payer.setPartyId("<MSISDN>");
-payer.setPartyIdType(Constants.MSISDN);
+payer.setPartyIdType(IdType.MSISDN.getValue());
 
 RequestPay requestPay = new RequestPay();
 requestPay.setAmount("6.0");

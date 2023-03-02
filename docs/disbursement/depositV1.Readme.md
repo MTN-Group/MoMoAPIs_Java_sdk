@@ -12,16 +12,16 @@ DisbursementConfiguration disbursementConfiguration = new DisbursementConfigurat
 DisbursementRequest disbursementRequest = disbursementConfiguration.createDisbursementRequest();
 
 Payee payee = new Payee();
-  payee.setPartyId("<MSISDN>");
-  payee.setPartyIdType(IdType.MSISDN.getValue());
+payee.setPartyId("<MSISDN>");
+payee.setPartyIdType(IdType.MSISDN.getValue());
 
 Deposit deposit = new Deposit();
-  deposit.setAmount("6.0");
-  deposit.setCurrency("EUR");
-  deposit.setExternalId("6353636");
-  deposit.setPayeeNote("payer note deposit");
-  deposit.setPayerMessage("Pay for product a  deposit");
-  deposit.setPayee(payee);
+deposit.setAmount("6.0");
+deposit.setCurrency("EUR");
+deposit.setExternalId("6353636");
+deposit.setPayeeNote("payer note deposit");
+deposit.setPayerMessage("Pay for product a  deposit");
+deposit.setPayee(payee);
 
 StatusResponse statusResponse = disbursementRequest.depositV1(deposit);
 ```

@@ -11,16 +11,16 @@ DisbursementConfiguration disbursementConfiguration = new DisbursementConfigurat
 DisbursementRequest disbursementRequest = disbursementConfiguration.createDisbursementRequest();
 
 Payee payee = new Payee();
-  payee.setPartyId("<MSISDN>");
-  payee.setPartyIdType(IdType.MSISDN.getValue());
+payee.setPartyId("<MSISDN>");
+payee.setPartyIdType(IdType.MSISDN.getValue());
 
 Transfer transfer = new Transfer();
-  transfer.setAmount("6.0");
-  transfer.setCurrency("EUR");
-  transfer.setExternalId("6353636");
-  transfer.setPayeeNote("payer note");
-  transfer.setPayerMessage("Pay for product a");
-  transfer.setPayee(payee);
+transfer.setAmount("6.0");
+transfer.setCurrency("EUR");
+transfer.setExternalId("6353636");
+transfer.setPayeeNote("payer note");
+transfer.setPayerMessage("Pay for product a");
+transfer.setPayee(payee);
 
 StatusResponse statusResponse = disbursementRequest.transfer(transfer);
 

@@ -201,12 +201,6 @@ Sample Response:
 </thead>
 <tbody>
   <tr>
-    <td>Instantiation of UserProvisioningRequest Object for making subsequent requests of Sandbox API</td>
-    <td><a href="docs/sandboxUserProvisioning/createUserProvisioningRequest.Readme.md">NA</a></td>
-    <td>createUserProvisioningRequest</td>
-    <td>NA</td>
-  </tr>
-  <tr>
     <td rowspan="3">Sandbox User Provisioning</td>
     <td><a href="docs/sandboxUserProvisioning/createUser.Readme.md">Creating an API user</a></td>
     <td>createUser</td>
@@ -237,12 +231,6 @@ Sample Response:
   </tr>
 </thead>
 <tbody>
-  <tr>
-    <td>Instantiation of CollectionRequest Object for making subsequent requests of Collection API</td>
-    <td><a href="docs/collection/createCollectionRequest.Readme.md">Collection access token generation</a></td>
-    <td>createCollectionRequest</td>
-    <td>NA</td>
-  </tr>
   <tr>
     <td rowspan="3">Request To Pay</td>
     <td><a href="docs/collection/requestToPay.Readme.md">Request To Pay</a></td>
@@ -320,12 +308,6 @@ Sample Response:
   </tr>
 </thead>
 <tbody>
-  <tr>
-    <td>Instantiation of DisbursementRequest Object for making subsequent requests of Disbursement API</td>
-    <td><a href="docs/disbursement/createDisbursementRequest.Readme.md">Disbursement access token generation</a></td>
-    <td>createDisbursementRequest</td>
-    <td>NA</td>
-  </tr>
   <tr>
     <td rowspan="2">Transfer</td>
     <td><a href="docs/disbursement/transfer.Readme.md">Transfer</a></td>
@@ -414,12 +396,6 @@ Sample Response:
   </tr>
 </thead>
 <tbody>
-  <tr>
-    <td>Instantiation of RemittanceRequest Object for making subsequent requests of Remittance API</td>
-    <td><a href="docs/remittance/createRemittanceRequest.Readme.md">Remittance access token generation</a></td>
-    <td>createRemittanceRequest</td>
-    <td>NA</td>
-  </tr>
   <tr>
     <td rowspan="2">Transfer</td>
     <td><a href="docs/remittance/transfer.Readme.md">Transfer</a></td>

@@ -25,10 +25,7 @@ public class ValidateAccountHolderStatus {
                     get("REFERENCE_ID"),
                     get("API_KEY"),
                     Environment.SANDBOX,
-                    TargetEnvironment.sandbox.getValue())
-                    .addCallBackUrl(
-                            get("CALLBACK_URL")
-                    );
+                    TargetEnvironment.sandbox.getValue());
             RemittanceRequest remittanceRequest = remittanceConfiguration.createRemittanceRequest();
 
             AccountHolder accountHolder = new AccountHolder(

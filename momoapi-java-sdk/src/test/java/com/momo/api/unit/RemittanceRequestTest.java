@@ -213,31 +213,6 @@ public class RemittanceRequestTest {
         
         assertThrows(MoMoException.class, () -> remittanceRequestSpy.requestToPayDeliveryNotification(REFERENCE_ID_PARAMETER, deliveryNotification, "Header Message", "eng"));
     }
-    
-    @Test
-    @DisplayName("BCAuthorize Test Success")
-    void bcAuthorizeTestSuccess() throws MoMoException {
-        RemittanceRequest remittanceRequestSpy = spy(new RemittanceRequest());
-        
-        AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getValue(), MSISDN);
-        BCAuthorize expectedBCAuthorize = getExpectedBCAuthorize();
-        doReturn(expectedBCAuthorize).when(remittanceRequestSpy).bcAuthorize(accountHolder, "profile", AccessType.OFFLINE);
-        
-        BCAuthorize bcAuthorize = remittanceRequestSpy.bcAuthorize(accountHolder, "profile", AccessType.OFFLINE);
-        
-        assertEquals(bcAuthorize.getAuth_req_id(), expectedBCAuthorize.getAuth_req_id());
-    }
-
-    @Test
-    @DisplayName("BCAuthorize Test Failure")
-    void bcAuthorizeTestFailure() throws MoMoException {
-        RemittanceRequest remittanceRequestSpy = spy(new RemittanceRequest());
-        
-        AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getValue(), MSISDN);
-        doThrow(MoMoException.class).when(remittanceRequestSpy).bcAuthorize(accountHolder, "profile", AccessType.OFFLINE);
-
-        assertThrows(MoMoException.class, () -> remittanceRequestSpy.bcAuthorize(accountHolder, "profile", AccessType.OFFLINE));
-    }
 
     private static BCAuthorize getExpectedBCAuthorize() {
         BCAuthorize bcAuthorize = new BCAuthorize();

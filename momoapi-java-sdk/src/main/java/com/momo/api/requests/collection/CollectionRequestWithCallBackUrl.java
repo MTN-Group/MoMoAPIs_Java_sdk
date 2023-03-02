@@ -2,7 +2,6 @@ package com.momo.api.requests.collection;
 
 import com.momo.api.base.constants.AccessType;
 import com.momo.api.base.exception.MoMoException;
-import com.momo.api.base.model.BCAuthorize;
 import com.momo.api.base.model.StatusResponse;
 import com.momo.api.constants.NotificationType;
 import com.momo.api.models.AccountHolder;
@@ -22,7 +21,7 @@ public interface CollectionRequestWithCallBackUrl {
 
     public StatusResponse requestToWithdrawV2(Withdraw withdraw) throws MoMoException;
 
-    public BCAuthorize bcAuthorize(AccountHolder accountHolder, String scope, AccessType accesType) throws MoMoException;
+    public UserInfo getUserInfoWithConsent(AccountHolder accountHolder, String scope, AccessType accesType) throws MoMoException;
 
     public CollectionRequestWithCallBackUrl addCallBackUrl(final String callBackURL);
 

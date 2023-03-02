@@ -342,31 +342,6 @@ public class CollectionRequestTest {
         assertThrows(MoMoException.class, () -> collectionRequestSpy.getUserInfoWithConsent(accountHolder, "profile", AccessType.OFFLINE));
     }
     
-    @Test
-    @DisplayName("BCAuthorize Test Success")
-    void bcAuthorizeTestSuccess() throws MoMoException {
-        CollectionRequest collectionRequestSpy = spy(new CollectionRequest());
-        
-        AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getValue(), MSISDN);
-        BCAuthorize expectedBCAuthorize = getExpectedBCAuthorize();
-        doReturn(expectedBCAuthorize).when(collectionRequestSpy).bcAuthorize(accountHolder, "profile", AccessType.OFFLINE);
-        
-        BCAuthorize bcAuthorize = collectionRequestSpy.bcAuthorize(accountHolder, "profile", AccessType.OFFLINE);
-        
-        assertEquals(bcAuthorize.getAuth_req_id(), expectedBCAuthorize.getAuth_req_id());
-    }
-
-    @Test
-    @DisplayName("BCAuthorize Test Failure")
-    void bcAuthorizeTestFailure() throws MoMoException {
-        CollectionRequest collectionRequestSpy = spy(new CollectionRequest());
-        
-        AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getValue(), MSISDN);
-        doThrow(MoMoException.class).when(collectionRequestSpy).bcAuthorize(accountHolder, "profile", AccessType.OFFLINE);
-
-        assertThrows(MoMoException.class, () -> collectionRequestSpy.bcAuthorize(accountHolder, "profile", AccessType.OFFLINE));
-    }
-    
     private StatusResponse getExpectedStatusResponse(boolean haveReferenceId) {
         StatusResponse statusResponse = new StatusResponse();
         if (haveReferenceId) {

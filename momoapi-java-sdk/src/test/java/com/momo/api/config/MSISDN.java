@@ -2,7 +2,6 @@ package com.momo.api.config;
 
 import java.util.Random;
 
-//TODO do we need to validate MSISDN length
 /**
  *
  * ENUM MSISDN

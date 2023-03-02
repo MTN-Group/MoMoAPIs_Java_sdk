@@ -58,7 +58,6 @@ public class Validator {
         }
     }
 
-    //TODO we can use this method if required for all strnig validations(null and empty checks), not yet used
     /**
      * throws MoMoException with specified variable name if String is null or
      * empty otherwise returns true.
@@ -99,7 +98,6 @@ public class Validator {
         }
     }
 
-    //TODO we can use this method if required for all strnig validations(null and empty checks), not yet used
     /**
      * throws MoMoException with specified variable name if Object is null
      * otherwise returns true.

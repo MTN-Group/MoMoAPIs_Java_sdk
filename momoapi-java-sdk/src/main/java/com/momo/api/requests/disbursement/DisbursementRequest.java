@@ -331,8 +331,7 @@ public class DisbursementRequest extends TransferRequest implements Disbursement
      * @return
      * @throws MoMoException
      */
-    @Override
-    public BCAuthorize bcAuthorize(AccountHolder accountHolder, String scope, AccessType access_type) throws MoMoException {
+    private BCAuthorize bcAuthorize(AccountHolder accountHolder, String scope, AccessType access_type) throws MoMoException {
         return bcAuthorize(accountHolder, scope, access_type, SubscriptionType.DISBURSEMENT, DisbursementContext.getContext(), this.notificationType, this.callBackURL);
     }
 

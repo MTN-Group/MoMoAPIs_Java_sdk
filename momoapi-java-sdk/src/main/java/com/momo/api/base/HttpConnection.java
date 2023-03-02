@@ -17,6 +17,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * *
@@ -104,14 +105,12 @@ public abstract class HttpConnection {
         }
 
         try {
-            //TODO make sure there is option to add "optional_headers"
             setHttpHeaders(headers);
 
 ////            //TODO remove after testing
 //            Map<String, String> headers2 =  headers.entrySet().stream()
 ////                    .filter(m->m.getKey().equals("X-Callback-Url"))
 //                    .collect(Collectors.toMap(m -> m.getKey(), m -> m.getValue()));
-//            
 ////                    .map(k->k.getValue())
 ////                    .collect(Collectors.f)
 ////                    ;
@@ -132,9 +131,6 @@ public abstract class HttpConnection {
                 }
 
                 int responseCode = this.connection.getResponseCode();
-                //TODO remove after testing
-                String responseMessage = this.connection.getResponseMessage();
-                System.out.println(responseCode + " : " + responseMessage);
                 
                 HttpStatusCode httpStatus = HttpStatusCode.getHttpStatus(responseCode);
 
@@ -153,14 +149,10 @@ public abstract class HttpConnection {
                         case SERVICE_UNAVAILABLE:
                         case TOO_MANY_REQUESTS:
                         case CONFLICT:
-                            //TODO remove after testing
-                            System.out.println("url::::::"+url);
                             requestResponse = HttpResponse.createResponse(this.connection.getErrorStream(), false,
                                     httpStatus, this.connection.getHeaderFields(), referenceId);
                             break;
                         default:
-                            //TODO remove after testing
-                            System.out.println("************:::::::::::HttpStatus (default case): "+httpStatus);
                             requestResponse = HttpResponse.createResponse(this.connection.getErrorStream(), false,
                                     HttpStatusCode.BAD_REQUEST, this.connection.getHeaderFields(), referenceId);
                             break;

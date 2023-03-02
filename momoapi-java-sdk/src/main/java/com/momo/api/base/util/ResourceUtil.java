@@ -126,10 +126,6 @@ public class ResourceUtil {
             throws MoMoException {
         HttpResponse requestResponse = requestExecute(httpMethod, resourcePath, payLoad, notificationType, callBackURL, currentContext, null);
         StatusResponse statusResponse = new StatusResponse();
-        //TODO remove after testing
-        if (!StringUtils.isNullOrEmpty(requestResponse.getPayLoad().toString())) {
-            System.out.println("PayLoad:::::::::::::::::::::: " + requestResponse.getPayLoad().toString());
-        }
 
         statusResponse.setStatus(requestResponse.isSuccess());
         if (requestResponse.getReferenceId() != null) {
@@ -437,7 +433,6 @@ public class ResourceUtil {
      * @return
      */
     public static boolean isValidURL(String URL) {
-        //TODO make sure isValidURL is used in all the requred places
         return URL.matches("^(https?)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
     }
 
@@ -460,13 +455,9 @@ public class ResourceUtil {
                             httpStatusCode.getHttpCode()).build());
         } else if (!responseData.isSuccess() && responseData.getPayLoad() instanceof String) {
             HttpStatusCode httpStatusCode = responseData.getResponseCode();
-            //TODO remove after testing
-            System.out.println("payload:::::" + responseData.getPayLoad().toString());
             HttpErrorResponse errorResponse = JSONFormatter.fromJSON((String) responseData.getPayLoad(),
                     HttpErrorResponse.class);
             if (errorResponse.getCode() != null && errorResponse.getMessage() != null) {
-                //TODO remove after testing
-                System.out.println("inside if 1");
                 throw new MoMoException(
                         new HttpErrorResponse.HttpErrorReasonBuilder(
                                 Integer.toString(
@@ -475,8 +466,6 @@ public class ResourceUtil {
                                 errorResponse.getCode(),
                                 errorResponse.getMessage()).build());
             } else if (errorResponse.getError() != null) {
-                //TODO remove after testing
-                System.out.println("inside if 2");
                 throw new MoMoException(
                         new HttpErrorResponse.HttpErrorBuilder(
                                 Integer.toString(
@@ -484,8 +473,6 @@ public class ResourceUtil {
                                 //                                null,
                                 errorResponse.getError()).build());
             } else {
-                //TODO remove after testing
-                System.out.println("inside if 3");
                 throw new MoMoException(errorResponse);
             }
         }

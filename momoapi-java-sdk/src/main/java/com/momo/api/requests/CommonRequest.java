@@ -164,7 +164,7 @@ public class CommonRequest extends ResourceUtil {
                 .replace(Constants.REQUEST_TYPE, RequestType.BC_AUTHORIZE);
 
         //TODO possible values for "msisdn", "scope" and "access_type" 
-        //TODO make sure no unwanted strings are passed in as parameters eg:- "/"
+        //TODO make sure no unwanted strings are not passed in as parameters eg:- "/"
         String payLoad = "login_hint=ID:" + accountHolder.getAccountHolderId() + "/" + accountHolder.getAccountHolderIdType() + "&scope=" + scope + "&access_type=" + accesType.getValue();
 
         BCAuthorize bcAuthorize = createRequest(HttpMethod.POST, resourcePath, payLoad, notificationType, callBackURL, BCAuthorize.class, currentContext);

@@ -171,7 +171,6 @@ public class UserProvisioningAuthentication extends BaseAuthentication {
      * @throws MoMoException
      */
     public StatusResponse createUser(CallbackHost callbackHost) throws MoMoException {
-        //TODO do we need to validate if "providerCallbackHost" value contain only the host value and not the complete url?
         this.providerCallbackHost = callbackHost;
         return createUser();
     }

@@ -393,31 +393,6 @@ public class DisbursementRequestTest {
         
         assertThrows(MoMoException.class, () -> disbursementRequestSpy.getBasicUserinfo(MSISDN));
     }
-    
-    @Test
-    @DisplayName("BCAuthorize Test Success")
-    void bcAuthorizeTestSuccess() throws MoMoException {
-        DisbursementRequest disbursementRequestSpy = spy(new DisbursementRequest());
-        
-        AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getValue(), MSISDN);
-        BCAuthorize expectedBCAuthorize = getExpectedBCAuthorize();
-        doReturn(expectedBCAuthorize).when(disbursementRequestSpy).bcAuthorize(accountHolder, "profile", AccessType.OFFLINE);
-        
-        BCAuthorize bcAuthorize = disbursementRequestSpy.bcAuthorize(accountHolder, "profile", AccessType.OFFLINE);
-        
-        assertEquals(bcAuthorize.getAuth_req_id(), expectedBCAuthorize.getAuth_req_id());
-    }
-
-    @Test
-    @DisplayName("BCAuthorize Test Failure")
-    void bcAuthorizeTestFailure() throws MoMoException {
-        DisbursementRequest disbursementRequestSpy = spy(new DisbursementRequest());
-        
-        AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getValue(), MSISDN);
-        doThrow(MoMoException.class).when(disbursementRequestSpy).bcAuthorize(accountHolder, "profile", AccessType.OFFLINE);
-
-        assertThrows(MoMoException.class, () -> disbursementRequestSpy.bcAuthorize(accountHolder, "profile", AccessType.OFFLINE));
-    }
 
     private static BCAuthorize getExpectedBCAuthorize() {
         BCAuthorize bcAuthorize = new BCAuthorize();

@@ -123,8 +123,7 @@ public class RemittanceRequest extends TransferRequest implements RemittanceRequ
      * @return
      * @throws MoMoException
      */
-    @Override
-    public BCAuthorize bcAuthorize(AccountHolder accountHolder, String scope, AccessType access_type) throws MoMoException {
+    private BCAuthorize bcAuthorize(AccountHolder accountHolder, String scope, AccessType access_type) throws MoMoException {
         return bcAuthorize(accountHolder, scope, access_type, SubscriptionType.REMITTANCE, RemittanceContext.getContext(), this.notificationType, this.callBackURL);
     }
 

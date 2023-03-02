@@ -6,11 +6,26 @@ package com.momo.api.base.constants;
  */
 public enum IdType {
     //TODO do we need to validate each type accordingly?
-    MSISDN("MSISDN"),//Mobile Number validated according to ITU-T E.164
+    //Mobile Number can be validated according to ITU-T E.164
+    MSISDN("MSISDN"),
+    /**
+     * lower case IdType is needed when passing IdType value in URL as a path
+     * parameter. Eg:- In "validateAccountHolderStatus"
+     */
     msisdn("msisdn"),
-    EMAIL("EMAIL"),//Validated to be a valid e-mail format
+    //Can be validated to a valid e-mail format
+    EMAIL("EMAIL"),
+    /**
+     * lower case IdType is needed when passing IdType value in URL as a path
+     * parameter. Eg:- In "validateAccountHolderStatus"
+     */
     email("email"),
-    PARTY_CODE("PARTY_CODE"),//UUID of the party
+    //Can be validated as a UUID of the party
+    PARTY_CODE("PARTY_CODE"),
+    /**
+     * lower case IdType is needed when passing IdType value in URL as a path
+     * parameter. Eg:- In "validateAccountHolderStatus"
+     */
     party_code("party_code");
 
     private final String idType;
@@ -24,8 +39,8 @@ public enum IdType {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getValue() {
         return this.idType;

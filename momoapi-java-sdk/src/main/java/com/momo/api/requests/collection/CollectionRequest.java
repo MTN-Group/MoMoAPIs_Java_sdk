@@ -276,11 +276,11 @@ public class CollectionRequest extends CommonRequest implements CollectionReques
      * @return
      * @throws MoMoException
      */
+    @Override
     public UserInfo getUserInfoWithConsent(AccountHolder accountHolder, String scope, AccessType accesType) throws MoMoException {
 
         BCAuthorize bcAuthorize = bcAuthorize(accountHolder, scope, accesType);
 
-        //TODO find and remove all System.out.print
         if (bcAuthorize == null) {
             throw new MoMoException(
                     new HttpErrorResponse.HttpErrorResponseBuilder(Constants.VALIDATION_ERROR_CATEGORY,
@@ -310,8 +310,7 @@ public class CollectionRequest extends CommonRequest implements CollectionReques
      * @return
      * @throws MoMoException
      */
-    @Override
-    public BCAuthorize bcAuthorize(AccountHolder accountHolder, String scope, AccessType accesType) throws MoMoException {
+    private BCAuthorize bcAuthorize(AccountHolder accountHolder, String scope, AccessType accesType) throws MoMoException {
         return bcAuthorize(accountHolder, scope, accesType, SubscriptionType.COLLECTION, CollectionContext.getContext(), this.notificationType, this.callBackURL);
     }
 

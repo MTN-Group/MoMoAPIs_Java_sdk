@@ -41,7 +41,6 @@ import org.junit.jupiter.api.Test;
  */
 public class CollectionRequestTest {
 
-    //TODO add comment for test methods
     static PropertiesLoader loader;
 
     @BeforeAll
@@ -63,8 +62,8 @@ public class CollectionRequestTest {
 
         StatusResponse statusResponse;
         //case 0: Passing an incorrect CallBackUrl with the collectionConfiguration object. 
-        //TODO: Don't do this, this will prevent future callbacks being received in the callBackUrl(tested in sandbox) used.
-        //This only happens for requests made a few seconds(5sec) after callback with invalid url is made.
+        //TODO!: Don't do the following(creating a request with invalid CallBackUrl), this will prevent future callbacks from getting received in the callBackUrl(tested in sandbox) used.
+        //This only happens for requests made a few seconds(5sec) after a callback with invalid url is made.
         //A new apiUser:apiKey combination will need to generated and used, for callBackUrl to work again later.
         //No callback will be received for any "CollectionRequest" object created, unless a valid callback url is set for "CollectionConfiguration" or for "CollectionRequest".
 //        collectionConfiguration.addCallBackUrl(loader.get("CALLBACK_URL")+"invalid");
@@ -287,12 +286,7 @@ public class CollectionRequestTest {
 
         deliveryNotification.setNotificationMessage("test message");
 
-        //TODO Header:-Do we need to validate the notification message string in header to be not more than 160 characters? No error is thrown during the actual API call
-        //case _: NotificationMessage string in header is more than 160 characters
-//        moMoException = assertThrows(MoMoException.class, ()->collectionRequest.requestToPayDeliveryNotification(statusResponsePay.getReferenceId(), deliveryNotification, stringLength_161));
-//        assertEquals(moMoException.getError().getStatusCode(), Integer.toString(HttpStatusCode.BAD_REQUEST.getHttpStatusCode()));
         //TODO Body:-Do we need to validate the notification message string to be not more than 160 characters? No error is thrown during the actual API call
-        //161 character string
         String stringLength_161 = "01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890";
 
         //case 5: NotificationMessage string in DeliveryNotification object is more than 160 characters
@@ -513,7 +507,7 @@ public class CollectionRequestTest {
         assertNotNull(userInfoEMAIL.getGiven_name());
         
         //TODO if PARTY_CODE is not an acceptable pearameter, we may need to validate and make sure its not used
-        //TODO seems like it accepts any texts. so validations are not applicable as of now
+        //TODO seems like bc-authorise accepts any text. so validations are not applicable as of now
         
 //        AccountHolder accountHolderUUID = new AccountHolder(IdType.PARTY_CODE.getValue(), loader.get("REFERENCE_ID"));
 //        UserInfo userInfoUUID = collectionRequest.getUserInfoWithConsent(accountHolderUUID, "profile", AccessType.OFFLINE);
@@ -549,56 +543,6 @@ public class CollectionRequestTest {
         assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_VALUE_ERROR);
         
         moMoException = assertThrows(MoMoException.class, ()->collectionRequest.getUserInfoWithConsent(null, "profile", AccessType.OFFLINE));
-        
-        assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_VALUE_ERROR);
-    }
-    
-    @Test
-    @DisplayName("BCAuthorize Test Success")
-    void bcAuthorizeTestSuccess() throws MoMoException {
-        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue());
-        CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
-
-        AccountHolder accountHolderMSISDN = new AccountHolder(IdType.MSISDN.getValue(), MSISDN_NUMBER);
-        BCAuthorize bcAuthorizeMSISDN = collectionRequest.bcAuthorize(accountHolderMSISDN, "profile", AccessType.OFFLINE);
-        
-        assertNotNull(bcAuthorizeMSISDN);
-        assertNotNull(bcAuthorizeMSISDN.getAuth_req_id());
-        
-        AccountHolder accountHolderEMAIL = new AccountHolder(IdType.EMAIL.getValue(), EMAIL);
-        BCAuthorize bcAuthorizeEMAIL = collectionRequest.bcAuthorize(accountHolderEMAIL, "profile", AccessType.OFFLINE);
-        
-        assertNotNull(bcAuthorizeEMAIL);
-        assertNotNull(bcAuthorizeEMAIL.getAuth_req_id());
-    }
-    
-    @Test
-    @DisplayName("BCAuthorize Test Failure")
-    void bcAuthorizeTestFailure() throws MoMoException {
-        CollectionConfiguration collectionConfiguration = new CollectionConfiguration(loader.get(SUBSCRIPTION_KEY), loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue());
-        CollectionRequest collectionRequest = collectionConfiguration.createCollectionRequest();
-
-        AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getValue(), MSISDN_NUMBER);
-        MoMoException moMoException = assertThrows(MoMoException.class, ()->collectionRequest.bcAuthorize(accountHolder, "invalid", AccessType.OFFLINE));
-        
-        assertEquals(moMoException.getError().getStatusCode(), Integer.toString(HttpStatusCode.INTERNAL_SERVER_ERROR.getHttpStatusCode()));
-
-        AccountHolder accountHolder1 = new AccountHolder(null, null);
-        moMoException = assertThrows(MoMoException.class, ()->collectionRequest.bcAuthorize(accountHolder1, "profile", AccessType.OFFLINE));
-        
-        assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_VALUE_ERROR);
-        
-        AccountHolder accountHolder2 = new AccountHolder(IdType.MSISDN.getValue(), MSISDN_NUMBER);
-        moMoException = assertThrows(MoMoException.class, ()->collectionRequest.bcAuthorize(accountHolder2, "", AccessType.OFFLINE));
-        
-        assertEquals(moMoException.getError().getErrorDescription(), Constants.EMPTY_STRING_ERROR);
-        
-        AccountHolder accountHolder3 = new AccountHolder(IdType.MSISDN.getValue(), MSISDN_NUMBER);
-        moMoException = assertThrows(MoMoException.class, ()->collectionRequest.bcAuthorize(accountHolder3, "profile", null));
-        
-        assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_VALUE_ERROR);
-        
-        moMoException = assertThrows(MoMoException.class, ()->collectionRequest.bcAuthorize(null, "profile", AccessType.OFFLINE));
         
         assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_VALUE_ERROR);
     }

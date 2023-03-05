@@ -1,20 +1,14 @@
 package com.momo.api.requests.remittance;
 
-import com.momo.api.base.constants.AccessType;
-import com.momo.api.base.constants.SubscriptionType;
+import com.momo.api.base.constants.*;
 import com.momo.api.base.context.remittance.RemittanceContext;
 import com.momo.api.base.exception.MoMoException;
 import com.momo.api.base.model.BCAuthorize;
+import com.momo.api.base.model.HttpErrorResponse;
 import com.momo.api.base.model.StatusResponse;
 import com.momo.api.base.util.StringUtils;
 import com.momo.api.constants.NotificationType;
-import com.momo.api.models.DeliveryNotification;
-import com.momo.api.models.AccountBalance;
-import com.momo.api.models.AccountHolder;
-import com.momo.api.models.BasicUserInfo;
-import com.momo.api.models.Result;
-import com.momo.api.models.Transfer;
-import com.momo.api.models.TransferStatus;
+import com.momo.api.models.*;
 import com.momo.api.requests.TransferRequest;
 
 /**
@@ -158,4 +152,28 @@ public class RemittanceRequest extends TransferRequest implements RemittanceRequ
         this.notificationType = notificationType;
         return this;
     }
+
+    @Override
+    public UserInfo getUserInfoWithConsent(AccountHolder accountHolder, String scope, AccessType accessType) throws MoMoException {
+        BCAuthorize bcAuthorize = bcAuthorize(accountHolder, scope, accessType);
+
+        if (bcAuthorize == null) {
+            throw new MoMoException(
+                    new HttpErrorResponse.HttpErrorResponseBuilder(Constants.VALIDATION_ERROR_CATEGORY,
+                            Constants.VALUE_NOT_SUPPLIED_ERROR_CODE)
+                            .errorDescription(Constants.BCAUTHORIZE_OBJECT_INIT_ERROR).build());
+        }
+
+        //TODO auth_req_id can also be validated with UUID format if needed
+        if (StringUtils.isNullOrEmpty(bcAuthorize.getAuth_req_id())) {
+            throw new MoMoException(
+                    new HttpErrorResponse.HttpErrorResponseBuilder(Constants.INTERNAL_ERROR_CATEGORY,
+                            Constants.GENERIC_ERROR_CODE).errorDescription(Constants.AUTH_REQ_ID_ERROR).build());
+        }
+        String resourcePath = API.SUBSCRIPTION_OAUTH2_USERINFO
+                .replace(Constants.SUBSCRIPTION_TYPE, SubscriptionType.REMITTANCE);
+        return createRequest(HttpMethod.GET, resourcePath, "", NotificationType.POLLING, null,
+                UserInfo.class, RemittanceContext.getContext(), bcAuthorize.getAuth_req_id());
+    }
+
 }

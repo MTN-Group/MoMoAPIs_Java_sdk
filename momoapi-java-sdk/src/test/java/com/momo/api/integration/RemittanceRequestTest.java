@@ -14,15 +14,7 @@ import com.momo.api.config.MSISDN;
 import com.momo.api.config.PropertiesLoader;
 import com.momo.api.constants.Environment;
 import com.momo.api.constants.NotificationType;
-import com.momo.api.models.AccountBalance;
-import com.momo.api.models.AccountHolder;
-import com.momo.api.models.BasicUserInfo;
-import com.momo.api.models.DeliveryNotification;
-import com.momo.api.models.Payee;
-import com.momo.api.models.Payer;
-import com.momo.api.models.Result;
-import com.momo.api.models.Transfer;
-import com.momo.api.models.TransferStatus;
+import com.momo.api.models.*;
 import com.momo.api.models.collection.RequestPay;
 import com.momo.api.requests.collection.CollectionRequest;
 import com.momo.api.requests.remittance.RemittanceRequest;
@@ -305,6 +297,45 @@ public class RemittanceRequestTest {
         moMoException = assertThrows(MoMoException.class, ()->remittanceRequest.requestToPayDeliveryNotification(statusResponsePay.getReferenceId(), deliveryNotification, "Header Message", "eng"));
         assertEquals(moMoException.getError().getStatusCode(), Integer.toString(HttpStatusCode.TOO_MANY_REQUESTS.getHttpStatusCode()));
     }
+
+    @Test
+    @DisplayName("Get Userinfo With Consent Test Success")
+    void getUserInfoWithConsentTestSuccess() throws MoMoException {
+        RemittanceConfiguration remittanceConfiguration = new RemittanceConfiguration(loader.get(SUBSCRIPTION_KEY),
+                loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue());
+        RemittanceRequest remittanceRequest = remittanceConfiguration.createRemittanceRequest();
+
+        AccountHolder accountHolderMSISDN = new AccountHolder(IdType.MSISDN.getValue(), MSISDN_NUMBER);
+        UserInfo userInfoMSISDN = remittanceRequest.getUserInfoWithConsent(accountHolderMSISDN, "profile", AccessType.OFFLINE);
+
+        assertNotNull(userInfoMSISDN);
+        assertNotNull(userInfoMSISDN.getGiven_name());
+    }
+
+    @Test
+    @DisplayName("Get Userinfo With Consent Test Failure")
+    void getUserInfoWithConsentTestFailure() throws MoMoException {
+        RemittanceConfiguration remittanceConfiguration = new RemittanceConfiguration(loader.get(SUBSCRIPTION_KEY),
+                loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue());
+        RemittanceRequest remittanceRequest = remittanceConfiguration.createRemittanceRequest();
+
+        AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getValue(), MSISDN_NUMBER);
+        MoMoException moMoException = assertThrows(MoMoException.class, ()->remittanceRequest.getUserInfoWithConsent(accountHolder, "invalid", AccessType.OFFLINE));
+
+        assertEquals(moMoException.getError().getStatusCode(), Integer.toString(HttpStatusCode.INTERNAL_SERVER_ERROR.getHttpStatusCode()));
+
+        AccountHolder accountHolder1 = new AccountHolder(null, null);
+        moMoException = assertThrows(MoMoException.class, ()->remittanceRequest.getUserInfoWithConsent(accountHolder1, "profile", AccessType.OFFLINE));
+
+        assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_VALUE_ERROR);
+
+        AccountHolder accountHolder2 = new AccountHolder(IdType.MSISDN.getValue(), MSISDN_NUMBER);
+        moMoException = assertThrows(MoMoException.class, ()->remittanceRequest.getUserInfoWithConsent(accountHolder2, "", AccessType.OFFLINE));
+
+        assertEquals(moMoException.getError().getErrorDescription(), Constants.EMPTY_STRING_ERROR);
+
+    }
+
 
     private static Payee getPayee(String msisdnValue) {
         Payee payee = new Payee();

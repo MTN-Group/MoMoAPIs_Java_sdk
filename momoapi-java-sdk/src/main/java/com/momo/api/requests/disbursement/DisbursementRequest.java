@@ -15,17 +15,11 @@ import com.momo.api.base.util.JSONFormatter;
 import com.momo.api.base.util.StringUtils;
 import com.momo.api.constants.NotificationType;
 import com.momo.api.constants.RequestType;
-import com.momo.api.models.AccountBalance;
-import com.momo.api.models.AccountHolder;
-import com.momo.api.models.BasicUserInfo;
-import com.momo.api.models.DeliveryNotification;
-import com.momo.api.models.Result;
-import com.momo.api.models.Transfer;
+import com.momo.api.models.*;
 import com.momo.api.models.disbursement.Deposit;
 import com.momo.api.models.disbursement.DepositStatus;
 import com.momo.api.models.disbursement.Refund;
 import com.momo.api.models.disbursement.RefundStatus;
-import com.momo.api.models.TransferStatus;
 import com.momo.api.requests.TransferRequest;
 import java.util.UUID;
 
@@ -121,7 +115,7 @@ public class DisbursementRequest extends TransferRequest implements Disbursement
     }
 
     /**
-     * Deposit operation is used to deposit an amount from the owner’s account
+     * Deposit operation is used to deposit an amount from the ownerï¿½s account
      * to a payee account. Status of the transaction can be validated by using
      * the getDepositStatus(String referenceId) request method.
      *
@@ -150,7 +144,7 @@ public class DisbursementRequest extends TransferRequest implements Disbursement
     }
 
     /**
-     * Deposit operation is used to deposit an amount from the owner’s account
+     * Deposit operation is used to deposit an amount from the ownerï¿½s account
      * to a payee account. Status of the transaction can be validated by using
      * the getDepositStatus(String referenceId) request method.
      *
@@ -202,7 +196,7 @@ public class DisbursementRequest extends TransferRequest implements Disbursement
     }
 
     /**
-     * Refund operation is used to refund an amount from the owner’s account to
+     * Refund operation is used to refund an amount from the ownerï¿½s account to
      * a payee account. Status of the transaction can validated by using the
      * getRefundStatus(String referenceId) request method.
      *
@@ -231,7 +225,7 @@ public class DisbursementRequest extends TransferRequest implements Disbursement
     }
 
     /**
-     * Refund operation is used to refund an amount from the owner’s account to
+     * Refund operation is used to refund an amount from the ownerï¿½s account to
      * a payee account. Status of the transaction can validated by using the
      * getRefundStatus(String referenceId) request method.
      *
@@ -365,6 +359,29 @@ public class DisbursementRequest extends TransferRequest implements Disbursement
     public DisbursementRequest setNotificationType(final NotificationType notificationType) {
         this.notificationType = notificationType;
         return this;
+    }
+
+    @Override
+    public UserInfo getUserInfoWithConsent(AccountHolder accountHolder, String scope, AccessType accessType) throws MoMoException {
+        BCAuthorize bcAuthorize = bcAuthorize(accountHolder, scope, accessType);
+
+        if (bcAuthorize == null) {
+            throw new MoMoException(
+                    new HttpErrorResponse.HttpErrorResponseBuilder(Constants.VALIDATION_ERROR_CATEGORY,
+                            Constants.VALUE_NOT_SUPPLIED_ERROR_CODE)
+                            .errorDescription(Constants.BCAUTHORIZE_OBJECT_INIT_ERROR).build());
+        }
+
+        //TODO auth_req_id can also be validated with UUID format if needed
+        if (StringUtils.isNullOrEmpty(bcAuthorize.getAuth_req_id())) {
+            throw new MoMoException(
+                    new HttpErrorResponse.HttpErrorResponseBuilder(Constants.INTERNAL_ERROR_CATEGORY,
+                            Constants.GENERIC_ERROR_CODE).errorDescription(Constants.AUTH_REQ_ID_ERROR).build());
+        }
+        String resourcePath = API.SUBSCRIPTION_OAUTH2_USERINFO
+                .replace(Constants.SUBSCRIPTION_TYPE, SubscriptionType.DISBURSEMENT);
+        return createRequest(HttpMethod.GET, resourcePath, "", NotificationType.POLLING, null,
+                UserInfo.class, DisbursementContext.getContext(), bcAuthorize.getAuth_req_id());
     }
 
 }

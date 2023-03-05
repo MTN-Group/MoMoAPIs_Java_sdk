@@ -15,15 +15,8 @@ import com.momo.api.config.PropertiesLoader;
 import com.momo.api.constants.Environment;
 import com.momo.api.constants.NotificationType;
 import static com.momo.api.integration.DisbursementRequestTest.loader;
-import com.momo.api.models.AccountBalance;
-import com.momo.api.models.AccountHolder;
-import com.momo.api.models.BasicUserInfo;
-import com.momo.api.models.DeliveryNotification;
-import com.momo.api.models.Payee;
-import com.momo.api.models.Payer;
-import com.momo.api.models.Result;
-import com.momo.api.models.Transfer;
-import com.momo.api.models.TransferStatus;
+
+import com.momo.api.models.*;
 import com.momo.api.models.collection.RequestPay;
 import com.momo.api.models.disbursement.Deposit;
 import com.momo.api.models.disbursement.DepositStatus;
@@ -591,6 +584,42 @@ public class DisbursementRequestTest {
 
         //case 2: Value is empty
         moMoException = assertThrows(MoMoException.class, () -> disbursementRequest.getBasicUserinfo(""));
+        assertEquals(moMoException.getError().getErrorDescription(), Constants.EMPTY_STRING_ERROR);
+    }
+
+    @Test
+    @DisplayName("Get Userinfo With Consent Test Success")
+    void getUserInfoWithConsentTestSuccess() throws MoMoException {
+        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY),
+                loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue());
+        DisbursementRequest disbursementRequest = disbursementConfiguration.createDisbursementRequest();
+
+        AccountHolder accountHolderMSISDN = new AccountHolder(IdType.MSISDN.getValue(), MSISDN_NUMBER);
+        UserInfo userInfoMSISDN = disbursementRequest.getUserInfoWithConsent(accountHolderMSISDN, "profile", AccessType.OFFLINE);
+
+        assertNotNull(userInfoMSISDN);
+        assertNotNull(userInfoMSISDN.getGiven_name());
+    }
+
+    @Test
+    @DisplayName("Get Userinfo With Consent Test Failure")
+    void getUserInfoWithConsentTestFailure() throws MoMoException {
+        DisbursementConfiguration disbursementConfiguration = new DisbursementConfiguration(loader.get(SUBSCRIPTION_KEY),
+                loader.get("REFERENCE_ID"), loader.get("API_KEY"), Environment.SANDBOX, TargetEnvironment.sandbox.getValue());
+        DisbursementRequest disbursementRequest = disbursementConfiguration.createDisbursementRequest();
+        AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getValue(), MSISDN_NUMBER);
+        MoMoException moMoException = assertThrows(MoMoException.class, ()->disbursementRequest.getUserInfoWithConsent(accountHolder, "invalid", AccessType.OFFLINE));
+
+        assertEquals(moMoException.getError().getStatusCode(), Integer.toString(HttpStatusCode.INTERNAL_SERVER_ERROR.getHttpStatusCode()));
+
+        AccountHolder accountHolder1 = new AccountHolder(null, null);
+        moMoException = assertThrows(MoMoException.class, ()->disbursementRequest.getUserInfoWithConsent(accountHolder1, "profile", AccessType.OFFLINE));
+
+        assertEquals(moMoException.getError().getErrorDescription(), Constants.NULL_VALUE_ERROR);
+
+        AccountHolder accountHolder2 = new AccountHolder(IdType.MSISDN.getValue(), MSISDN_NUMBER);
+        moMoException = assertThrows(MoMoException.class, ()->disbursementRequest.getUserInfoWithConsent(accountHolder2, "", AccessType.OFFLINE));
+
         assertEquals(moMoException.getError().getErrorDescription(), Constants.EMPTY_STRING_ERROR);
     }
 

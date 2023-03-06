@@ -34,7 +34,7 @@ public class DisbursementRequest extends TransferRequest implements Disbursement
 
     /**
      * Transfer operation is used to transfer an amount from the own account to
-     * a payee account. Status of the transaction can validated by using the
+     * a payee account. Status of the transaction can be validated by using the
      * getTransferStatus(String referenceId) request method.
      *
      * @param transfer
@@ -115,7 +115,7 @@ public class DisbursementRequest extends TransferRequest implements Disbursement
     }
 
     /**
-     * Deposit operation is used to deposit an amount from the owner�s account
+     * Deposit operation is used to deposit an amount from the owner's account
      * to a payee account. Status of the transaction can be validated by using
      * the getDepositStatus(String referenceId) request method.
      *
@@ -144,7 +144,7 @@ public class DisbursementRequest extends TransferRequest implements Disbursement
     }
 
     /**
-     * Deposit operation is used to deposit an amount from the owner�s account
+     * Deposit operation is used to deposit an amount from the owner's account
      * to a payee account. Status of the transaction can be validated by using
      * the getDepositStatus(String referenceId) request method.
      *
@@ -196,8 +196,8 @@ public class DisbursementRequest extends TransferRequest implements Disbursement
     }
 
     /**
-     * Refund operation is used to refund an amount from the owner�s account to
-     * a payee account. Status of the transaction can validated by using the
+     * Refund operation is used to refund an amount from the owner's account to
+     * a payee account. Status of the transaction can be validated by using the
      * getRefundStatus(String referenceId) request method.
      *
      * @param refund
@@ -225,8 +225,8 @@ public class DisbursementRequest extends TransferRequest implements Disbursement
     }
 
     /**
-     * Refund operation is used to refund an amount from the owner�s account to
-     * a payee account. Status of the transaction can validated by using the
+     * Refund operation is used to refund an amount from the owner's account to
+     * a payee account. Status of the transaction can be validated by using the
      * getRefundStatus(String referenceId) request method.
      *
      * @param refund

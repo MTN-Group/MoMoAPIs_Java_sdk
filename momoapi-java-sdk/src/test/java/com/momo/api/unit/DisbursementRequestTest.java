@@ -9,14 +9,7 @@ import com.momo.api.base.exception.MoMoException;
 import com.momo.api.base.model.BCAuthorize;
 import com.momo.api.base.model.StatusResponse;
 import com.momo.api.constants.Environment;
-import com.momo.api.models.AccountBalance;
-import com.momo.api.models.AccountHolder;
-import com.momo.api.models.BasicUserInfo;
-import com.momo.api.models.DeliveryNotification;
-import com.momo.api.models.Payee;
-import com.momo.api.models.Result;
-import com.momo.api.models.Transfer;
-import com.momo.api.models.TransferStatus;
+import com.momo.api.models.*;
 import com.momo.api.models.disbursement.Deposit;
 import com.momo.api.models.disbursement.DepositStatus;
 import com.momo.api.models.disbursement.Refund;
@@ -392,6 +385,44 @@ public class DisbursementRequestTest {
         doThrow(MoMoException.class).when(disbursementRequestSpy).getBasicUserinfo(MSISDN);
         
         assertThrows(MoMoException.class, () -> disbursementRequestSpy.getBasicUserinfo(MSISDN));
+    }
+
+    @Test
+    @DisplayName("Get Userinfo With Consent Test Success")
+    void getUserInfoWithConsentTestSuccess() throws MoMoException {
+        DisbursementRequest disbursementRequestSpy = spy(new DisbursementRequest());
+
+        AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getValue(), MSISDN);
+        UserInfo expectedUserInfo = getExpectedUserInfo();
+        doReturn(expectedUserInfo).when(disbursementRequestSpy).getUserInfoWithConsent(accountHolder, "profile", AccessType.OFFLINE);
+
+        UserInfo userInfo = disbursementRequestSpy.getUserInfoWithConsent(accountHolder, "profile", AccessType.OFFLINE);
+
+        assertEquals(userInfo.getName(), expectedUserInfo.getName());
+    }
+
+    @Test
+    @DisplayName("Get Userinfo With Consent Test Failure")
+    void getUserInfoWithConsentTestFailure() throws MoMoException {
+        DisbursementRequest disbursementRequestSpy = spy(new DisbursementRequest());
+
+        AccountHolder accountHolder = new AccountHolder(IdType.MSISDN.getValue(), MSISDN);
+        doThrow(MoMoException.class).when(disbursementRequestSpy).getUserInfoWithConsent(accountHolder, "profile", AccessType.OFFLINE);
+
+        assertThrows(MoMoException.class, () -> disbursementRequestSpy.getUserInfoWithConsent(accountHolder, "profile", AccessType.OFFLINE));
+    }
+
+    private static UserInfo getExpectedUserInfo() {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setSub("0");
+        userInfo.setName("Sand Box");
+        userInfo.setUpdated_at(1676613526L);
+        userInfo.setGiven_name("Sand");
+        userInfo.setFamily_name("Box");
+        userInfo.setBirthdate("1976-08-13");
+        userInfo.setLocale("sv_SE");
+        userInfo.setGender("MALE");
+        return userInfo;
     }
 
     private static BCAuthorize getExpectedBCAuthorize() {

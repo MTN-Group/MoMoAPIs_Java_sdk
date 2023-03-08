@@ -107,16 +107,6 @@ public abstract class HttpConnection {
         try {
             setHttpHeaders(headers);
 
-////            //TODO remove after testing
-//            Map<String, String> headers2 =  headers.entrySet().stream()
-////                    .filter(m->m.getKey().equals("X-Callback-Url"))
-//                    .collect(Collectors.toMap(m -> m.getKey(), m -> m.getValue()));
-////                    .map(k->k.getValue())
-////                    .collect(Collectors.f)
-////                    ;
-//            System.out.println("api-url::::"+url);
-//            headers2.forEach((k,v)->System.out.println(k+" : "+v));
-
             int retry = 0;
             retryLoop:
             do {

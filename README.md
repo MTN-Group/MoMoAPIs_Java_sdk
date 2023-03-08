@@ -448,7 +448,7 @@ Sample Response:
 
 ## Testing
 
-The `test` package contains the test cases. These are logically divided into unit and integration tests. 
+The `test` package contains the test cases. These are logically divided into unit and integration tests. The test commands(Eg:- `mvn test` ) must be run from the directory where `pom.xml` file is located.
 
 ### Unit tests
 

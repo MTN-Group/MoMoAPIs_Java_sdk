@@ -353,10 +353,8 @@ public class ResourceUtil {
             try {
                 return task.execute();
             } catch (UnauthorizedException e) {
-                System.out.println("1---------------------------------------------------token expired:");
                 AccessToken accessToken = (!StringUtils.isNullOrEmpty(auth_req_id)) ? currentContext.getRefreshOauth2Token(auth_req_id) : currentContext.getRefreshToken();
                 if (accessToken == null || accessToken.getAccess_token() == null) {
-                    System.out.println("2---------------------------------------------------token expired error:");
                     throw new IllegalArgumentException(Constants.EMPTY_ACCESS_TOKEN_MESSAGE);
                 }
                 currentContext.getHTTPHeaders().put(Constants.AUTHORIZATION_HEADER, Constants.BEARER + accessToken.getAccess_token());

@@ -110,7 +110,6 @@ public class UserProvisioningRequestTest {
         StatusResponse statusResponse = userProvisioningRequest.createUser(callbackHost);
 
         ApiKey apiKey = userProvisioningRequest.createApiKey(statusResponse.getReferenceId());
-        System.out.println(JSONFormatter.toJSON(apiKey));
         assertNotNull(apiKey);
         assertNotEquals(apiKey, "");
     }

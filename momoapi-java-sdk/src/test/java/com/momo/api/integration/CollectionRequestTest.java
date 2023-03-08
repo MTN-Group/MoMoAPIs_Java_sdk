@@ -8,7 +8,6 @@ import com.momo.api.base.constants.TargetEnvironment;
 import com.momo.api.base.context.collection.CollectionConfiguration;
 import com.momo.api.base.context.provisioning.UserProvisioningConfiguration;
 import com.momo.api.base.exception.MoMoException;
-import com.momo.api.base.model.BCAuthorize;
 import com.momo.api.base.model.StatusResponse;
 import com.momo.api.config.MSISDN;
 import com.momo.api.config.PropertiesLoader;

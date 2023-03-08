@@ -358,6 +358,12 @@ Sample Response:
     <td>String referenceId</td>
   </tr>
   <tr>
+    <td>Get UserInfo With Consent</td>
+    <td><a href="docs/disbursement/getUserInfoWithConsent.Readme.md">Get UserInfo With Consent</a></td>
+    <td>getUserInfoWithConsent</td>
+    <td>AccountHolder accountHolder, String scope, AccessType accessType</td>
+  </tr>
+  <tr>
     <td>Get Basic Userinfo</td>
     <td><a href="docs/disbursement/getBasicUserinfo.Readme.md">Get Basic Userinfo</a></td>
     <td>getBasicUserinfo</td>
@@ -412,6 +418,12 @@ Sample Response:
     <td><a href="docs/remittance/requestToPayDeliveryNotification.Readme.md">Request To Pay Delivery Notification</a></td>
     <td>requestToPayDeliveryNotification</td>
     <td>String referenceId, DeliveryNotification deliveryNotification, (optional)String deliveryNotificationHeader</td>
+  </tr>
+  <tr>
+    <td>Get UserInfo With Consent</td>
+    <td><a href="docs/remittance/getUserInfoWithConsent.Readme.md">Get UserInfo With Consent</a></td>
+    <td>getUserInfoWithConsent</td>
+    <td>AccountHolder accountHolder, String scope, AccessType accessType</td>
   </tr>
   <tr>
     <td>Get Basic Userinfo</td>

@@ -272,45 +272,13 @@ public class CollectionRequest extends CommonRequest implements CollectionReques
      *
      * @param accountHolder
      * @param scope
-     * @param accesType
+     * @param accessType
      * @return
      * @throws MoMoException
      */
     @Override
-    public UserInfo getUserInfoWithConsent(AccountHolder accountHolder, String scope, AccessType accesType) throws MoMoException {
-
-        BCAuthorize bcAuthorize = bcAuthorize(accountHolder, scope, accesType);
-
-        if (bcAuthorize == null) {
-            throw new MoMoException(
-                    new HttpErrorResponse.HttpErrorResponseBuilder(Constants.VALIDATION_ERROR_CATEGORY,
-                            Constants.VALUE_NOT_SUPPLIED_ERROR_CODE)
-                            .errorDescription(Constants.BCAUTHORIZE_OBJECT_INIT_ERROR).build());
-        }
-
-        if (StringUtils.isNullOrEmpty(bcAuthorize.getAuth_req_id())) {
-            throw new MoMoException(
-                    new HttpErrorResponse.HttpErrorResponseBuilder(Constants.INTERNAL_ERROR_CATEGORY,
-                            Constants.GENERIC_ERROR_CODE).errorDescription(Constants.AUTH_REQ_ID_ERROR).build());
-        }
-        String resourcePath = API.SUBSCRIPTION_OAUTH2_USERINFO
-                .replace(Constants.SUBSCRIPTION_TYPE, SubscriptionType.COLLECTION);
-        return createRequest(HttpMethod.GET, resourcePath, "", NotificationType.POLLING, null, UserInfo.class, CollectionContext.getContext(), bcAuthorize.getAuth_req_id());
-    }
-
-    /**
-     * This operation is used to claim a consent by the account holder for the
-     * requested scopes.bcAuthorize receives a parameter "auth_req_id" which is
-     * passed into Oauth2 API which is then used in getUserInfoWithConsent API
-     *
-     * @param accountHolder
-     * @param scope
-     * @param accesType
-     * @return
-     * @throws MoMoException
-     */
-    private BCAuthorize bcAuthorize(AccountHolder accountHolder, String scope, AccessType accesType) throws MoMoException {
-        return bcAuthorize(accountHolder, scope, accesType, SubscriptionType.COLLECTION, CollectionContext.getContext(), this.notificationType, this.callBackURL);
+    public UserInfo getUserInfoWithConsent(AccountHolder accountHolder, String scope, AccessType accessType) throws MoMoException {
+        return getUserInfoWithConsent(accountHolder, scope, accessType, SubscriptionType.COLLECTION, CollectionContext.getContext(), this.notificationType, this.callBackURL);
     }
 
     /**

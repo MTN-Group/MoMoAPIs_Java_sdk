@@ -20,6 +20,7 @@ import com.momo.api.models.AccountHolder;
 import com.momo.api.models.BasicUserInfo;
 import com.momo.api.models.DeliveryNotification;
 import com.momo.api.models.Result;
+import com.momo.api.models.UserInfo;
 
 /**
  *
@@ -62,7 +63,7 @@ public class CommonRequest extends ResourceUtil {
 
     /**
      * This operation returns personal information of the account holder.The
- operation does not need any consent by the account holder.
+     * operation does not need any consent by the account holder.
      *
      * @param msisdn
      * @param subscriptionType
@@ -114,13 +115,13 @@ public class CommonRequest extends ResourceUtil {
                             Constants.VALUE_NOT_SUPPLIED_ERROR_CODE)
                             .errorDescription(Constants.DELIVERY_NOTIFICATION_OBJECT_INIT_ERROR).build());
         }
-        
-        if(!StringUtils.isNullOrEmpty(deliveryNotificationHeader)){
+
+        if (!StringUtils.isNullOrEmpty(deliveryNotificationHeader)) {
             currentContext.getHTTPHeaders()
                     .put(Constants.NOTIFICATION_MESSAGE, deliveryNotificationHeader);
         }
-        
-        if(!StringUtils.isNullOrEmpty(language)){
+
+        if (!StringUtils.isNullOrEmpty(language)) {
             currentContext.getHTTPHeaders()
                     .put(Constants.LANGUAGE, language);
         }
@@ -131,6 +132,41 @@ public class CommonRequest extends ResourceUtil {
                 .replace(Constants.REFERENCE_ID, referenceId);
         StatusResponse statusResponse = createRequest(HttpMethod.POST, resourcePath, deliveryNotification.toJSON(), NotificationType.POLLING, null, currentContext);
         return statusResponse;
+    }
+
+    /**
+     * This operation is used to get the details of the account holder for the
+     * requested scopes.
+     *
+     * @param accountHolder
+     * @param scope
+     * @param accessType
+     * @param subscriptionType
+     * @param currentContext
+     * @param notificationType
+     * @param callBackURL
+     * @return
+     * @throws MoMoException
+     */
+    protected UserInfo getUserInfoWithConsent(AccountHolder accountHolder, String scope, AccessType accessType, String subscriptionType, MoMoContext currentContext, NotificationType notificationType, String callBackURL) throws MoMoException {
+        BCAuthorize bcAuthorize = bcAuthorize(accountHolder, scope, accessType, subscriptionType, currentContext, notificationType, callBackURL);
+
+        if (bcAuthorize == null) {
+            throw new MoMoException(
+                    new HttpErrorResponse.HttpErrorResponseBuilder(Constants.VALIDATION_ERROR_CATEGORY,
+                            Constants.VALUE_NOT_SUPPLIED_ERROR_CODE)
+                            .errorDescription(Constants.BCAUTHORIZE_OBJECT_INIT_ERROR).build());
+        }
+
+        if (StringUtils.isNullOrEmpty(bcAuthorize.getAuth_req_id())) {
+            throw new MoMoException(
+                    new HttpErrorResponse.HttpErrorResponseBuilder(Constants.INTERNAL_ERROR_CATEGORY,
+                            Constants.GENERIC_ERROR_CODE).errorDescription(Constants.AUTH_REQ_ID_ERROR).build());
+        }
+        String resourcePath = API.SUBSCRIPTION_OAUTH2_USERINFO
+                .replace(Constants.SUBSCRIPTION_TYPE, subscriptionType);
+        return createRequest(HttpMethod.GET, resourcePath, "", NotificationType.POLLING, null,
+                UserInfo.class, currentContext, bcAuthorize.getAuth_req_id());
     }
 
     /**
@@ -148,7 +184,7 @@ public class CommonRequest extends ResourceUtil {
      * @return
      * @throws MoMoException
      */
-    protected BCAuthorize bcAuthorize(AccountHolder accountHolder, String scope, AccessType accesType, String subscriptionType, MoMoContext currentContext, NotificationType notificationType, String callBackURL) throws MoMoException {
+    private BCAuthorize bcAuthorize(AccountHolder accountHolder, String scope, AccessType accesType, String subscriptionType, MoMoContext currentContext, NotificationType notificationType, String callBackURL) throws MoMoException {
         Validator.throwIfNullObject(accountHolder);
         Validator.throwIfNullOrEmptyString(accountHolder.getAccountHolderId());
         Validator.throwIfNullOrEmptyString(accountHolder.getAccountHolderIdType());

@@ -1,5 +1,5 @@
-REFERENCE_ID=API_User/referenceId
-API_KEY=received after creating user
+REFERENCE_ID=Place your API_User/referenceId
+API_KEY=Place your API_KEY here
 CALLBACK_URL=http://sample.com/callbackurl
 COLLECTION_SUBSCRIPTION_KEY=place your COLLECTION subscription key here
 DISBURSEMENT_SUBSCRIPTION_KEY=place your DISBURSEMENT subscription key here

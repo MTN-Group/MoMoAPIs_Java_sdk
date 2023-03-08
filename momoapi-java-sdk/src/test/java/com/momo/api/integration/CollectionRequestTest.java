@@ -60,13 +60,6 @@ public class CollectionRequestTest {
         CollectionRequest collectionRequestFirst = collectionConfiguration.createCollectionRequest();
 
         StatusResponse statusResponse;
-        //case 0: Passing an incorrect CallBackUrl with the collectionConfiguration object. 
-        //TODO!: Don't do the following(creating a request with invalid CallBackUrl), this will prevent future callbacks from getting received in the callBackUrl(tested in sandbox) used.
-        //This only happens for requests made a few seconds(5sec) after a callback with invalid url is made.
-        //A new apiUser:apiKey combination will need to generated and used, for callBackUrl to work again later.
-        //No callback will be received for any "CollectionRequest" object created, unless a valid callback url is set for "CollectionConfiguration" or for "CollectionRequest".
-//        collectionConfiguration.addCallBackUrl(loader.get("CALLBACK_URL")+"invalid");
-//        statusResponse = collectionRequestFirst.requestToPay(getRequestPay(MSISDN_NUMBER+"0"));
 
         //case 1: Passing a correct CallBackUrl with the collectionRequestFirst object. This allows callBack's to be received for all requests made with this "collectionRequestFirst" object.
         collectionRequestFirst.addCallBackUrl(loader.get("CALLBACK_URL"));
@@ -285,7 +278,6 @@ public class CollectionRequestTest {
 
         deliveryNotification.setNotificationMessage("test message");
 
-        //TODO Body:-Do we need to validate the notification message string to be not more than 160 characters? No error is thrown during the actual API call
         String stringLength_161 = "01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890";
 
         //case 5: NotificationMessage string in DeliveryNotification object is more than 160 characters
@@ -504,9 +496,6 @@ public class CollectionRequestTest {
         
         assertNotNull(userInfoEMAIL);
         assertNotNull(userInfoEMAIL.getGiven_name());
-        
-        //TODO if PARTY_CODE is not an acceptable pearameter, we may need to validate and make sure its not used
-        //TODO seems like bc-authorise accepts any text. so validations are not applicable as of now
         
 //        AccountHolder accountHolderUUID = new AccountHolder(IdType.PARTY_CODE.getValue(), loader.get("REFERENCE_ID"));
 //        UserInfo userInfoUUID = collectionRequest.getUserInfoWithConsent(accountHolderUUID, "profile", AccessType.OFFLINE);

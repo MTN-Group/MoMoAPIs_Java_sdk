@@ -288,7 +288,6 @@ public class CollectionRequest extends CommonRequest implements CollectionReques
                             .errorDescription(Constants.BCAUTHORIZE_OBJECT_INIT_ERROR).build());
         }
 
-        //TODO auth_req_id can also be validated with UUID format if needed
         if (StringUtils.isNullOrEmpty(bcAuthorize.getAuth_req_id())) {
             throw new MoMoException(
                     new HttpErrorResponse.HttpErrorResponseBuilder(Constants.INTERNAL_ERROR_CATEGORY,

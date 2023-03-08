@@ -5,7 +5,6 @@ package com.momo.api.base.constants;
  * Enum IdType
  */
 public enum IdType {
-    //TODO do we need to validate each type accordingly?
     //Mobile Number can be validated according to ITU-T E.164
     MSISDN("MSISDN"),
     /**

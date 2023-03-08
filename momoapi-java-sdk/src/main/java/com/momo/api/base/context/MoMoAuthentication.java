@@ -153,7 +153,6 @@ public class MoMoAuthentication extends BaseAuthentication {
             //will be reset in finally block
             this.headers.put(Constants.HTTP_CONTENT_TYPE_HEADER, Constants.HTTP_CONTENT_TYPE_URLENCODED);
             
-            //TODO make sure the values "grant_type=urn:openid:params:grant-type:ciba&auth_req_id=" are static or if need to passed in as parameters in case of varying
             String payLoad = "grant_type=urn:openid:params:grant-type:ciba&auth_req_id="+auth_req_id;
             
             HttpResponse responseData = connection.execute(httpConfiguration.getEndPointUrl(), payLoad, this.headers);

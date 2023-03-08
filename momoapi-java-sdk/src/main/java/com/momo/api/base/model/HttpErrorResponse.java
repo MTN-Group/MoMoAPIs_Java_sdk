@@ -18,7 +18,6 @@ public final class HttpErrorResponse extends Reason {
     private String errorCode;
     private String errorDescription;
     private String errorDateTime;
-    //TODO check if transient keyword can be used to remove this warning and doesn't affect printing error messages
     private List<HttpErrorMetaData> errorParameters;
     
     private String statusCode;

@@ -204,7 +204,6 @@ public class ResourceUtil {
             }
 
             // Set call back URL
-            //TODO do we need to check if callBackURL contains a subsrting of the CallbackHost? If so, is it possible in production to get the CallbackHost?
             if (NotificationType.POLLING != notificationType && (!StringUtils.isNullOrEmpty(callBackURL)
                     || !StringUtils.isNullOrEmpty(currentContext.getCallBackUrl()))) {
                 if (!StringUtils.isNullOrEmpty(callBackURL)) {

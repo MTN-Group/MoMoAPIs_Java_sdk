@@ -10,7 +10,6 @@ public class TransactionStatus extends Transaction {
 
     private String financialTransactionId;
     private String status;
-//    TODO reason object is having "code" and "message" in the API documentation, but not on actual response(test with MSISDN values to confirm)
     private String reason;
 //    private Reason reason;
 

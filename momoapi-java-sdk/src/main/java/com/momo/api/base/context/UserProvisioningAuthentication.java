@@ -68,7 +68,7 @@ public class UserProvisioningAuthentication extends BaseAuthentication {
 
             HttpResponse responseData = connection.execute(httpConfiguration.getEndPointUrl(), payload, this.headers);
 
-            ResourceUtil.validateResponseData(responseData);
+            ResourceUtil.validateResponseData(responseData, this.headers);
 
             StatusResponse statusResponse = new StatusResponse();
             statusResponse.setReferenceId(this.referenceId);
@@ -109,7 +109,7 @@ public class UserProvisioningAuthentication extends BaseAuthentication {
 
             HttpResponse responseData = connection.execute(httpConfiguration.getEndPointUrl(), "", this.headers);
 
-            ResourceUtil.validateResponseData(responseData);
+            ResourceUtil.validateResponseData(responseData, this.headers);
 
             if (responseData.getPayLoad() instanceof String) {
                 ApiUser apiUser = JSONFormatter.fromJSON((String) responseData.getPayLoad(), ApiUser.class);
@@ -148,7 +148,7 @@ public class UserProvisioningAuthentication extends BaseAuthentication {
 
             HttpResponse responseData = connection.execute(httpConfiguration.getEndPointUrl(), "", this.headers);
 
-            ResourceUtil.validateResponseData(responseData);
+            ResourceUtil.validateResponseData(responseData, this.headers);
 
             if (responseData.getPayLoad() instanceof String) {
                 ApiKey apikey = JSONFormatter.fromJSON((String) responseData.getPayLoad(), ApiKey.class);

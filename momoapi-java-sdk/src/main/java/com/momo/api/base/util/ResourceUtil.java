@@ -256,7 +256,7 @@ public class ResourceUtil {
 
             responseData = executeWithRetries(currentContext, auth_req_id, () -> execute(apiManager, httpConfiguration));
 
-            validateResponseData(responseData);
+            validateResponseData(responseData, currentContext.getHTTPHeaders());
         } else {
             throw new MoMoException(
                     new HttpErrorResponse.HttpErrorResponseBuilder(Constants.INTERNAL_ERROR_CATEGORY,
@@ -437,20 +437,27 @@ public class ResourceUtil {
      * Check if the HttpResponse received is an error
      *
      * @param responseData
+     * @param headers
      * @throws MoMoException
      */
-    public static void validateResponseData(HttpResponse responseData) throws MoMoException {
+    public static void validateResponseData(HttpResponse responseData, Map<String, String> headers) throws MoMoException {
         if (responseData == null) {
+            resetHeaders(headers);
+
             throw new MoMoException(
                     new HttpErrorResponse.HttpErrorResponseBuilder(Constants.INTERNAL_ERROR_CATEGORY,
                             Constants.GENERIC_ERROR_CODE).errorDescription(Constants.GENRAL_ERROR).build());
         } else if (responseData.getPayLoad() == null) {
+            resetHeaders(headers);
+
             HttpStatusCode httpStatusCode = responseData.getResponseCode();
             throw new MoMoException(
                     new HttpErrorResponse.HttpErrorReasonBuilder(
                             Integer.toString(httpStatusCode.getHttpStatusCode()),
                             httpStatusCode.getHttpCode()).build());
         } else if (!responseData.isSuccess() && responseData.getPayLoad() instanceof String) {
+            resetHeaders(headers);
+
             HttpStatusCode httpStatusCode = responseData.getResponseCode();
             HttpErrorResponse errorResponse = JSONFormatter.fromJSON((String) responseData.getPayLoad(),
                     HttpErrorResponse.class);
@@ -472,6 +479,30 @@ public class ResourceUtil {
             } else {
                 throw new MoMoException(errorResponse);
             }
+        }
+    }
+
+    /**
+     * Headers are reset when exception occurs, so that unwanted headers won't go
+     * into the next request
+     *
+     * @param headers
+     */
+    private static void resetHeaders(Map<String, String> headers) {
+        if (headers.containsKey(Constants.HTTP_CONTENT_TYPE_HEADER)) {
+            headers.remove(Constants.HTTP_CONTENT_TYPE_HEADER);
+        }
+        if (headers.containsKey(Constants.NOTIFICATION_MESSAGE)) {
+            headers.remove(Constants.NOTIFICATION_MESSAGE);
+        }
+        if (headers.containsKey(Constants.X_REFERENCE_ID)) {
+            headers.remove(Constants.X_REFERENCE_ID);
+        }
+        if (headers.containsKey(Constants.CALL_BACK_URL)) {
+            headers.remove(Constants.CALL_BACK_URL);
+        }
+        if (headers.containsKey(Constants.LANGUAGE)) {
+            headers.remove(Constants.LANGUAGE);
         }
     }
 }

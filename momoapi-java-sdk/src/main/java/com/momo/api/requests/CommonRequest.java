@@ -131,6 +131,16 @@ public class CommonRequest extends ResourceUtil {
                 .replace(Constants.REQUEST_TYPE, RequestType.REQUEST_TO_PAY)
                 .replace(Constants.REFERENCE_ID, referenceId);
         StatusResponse statusResponse = createRequest(HttpMethod.POST, resourcePath, deliveryNotification.toJSON(), NotificationType.POLLING, null, currentContext);
+        if (!StringUtils.isNullOrEmpty(deliveryNotificationHeader)) {
+            if(currentContext.getHTTPHeaders().containsKey(Constants.NOTIFICATION_MESSAGE)){
+                currentContext.getHTTPHeaders().remove(Constants.NOTIFICATION_MESSAGE);
+            }
+        }
+        if (!StringUtils.isNullOrEmpty(language)) {
+            if(currentContext.getHTTPHeaders().containsKey(Constants.LANGUAGE)){
+                currentContext.getHTTPHeaders().remove(Constants.LANGUAGE);
+            }
+        }
         return statusResponse;
     }
 

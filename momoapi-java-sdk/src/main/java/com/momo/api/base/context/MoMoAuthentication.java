@@ -109,7 +109,7 @@ public class MoMoAuthentication extends BaseAuthentication {
 
             HttpResponse responseData = connection.execute(httpConfiguration.getEndPointUrl(), "", this.headers);
 
-            ResourceUtil.validateResponseData(responseData);
+            ResourceUtil.validateResponseData(responseData, this.headers);
 
             if (responseData.getPayLoad() instanceof String) {
                 this.accessToken = JSONFormatter.fromJSON((String) responseData.getPayLoad(), AccessToken.class);
@@ -120,9 +120,7 @@ public class MoMoAuthentication extends BaseAuthentication {
         } catch (IOException e) {
             Logger.getLogger(MoMoAuthentication.class.getName()).log(Level.SEVERE, e.toString(), e);
         } finally {
-            if(this.headers.containsKey(Constants.HTTP_CONTENT_TYPE_HEADER)){
-                this.headers.remove(Constants.HTTP_CONTENT_TYPE_HEADER);
-            }
+            this.headers.put(Constants.HTTP_CONTENT_TYPE_HEADER, Constants.HTTP_CONTENT_TYPE_JSON);
         }
         return null;
     }
@@ -157,7 +155,7 @@ public class MoMoAuthentication extends BaseAuthentication {
             
             HttpResponse responseData = connection.execute(httpConfiguration.getEndPointUrl(), payLoad, this.headers);
 
-            ResourceUtil.validateResponseData(responseData);
+            ResourceUtil.validateResponseData(responseData, this.headers);
 
             if (responseData.getPayLoad() instanceof String) {
                 this.oauth2Token = JSONFormatter.fromJSON((String) responseData.getPayLoad(), Oauth2Token.class);
@@ -168,9 +166,7 @@ public class MoMoAuthentication extends BaseAuthentication {
         } catch (IOException e) {
             Logger.getLogger(MoMoAuthentication.class.getName()).log(Level.SEVERE, e.toString(), e);
         } finally {
-            if(this.headers.containsKey(Constants.HTTP_CONTENT_TYPE_HEADER)){
-                this.headers.remove(Constants.HTTP_CONTENT_TYPE_HEADER);
-            }
+            this.headers.put(Constants.HTTP_CONTENT_TYPE_HEADER, Constants.HTTP_CONTENT_TYPE_JSON);
         }
         return null;
     }

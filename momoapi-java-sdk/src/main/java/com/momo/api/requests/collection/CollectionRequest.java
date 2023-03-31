@@ -67,6 +67,9 @@ public class CollectionRequest extends CommonRequest implements CollectionReques
                 .replace(Constants.SUBSCRIPTION_TYPE, SubscriptionType.COLLECTION)
                 .replace(Constants.REQUEST_TYPE, RequestType.REQUEST_TO_PAY);
         StatusResponse statusResponse = createRequest(HttpMethod.POST, resourcePath, JSONFormatter.toJSON(requestPay), notificationType, callBackURL, CollectionContext.getContext());
+        if(CollectionContext.getContext().getHTTPHeaders().containsKey(Constants.X_REFERENCE_ID)){
+            CollectionContext.getContext().getHTTPHeaders().remove(Constants.X_REFERENCE_ID);
+        }
         return statusResponse;
     }
 
@@ -200,6 +203,9 @@ public class CollectionRequest extends CommonRequest implements CollectionReques
                 .replace(Constants.SUBSCRIPTION_TYPE, SubscriptionType.COLLECTION)
                 .replace(Constants.REQUEST_TYPE, RequestType.REQUEST_TO_WITHDRAW);
         StatusResponse statusResponse = createRequest(HttpMethod.POST, resourcePath, JSONFormatter.toJSON(withdraw), notificationType, callBackURL, CollectionContext.getContext());
+        if(CollectionContext.getContext().getHTTPHeaders().containsKey(Constants.X_REFERENCE_ID)){
+            CollectionContext.getContext().getHTTPHeaders().remove(Constants.X_REFERENCE_ID);
+        }
         return statusResponse;
     }
 
@@ -229,6 +235,9 @@ public class CollectionRequest extends CommonRequest implements CollectionReques
                 .replace(Constants.SUBSCRIPTION_TYPE, SubscriptionType.COLLECTION)
                 .replace(Constants.REQUEST_TYPE, RequestType.REQUEST_TO_WITHDRAW);
         StatusResponse statusResponse = createRequest(HttpMethod.POST, resourcePath, JSONFormatter.toJSON(withdraw), notificationType, callBackURL, CollectionContext.getContext());
+        if(CollectionContext.getContext().getHTTPHeaders().containsKey(Constants.X_REFERENCE_ID)){
+            CollectionContext.getContext().getHTTPHeaders().remove(Constants.X_REFERENCE_ID);
+        }
         return statusResponse;
     }
 

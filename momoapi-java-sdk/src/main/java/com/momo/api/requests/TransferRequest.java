@@ -47,6 +47,9 @@ public class TransferRequest extends CommonRequest {
                 .replace(Constants.SUBSCRIPTION_TYPE, subscriptionType)
                 .replace(Constants.REQUEST_TYPE, RequestType.TRANSFER);
         StatusResponse statusResponse = createRequest(HttpMethod.POST, resourcePath, JSONFormatter.toJSON(transfer), notificationType, callBackURL, currentContext);
+        if(currentContext.getHTTPHeaders().containsKey(Constants.X_REFERENCE_ID)){
+            currentContext.getHTTPHeaders().remove(Constants.X_REFERENCE_ID);
+        }
         return statusResponse;
     }
     

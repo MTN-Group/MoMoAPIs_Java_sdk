@@ -17,7 +17,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 /**
  * *
@@ -151,23 +150,7 @@ public abstract class HttpConnection {
             } while (retry < this.config.getMaxRetry());
         } catch (IOException e) {
             Logger.getLogger(HttpConnection.class.getName()).log(Level.SEVERE, e.toString(), e);
-        } finally {
-            if(headers.containsKey(Constants.HTTP_CONTENT_TYPE_HEADER)){
-                headers.remove(Constants.HTTP_CONTENT_TYPE_HEADER);
-            }
-            if(headers.containsKey(Constants.NOTIFICATION_MESSAGE)){
-                headers.remove(Constants.NOTIFICATION_MESSAGE);
-            }
-            if(headers.containsKey(Constants.X_REFERENCE_ID)){
-                headers.remove(Constants.X_REFERENCE_ID);
-            }
-            if(headers.containsKey(Constants.CALL_BACK_URL)){
-                headers.remove(Constants.CALL_BACK_URL);
-            }
-            if(headers.containsKey(Constants.LANGUAGE)){
-                headers.remove(Constants.LANGUAGE);
-            }
-            
+        } finally {            
             if (writer != null) {
                 try {
                     writer.close();
